@@ -11,10 +11,10 @@ from pathlib import Path
 from app.rag.extractors.base import Extracted
 
 _DROP = {"script", "style", "noscript", "head"}
+_HEADINGS = {"h1", "h2", "h3", "h4", "h5", "h6"}
 _BLOCK = {
-    "p", "div", "section", "article", "br", "li", "tr",
-    "h1", "h2", "h3", "h4", "h5", "h6", "pre", "table",
-}
+    "p", "div", "section", "article", "br", "li", "tr", "pre", "table",
+} | _HEADINGS
 
 
 class _Reader(HTMLParser):
@@ -42,6 +42,12 @@ class _Reader(HTMLParser):
             self._row_is_header = False
         if tag in _BLOCK:
             self.parts.append("\n")
+        # Emit headings as markdown so the structure-aware chunker can see
+        # them. An <h2> that arrives as plain text is a section boundary the
+        # chunker will never find — the structure was in the source and
+        # ingestion is where it gets lost.
+        if tag in _HEADINGS:
+            self.parts.append("#" * int(tag[1]) + " ")
         if tag in ("td", "th"):
             self._row_cells += 1
             if tag == "th":

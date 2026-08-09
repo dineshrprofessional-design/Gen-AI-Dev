@@ -7,11 +7,29 @@
 </head>
 <body>
   <h1>Client.stream()</h1>
-  <p>Opens a streaming connection and yields events as they arrive.</p>
+  <p>Opens a streaming connection and yields events as they arrive. The generator
+  holds its connection open for the lifetime of the iteration, so callers must
+  either exhaust it or close it explicitly. Abandoning a partially consumed
+  stream leaks a connection until the pool reaper collects it, which by default
+  takes ninety seconds.</p>
+
+  <h2>Parameters</h2>
   <table>
-    <tr><th>name</th><th>type</th><th>default</th></tr>
-    <tr><td>payload</td><td>dict</td><td>-</td></tr>
-    <tr><td>chunk_size</td><td>int</td><td>1024</td></tr>
+    <tr><th>name</th><th>type</th><th>default</th><th>required</th></tr>
+    <tr><td>payload</td><td>dict</td><td>-</td><td>yes</td></tr>
+    <tr><td>chunk_size</td><td>int</td><td>1024</td><td>no</td></tr>
+    <tr><td>heartbeat_ms</td><td>int</td><td>15000</td><td>no</td></tr>
+    <tr><td>reconnect</td><td>bool</td><td>true</td><td>no</td></tr>
   </table>
+
+  <h2>Example</h2>
+  <pre>with client.stream(payload={"query": "hello"}) as events:
+    for event in events:
+        print(event.text, end="")</pre>
+
+  <h2>Notes</h2>
+  <p>When reconnect is true the client transparently re-establishes a dropped
+  connection and resumes from the last acknowledged event id. Duplicate events
+  are possible across a reconnect boundary, so consumers should be idempotent.</p>
 </body>
 </html>
