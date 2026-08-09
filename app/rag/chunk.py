@@ -1,7 +1,7 @@
 """Chunking CLI.
 
-    python -m app.rag.chunk
-    python -m app.rag.chunk --show
+    python -m app.rag.chunk --compare
+    python -m app.rag.chunk --strategy fixed --show
     python -m app.rag.chunk --docs sample-corpus
 
 Takes the Documents that ingestion produced and splits them into Chunks.
@@ -74,9 +74,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--docs", type=Path, default=DEFAULT_DOCS)
     parser.add_argument("--version", default=None, help="one sdk_version only")
     parser.add_argument(
-        "--strategy", choices=sorted(CHUNKERS), default=sorted(CHUNKERS)[0]
+        "--strategy", choices=sorted(CHUNKERS), default=sorted(CHUNKERS)[-1]
     )
     parser.add_argument("--show", action="store_true", help="print every chunk")
+    parser.add_argument(
+        "--compare", action="store_true", help="run every strategy side by side"
+    )
     args = parser.parse_args(argv)
 
     try:
@@ -93,10 +96,13 @@ def main(argv: list[str] | None = None) -> int:
     if report.failures:
         print(f"({report.failed_count} file(s) were quarantined at ingest)")
 
-    chunks = build_chunks(report.documents, args.strategy)
-    if args.show:
-        print_chunks(chunks)
-    print_summary(chunks, args.strategy)
+    strategies = sorted(CHUNKERS) if args.compare else [args.strategy]
+    for strategy in strategies:
+        chunks = build_chunks(report.documents, strategy)
+        if args.show and not args.compare:
+            print_chunks(chunks)
+        print_summary(chunks, strategy)
+
     return 0
 
 

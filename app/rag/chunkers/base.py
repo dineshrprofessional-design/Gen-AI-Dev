@@ -41,6 +41,16 @@ def has_table_header(text: str) -> bool:
     return any(_TABLE_SEPARATOR.match(line) for line in text.splitlines())
 
 
+def damage_flags(text: str) -> list[str]:
+    """Human-readable structural damage in one chunk, for reports and the UI."""
+    flags = []
+    if not has_balanced_fences(text):
+        flags.append("split code fence")
+    if has_table_row(text) and not has_table_header(text):
+        flags.append("orphaned table row")
+    return flags
+
+
 def make_chunk(
     doc: Document,
     *,
