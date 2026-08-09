@@ -11,3 +11,8 @@ python-docx==1.2.0
 
 # Gold question set
 pyyaml==6.0.3
+
+# Retrieval. bge-m3 is ~2.2GB of weights downloaded on first use; both are
+# imported lazily so nothing here loads unless an index is actually built.
+sentence-transformers==5.1.2
+chromadb==1.5.9

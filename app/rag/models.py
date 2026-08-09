@@ -85,6 +85,28 @@ class Chunk(BaseModel):
     has_table_row: bool = False
     has_code_fence: bool = False
 
+    def to_metadata(self) -> dict[str, str | int | bool]:
+        """Flatten for the vector store, which only accepts scalar values.
+
+        Every field the ingestion contract requires travels with the chunk —
+        a chunk that cannot say which page it came from is useless no matter
+        how well it matches a query.
+        """
+        return {
+            "source_file": self.source_file,
+            "page_id": self.page_id,
+            "sdk_version": self.sdk_version,
+            "page_type": self.page_type.value,
+            "heading_path": self.heading_path,
+            "anchor": self.anchor,
+            "char_start": self.char_start,
+            "char_end": self.char_end,
+            "strategy": self.strategy,
+            "chunk_ord": self.chunk_ord,
+            "has_table_row": self.has_table_row,
+            "has_code_fence": self.has_code_fence,
+        }
+
 
 class FailedFile(BaseModel):
     """A file that should have ingested but didn't. Quarantined, not fatal."""
