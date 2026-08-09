@@ -7,3 +7,11 @@ venv/
 .mypy_cache/
 *.egg-info/
 .DS_Store
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Jupyter
+.ipynb_checkpoints/
