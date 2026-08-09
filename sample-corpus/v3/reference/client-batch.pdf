@@ -1,0 +1,49 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 754 >>
+stream
+BT /F1 14 Tf 72 720 Td (Client.send_batch\(\)) Tj ET
+BT /F1 10 Tf 72 700 Td (Sends many requests, amortising connection setup across the batch.) Tj ET
+BT /F1 10 Tf 72 670 Td (name) Tj ET
+BT /F1 10 Tf 220 670 Td (type) Tj ET
+BT /F1 10 Tf 320 670 Td (default) Tj ET
+BT /F1 10 Tf 420 670 Td (required) Tj ET
+BT /F1 10 Tf 72 654 Td (payloads) Tj ET
+BT /F1 10 Tf 220 654 Td (list) Tj ET
+BT /F1 10 Tf 320 654 Td (-) Tj ET
+BT /F1 10 Tf 420 654 Td (yes) Tj ET
+BT /F1 10 Tf 72 638 Td (concurrency) Tj ET
+BT /F1 10 Tf 220 638 Td (int) Tj ET
+BT /F1 10 Tf 320 638 Td (8) Tj ET
+BT /F1 10 Tf 420 638 Td (no) Tj ET
+BT /F1 10 Tf 72 622 Td (retry_backoff_ms) Tj ET
+BT /F1 10 Tf 220 622 Td (int) Tj ET
+BT /F1 10 Tf 320 622 Td (250) Tj ET
+BT /F1 10 Tf 420 622 Td (no) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001046 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1116
+%%EOF

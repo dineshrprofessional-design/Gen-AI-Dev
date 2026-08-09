@@ -1,0 +1,6 @@
+Migrating from v1 to v2
+
+A plain text guide. There is no front matter and no markup, so page_type comes
+from the "guide" folder and the title comes from this first line.
+
+Automatic retries do not exist in v2. Wrap calls in your own retry loop.

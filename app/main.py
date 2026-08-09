@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import health, items
+from app.api.routes import health, ingest
 from app.core.config import get_settings
 
 
@@ -20,7 +20,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
     app.include_router(health.router)
-    app.include_router(items.router, prefix="/api/v1")
+    app.include_router(ingest.router, prefix="/api/v1")
 
     @app.get("/", tags=["root"])
     def root() -> dict[str, str]:
