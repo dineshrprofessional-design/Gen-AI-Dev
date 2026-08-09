@@ -26,12 +26,18 @@ class DocxExtractor:
 
         parts = [p.text.strip() for p in document.paragraphs if p.text.strip()]
 
-        # Tables survive here, unlike in PDF — keep the row structure.
+        # Tables survive here, unlike in PDF — keep the row structure, and emit
+        # a markdown separator after the header so the result is a *valid*
+        # markdown table. Without it, downstream can't tell a header row from a
+        # data row, and every chunk looks like it lost its header.
         for table in document.tables:
-            for row in table.rows:
+            for index, row in enumerate(table.rows):
                 cells = [c.text.strip() for c in row.cells]
-                if any(cells):
-                    parts.append("| " + " | ".join(cells) + " |")
+                if not any(cells):
+                    continue
+                parts.append("| " + " | ".join(cells) + " |")
+                if index == 0:
+                    parts.append("| " + " | ".join("---" for _ in cells) + " |")
 
         text = "\n\n".join(parts)
         if not text.strip():

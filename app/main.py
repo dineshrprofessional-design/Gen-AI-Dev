@@ -1,8 +1,13 @@
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, RedirectResponse
 
-from app.api.routes import health, ingest
+from app.api.routes import chunking, health, ingest
 from app.core.config import get_settings
+
+WEB_DIR = Path(__file__).parent / "web"
 
 
 def create_app() -> FastAPI:
@@ -21,10 +26,16 @@ def create_app() -> FastAPI:
     )
     app.include_router(health.router)
     app.include_router(ingest.router, prefix="/api/v1")
+    app.include_router(chunking.router, prefix="/api/v1")
 
-    @app.get("/", tags=["root"])
-    def root() -> dict[str, str]:
-        return {"message": f"{settings.app_name} is running", "docs": "/docs"}
+    @app.get("/ui", include_in_schema=False)
+    def chunk_viewer() -> FileResponse:
+        """The chunk viewer — one static page, no build step."""
+        return FileResponse(WEB_DIR / "index.html")
+
+    @app.get("/", include_in_schema=False)
+    def root() -> RedirectResponse:
+        return RedirectResponse("/ui")
 
     return app
 

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chunk viewer</title>
+<style>
+  :root {
+    --bg:#f7f7f5; --surface:#fff; --border:#e3e1db; --text:#1c1b19; --muted:#6e6a63;
+    --accent:#2f6f4f; --bad:#a8382c; --bad-bg:#fbecea; --ok-bg:#e8f1ec;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#16171a; --surface:#1e2024; --border:#33363c; --text:#ecedee; --muted:#9b9fa6;
+      --accent:#7cc79c; --bad:#e8877b; --bad-bg:#2f1f1d; --ok-bg:#1c2c24;
+      color-scheme: dark;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+       font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+  .wrap{max-width:1150px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+  h1{margin:0;font-size:1.8rem;letter-spacing:-.02em}
+  .sub{margin:.35rem 0 1.8rem;color:var(--muted);max-width:62ch}
+  code,pre{font-family:var(--mono);font-size:.85em}
+
+  .panel{background:var(--surface);border:1px solid var(--border);
+         border-radius:10px;padding:1.1rem 1.2rem;margin-bottom:1.2rem}
+  .drop{border:2px dashed var(--border);border-radius:10px;padding:2.2rem 1rem;
+        text-align:center;cursor:pointer;transition:.15s}
+  .drop:hover,.drop.over{border-color:var(--accent);background:var(--ok-bg)}
+  .drop strong{color:var(--accent)}
+  .hint{color:var(--muted);font-size:.85rem;margin-top:.4rem}
+
+  .meta{display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:1rem;
+        color:var(--muted);font-size:.88rem}
+  .meta b{color:var(--text)}
+
+  .tabs{display:flex;gap:.5rem;margin:1.5rem 0 1rem;flex-wrap:wrap}
+  .tab{padding:.5rem 1rem;border:1px solid var(--border);border-radius:999px;
+       background:transparent;color:var(--muted);font:inherit;cursor:pointer}
+  .tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);
+       color:var(--bg);font-weight:600}
+  .tab .n{opacity:.75;font-size:.85em}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+         gap:.8rem;margin-bottom:1.2rem}
+  .stat{border:1px solid var(--border);border-radius:8px;padding:.7rem .9rem;
+        background:var(--surface)}
+  .stat .v{font-size:1.5rem;font-weight:650;line-height:1.15}
+  .stat .k{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .stat.bad .v{color:var(--bad)} .stat.bad{background:var(--bad-bg);border-color:var(--bad)}
+  .stat.good .v{color:var(--accent)} .stat.good{background:var(--ok-bg);border-color:var(--accent)}
+
+  .chunk{border:1px solid var(--border);border-radius:9px;margin-bottom:.9rem;
+         background:var(--surface);overflow:hidden}
+  .chunk.damaged{border-color:var(--bad)}
+  .chunk header{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;
+        padding:.6rem .85rem;border-bottom:1px solid var(--border);background:var(--bg)}
+  .cid{font-family:var(--mono);font-size:.8rem;font-weight:600}
+  .path{color:var(--muted);font-size:.82rem}
+  .path.none{font-style:italic;opacity:.75}
+  .spacer{flex:1}
+  .pill{font-size:.71rem;padding:.1rem .5rem;border-radius:999px;
+        border:1px solid var(--border);color:var(--muted)}
+  .pill.dmg{background:var(--bad-bg);border-color:var(--bad);color:var(--bad);font-weight:600}
+  pre.body{margin:0;padding:.85rem;white-space:pre-wrap;word-break:break-word;
+        max-height:340px;overflow:auto}
+
+  .alert{padding:.85rem 1rem;border:1px solid var(--bad);border-left-width:4px;
+         border-radius:8px;background:var(--bad-bg);color:var(--bad);margin-bottom:1.2rem}
+  .empty{color:var(--muted);text-align:center;padding:2rem 0}
+  .busy{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Chunk viewer</h1>
+  <p class="sub">
+    Upload one document and see exactly where each strategy cuts it. Chunks that
+    lost their structure — a table row separated from its header, or a code fence
+    cut in half — are outlined in red.
+  </p>
+
+  <div class="panel">
+    <div class="drop" id="drop">
+      <div><strong>Choose a file</strong> or drop it here</div>
+      <div class="hint" id="hint">.md .markdown .txt .rst .html .htm .pdf .docx — max 5 MB</div>
+      <input type="file" id="file" hidden>
+    </div>
+    <div class="meta" id="meta" hidden></div>
+  </div>
+
+  <div id="error"></div>
+  <div id="out"><p class="empty">No document loaded yet.</p></div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let data = null, active = null;
+
+const drop = $("drop"), input = $("file");
+drop.onclick = () => input.click();
+input.onchange = () => input.files[0] && upload(input.files[0]);
+drop.addEventListener("dragover", e => { e.preventDefault(); drop.classList.add("over"); });
+drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+drop.addEventListener("drop", e => {
+  e.preventDefault(); drop.classList.remove("over");
+  if (e.dataTransfer.files[0]) upload(e.dataTransfer.files[0]);
+});
+
+async function upload(file) {
+  $("error").innerHTML = "";
+  $("out").innerHTML = '<p class="empty busy">Chunking…</p>';
+  const body = new FormData();
+  body.append("file", file);
+  try {
+    const res = await fetch("/api/v1/chunk/preview", { method: "POST", body });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.detail || res.statusText);
+    data = json;
+    active = json.results[0].strategy;
+    render();
+  } catch (err) {
+    data = null;
+    $("meta").hidden = true;
+    $("out").innerHTML = "";
+    $("error").innerHTML = `<div class="alert"><strong>Could not chunk that file.</strong> ${esc(err.message)}</div>`;
+  }
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+}
+
+function render() {
+  $("meta").hidden = false;
+  $("meta").innerHTML = `
+    <span>file <b>${esc(data.filename)}</b></span>
+    <span>format <b>${esc(data.source_format)}</b></span>
+    <span>title <b>${esc(data.title)}</b></span>
+    <span>size <b>${data.doc_chars.toLocaleString()}</b> chars</span>`;
+
+  const tabs = data.results.map(r => `
+    <button class="tab" role="tab" data-s="${esc(r.strategy)}"
+            aria-selected="${r.strategy === active}">
+      ${esc(r.strategy)} <span class="n">${r.count} chunks${r.damaged ? " · " + r.damaged + " damaged" : ""}</span>
+    </button>`).join("");
+
+  const r = data.results.find(x => x.strategy === active);
+  const stats = `
+    <div class="stats">
+      <div class="stat"><div class="v">${r.count}</div><div class="k">chunks</div></div>
+      <div class="stat"><div class="v">${r.sizes.min}</div><div class="k">smallest</div></div>
+      <div class="stat"><div class="v">${r.sizes.median}</div><div class="k">median</div></div>
+      <div class="stat"><div class="v">${r.sizes.max}</div><div class="k">largest</div></div>
+      <div class="stat ${r.damaged ? "bad" : "good"}">
+        <div class="v">${r.damaged}</div><div class="k">damaged</div></div>
+    </div>`;
+
+  const chunks = r.chunks.map(c => `
+    <article class="chunk ${c.damage.length ? "damaged" : ""}">
+      <header>
+        <span class="cid">${esc(c.chunk_id)}</span>
+        <span class="path ${c.heading_path ? "" : "none"}">
+          ${c.heading_path ? esc(c.heading_path) : "no heading context"}</span>
+        <span class="spacer"></span>
+        ${c.has_table_row ? '<span class="pill">table</span>' : ""}
+        ${c.has_code_fence ? '<span class="pill">code</span>' : ""}
+        <span class="pill">${c.size} ch</span>
+        <span class="pill">${c.char_start}:${c.char_end}</span>
+        ${c.damage.map(d => `<span class="pill dmg">${esc(d)}</span>`).join("")}
+      </header>
+      <pre class="body">${esc(c.text)}</pre>
+    </article>`).join("");
+
+  $("out").innerHTML = `<div class="tabs" role="tablist">${tabs}</div>${stats}${chunks}`;
+  document.querySelectorAll(".tab").forEach(t =>
+    t.onclick = () => { active = t.dataset.s; render(); });
+}
+</script>
+</body>
+</html>

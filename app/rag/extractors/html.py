@@ -26,6 +26,9 @@ class _Reader(HTMLParser):
         self._suppress = 0
         self._capture: str | None = None
         self._buffer: list[str] = []
+        # Track header rows so we can emit a markdown separator beneath them.
+        self._row_cells = 0
+        self._row_is_header = False
 
     def handle_starttag(self, tag: str, attrs) -> None:
         if tag in _DROP:
@@ -34,9 +37,15 @@ class _Reader(HTMLParser):
         if tag in ("title", "h1") and self._capture is None:
             self._capture = tag
             self._buffer = []
+        if tag == "tr":
+            self._row_cells = 0
+            self._row_is_header = False
         if tag in _BLOCK:
             self.parts.append("\n")
         if tag in ("td", "th"):
+            self._row_cells += 1
+            if tag == "th":
+                self._row_is_header = True
             self.parts.append(" | ")
 
     def handle_endtag(self, tag: str) -> None:
@@ -52,6 +61,12 @@ class _Reader(HTMLParser):
             self._capture = None
         if tag in _BLOCK:
             self.parts.append("\n")
+        # A `<th>` row becomes a markdown header row, so follow it with the
+        # `|---|---|` separator that makes the table valid markdown.
+        if tag == "tr" and self._row_is_header and self._row_cells:
+            self.parts.append("\n" + " | ".join("---" for _ in range(self._row_cells)))
+            self.parts.append("\n")
+            self._row_is_header = False
 
     def handle_data(self, data: str) -> None:
         if self._suppress:
