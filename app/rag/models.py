@@ -56,6 +56,36 @@ class Document(BaseModel):
         }
 
 
+class Chunk(BaseModel):
+    """One retrievable piece of a Document.
+
+    Everything a Document carries is copied onto every chunk. A chunk that
+    can't say which page it came from is useless no matter how well it matches
+    a query.
+    """
+
+    chunk_id: str
+    text: str
+
+    # Inherited from the parent Document — the metadata contract, unchanged.
+    source_file: str = Field(min_length=1)
+    page_id: str = Field(min_length=1)
+    sdk_version: str = Field(min_length=1)
+    page_type: PageType
+
+    # Where this chunk sits inside the page.
+    heading_path: str = ""
+    anchor: str = ""
+    char_start: int = 0
+    char_end: int = 0
+
+    # Which chunker produced it, and what structure it happens to contain.
+    strategy: str = ""
+    chunk_ord: int = 0
+    has_table_row: bool = False
+    has_code_fence: bool = False
+
+
 class FailedFile(BaseModel):
     """A file that should have ingested but didn't. Quarantined, not fatal."""
 
