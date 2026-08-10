@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SDK docs assistant</title>
+<style>
+  :root{
+    --bg:#f7f7f5;--surface:#fff;--border:#e3e1db;--text:#1c1b19;--muted:#6e6a63;
+    --accent:#2f6f4f;--accent-soft:#e8f1ec;--bad:#a8382c;--bad-soft:#fbecea;
+    --warn:#9a6b12;--warn-soft:#fbf2e2;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --bg:#16171a;--surface:#1e2024;--border:#33363c;--text:#ecedee;--muted:#9b9fa6;
+    --accent:#7cc79c;--accent-soft:#1c2c24;--bad:#e8877b;--bad-soft:#2f1f1d;
+    --warn:#d9ac5c;--warn-soft:#2c2519;color-scheme:dark;}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+       font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:2.2rem 1.5rem 5rem}
+  h1{margin:0;font-size:1.7rem;letter-spacing:-.02em}
+  .sub{margin:.35rem 0 1.5rem;color:var(--muted);max-width:64ch}
+  code,pre{font-family:var(--mono);font-size:.85em}
+
+  .banner{padding:.75rem 1rem;border-radius:8px;margin-bottom:1.2rem;
+          border:1px solid var(--border);background:var(--surface);font-size:.9rem}
+  .banner.warn{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
+  .banner.ok{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+
+  form.ask{background:var(--surface);border:1px solid var(--border);
+           border-radius:10px;padding:1rem;margin-bottom:1rem}
+  .row{display:flex;gap:.7rem;align-items:flex-end;flex-wrap:wrap}
+  .field{display:flex;flex-direction:column;gap:.25rem}
+  .field.grow{flex:1 1 320px;min-width:0}
+  .field span{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  input,select{padding:.55rem .65rem;border:1px solid var(--border);border-radius:6px;
+               background:var(--bg);color:var(--text);font:inherit;min-width:0}
+  input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  button{padding:.58rem 1.2rem;border:1px solid transparent;border-radius:6px;
+         background:var(--accent);color:var(--bg);font:inherit;font-weight:600;cursor:pointer}
+  button:disabled{opacity:.6;cursor:progress}
+  .samples{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.75rem}
+  .chip{padding:.28rem .6rem;border:1px dashed var(--border);border-radius:999px;
+        background:transparent;color:var(--muted);font:inherit;font-size:.79rem;
+        font-weight:400;cursor:pointer}
+  .chip:hover{color:var(--text);border-style:solid}
+  .chip.neg{border-color:var(--bad);color:var(--bad)}
+
+  .answer{background:var(--surface);border:1px solid var(--accent);border-left-width:4px;
+          border-radius:8px;padding:1rem 1.1rem;margin-bottom:1.2rem}
+  .answer.refused{border-color:var(--bad)}
+  .answer h2{margin:0 0 .5rem;font-size:.75rem;text-transform:uppercase;
+             letter-spacing:.06em;color:var(--muted)}
+  .answer .body{white-space:pre-wrap}
+  .cites{margin-top:.7rem;display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+  .cite{font-family:var(--mono);font-size:.74rem;padding:.12rem .45rem;border-radius:4px;
+        background:var(--accent-soft);border:1px solid var(--accent);color:var(--accent);
+        cursor:pointer}
+  .cite.bad{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+  .refusal-note{margin-top:.5rem;font-size:.85rem;color:var(--muted)}
+
+  h3.sec{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;
+         color:var(--muted);margin:1.5rem 0 .6rem}
+  .chunk{border:1px solid var(--border);border-radius:8px;margin-bottom:.7rem;
+         background:var(--surface);overflow:hidden}
+  .chunk.cited{border-color:var(--accent)}
+  .chunk header{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap;
+        padding:.5rem .75rem;background:var(--bg);border-bottom:1px solid var(--border);
+        cursor:pointer}
+  .rank{font-weight:700;color:var(--muted);min-width:1.3em}
+  .cid{font-family:var(--mono);font-size:.78rem;font-weight:600}
+  .path{color:var(--muted);font-size:.8rem}
+  .grow1{flex:1}
+  .pill{font-size:.71rem;padding:.08rem .45rem;border-radius:999px;
+        border:1px solid var(--border);color:var(--muted)}
+  .pill.v3{border-color:var(--accent);color:var(--accent)}
+  pre.body{margin:0;padding:.75rem;white-space:pre-wrap;word-break:break-word;
+           max-height:300px;overflow:auto}
+  .alert{padding:.85rem 1rem;border:1px solid var(--bad);border-left-width:4px;
+         border-radius:8px;background:var(--bad-soft);color:var(--bad);margin-bottom:1.2rem}
+  .empty{color:var(--muted);text-align:center;padding:2.5rem 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>SDK docs assistant</h1>
+  <p class="sub">
+    Ask a question about the SDK reference pages. The answer is grounded strictly
+    in retrieved chunks — if the corpus doesn't contain the answer, it refuses
+    rather than inventing one.
+  </p>
+
+  <div id="banner"></div>
+
+  <form class="ask" id="form">
+    <div class="row">
+      <label class="field grow">
+        <span>Question</span>
+        <input id="q" placeholder="What is the default value of retry_backoff_ms?" autofocus>
+      </label>
+      <label class="field">
+        <span>Chunker</span>
+        <select id="strategy"></select>
+      </label>
+      <label class="field">
+        <span>Version</span>
+        <select id="version">
+          <option value="">all</option>
+          <option value="v3">v3</option>
+          <option value="v2">v2</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Top-k</span>
+        <select id="k">
+          <option>3</option><option selected>5</option><option>8</option>
+        </select>
+      </label>
+      <button type="submit" id="go">Ask</button>
+    </div>
+    <div class="samples" id="samples"></div>
+  </form>
+
+  <div id="error"></div>
+  <div id="out"><p class="empty">Ask something to begin.</p></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let canGenerate = false;
+
+const SAMPLES = [
+  ["What is the default value of retry_backoff_ms?", false],
+  ["Which parameter is required when calling Client.send()?", false],
+  ["What is the default chunk_size for Client.stream()?", false],
+  ["How do I close a client without cancelling in-flight requests?", false],
+  ["What is the rate limit on the /v1/embeddings endpoint?", true],
+  ["How do I authenticate with OAuth2?", true],
+];
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+
+async function boot(){
+  try{
+    const s = await (await fetch("/api/v1/chat/status")).json();
+    canGenerate = s.generation_available;
+    $("strategy").innerHTML = s.strategies
+      .map(x=>`<option ${x==="structure"?"selected":""}>${esc(x)}</option>`).join("");
+    $("banner").innerHTML = canGenerate
+      ? `<div class="banner ok">Generation ready — model <code>${esc(s.default_model)}</code></div>`
+      : `<div class="banner warn"><strong>Retrieval only.</strong> ${esc(s.note)}
+         Set the key and restart to get written answers; retrieved chunks work now.</div>`;
+  }catch(e){
+    $("banner").innerHTML = `<div class="alert">Cannot reach the API. Is uvicorn running?</div>`;
+  }
+  $("samples").innerHTML = SAMPLES.map(([t,neg],i)=>
+    `<button type="button" class="chip ${neg?"neg":""}" data-i="${i}"
+      title="${neg?"Not in the corpus — should be refused":"Answerable from the corpus"}">${esc(t)}</button>`
+  ).join("");
+  document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{
+    $("q").value = SAMPLES[c.dataset.i][0]; $("form").requestSubmit();
+  });
+}
+
+$("form").onsubmit = async e => {
+  e.preventDefault();
+  const question = $("q").value.trim();
+  if(!question) return;
+  $("error").innerHTML=""; $("go").disabled=true;
+  $("out").innerHTML = `<p class="empty">Searching…</p>`;
+  try{
+    const res = await fetch("/api/v1/chat/ask",{
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        question, strategy:$("strategy").value, k:Number($("k").value),
+        sdk_version: $("version").value || null, generate: canGenerate,
+      })
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.detail || res.statusText);
+    render(data);
+  }catch(err){
+    $("out").innerHTML="";
+    $("error").innerHTML = `<div class="alert">${esc(err.message)}</div>`;
+  }finally{ $("go").disabled=false; }
+};
+
+function render(d){
+  let html = "";
+
+  if(d.error){
+    html += `<div class="alert">${esc(d.error)}</div>`;
+  }else if(d.answer !== null && d.answer !== undefined){
+    const refused = d.refused;
+    let body = esc(d.answer);
+    // Turn [chunk_id] into clickable markers.
+    body = body.replace(/\[([^\]\s]+::\d+)\]/g, (_,id)=>
+      `<span class="cite${d.invalid_citations.includes(id)?" bad":""}"
+             data-cid="${esc(id)}">[${esc(id)}]</span>`);
+    html += `<div class="answer ${refused?"refused":""}">
+      <h2>${refused?"Refused":"Answer"} ${d.model?`· ${esc(d.model)}`:""}</h2>
+      <div class="body">${body}</div>
+      ${refused && d.refusal_reason
+        ? `<p class="refusal-note">Why: ${esc(d.refusal_reason)}</p>` : ""}
+      ${d.invalid_citations.length
+        ? `<p class="refusal-note" style="color:var(--bad)">
+             Invalid citations (not in context): ${d.invalid_citations.map(esc).join(", ")}</p>` : ""}
+      ${d.citations.length && !d.invalid_citations.length
+        ? `<div class="cites"><span class="path">cited:</span>
+           ${d.citations.map(c=>`<span class="cite" data-cid="${esc(c)}">${esc(c)}</span>`).join("")}</div>`:""}
+    </div>`;
+  }
+
+  html += `<h3 class="sec">Retrieved chunks — ${d.chunks.length}
+    · chunker <code>${esc(d.strategy)}</code>
+    ${d.sdk_version_filter?`· filtered to <code>${esc(d.sdk_version_filter)}</code>`:"· no version filter"}</h3>`;
+
+  if(!d.chunks.length){
+    html += `<p class="empty">Nothing retrieved.</p>`;
+  }else{
+    html += d.chunks.map(c=>`
+      <article class="chunk ${d.citations.includes(c.chunk_id)?"cited":""}" id="c-${esc(c.chunk_id)}">
+        <header onclick="this.nextElementSibling.hidden=!this.nextElementSibling.hidden">
+          <span class="rank">${c.rank}</span>
+          <span class="cid">${esc(c.chunk_id)}</span>
+          <span class="path">${esc(c.heading_path||"no heading context")}</span>
+          <span class="grow1"></span>
+          <span class="pill ${c.sdk_version==="v3"?"v3":""}">${esc(c.sdk_version)}</span>
+          <span class="pill">${c.score.toFixed(3)}</span>
+        </header>
+        <pre class="body" ${c.rank>2?"hidden":""}>${esc(c.text)}</pre>
+      </article>`).join("");
+  }
+
+  $("out").innerHTML = html;
+  document.querySelectorAll(".cite").forEach(el=>el.onclick=()=>{
+    const target = document.getElementById("c-"+el.dataset.cid);
+    if(target){ target.querySelector("pre").hidden=false;
+      target.scrollIntoView({behavior:"smooth",block:"center"}); }
+  });
+}
+
+boot();
+</script>
+</body>
+</html>

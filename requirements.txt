@@ -16,3 +16,7 @@ pyyaml==6.0.3
 # imported lazily so nothing here loads unless an index is actually built.
 sentence-transformers==5.1.2
 chromadb==1.5.9
+
+# Generation via xAI Grok (OpenAI-compatible endpoint)
+openai==2.53.0
+python-multipart==0.0.20
