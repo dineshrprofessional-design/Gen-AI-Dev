@@ -15,6 +15,11 @@ class Settings(BaseSettings):
     # can point at a different corpus without editing config.
     docs_root: str = "docs"
 
+    # Generation via Groq. Read from .env or the environment; empty means
+    # retrieval still works and generation reports itself unconfigured.
+    groq_api_key: str = ""
+    groq_model: str = "llama-3.3-70b-versatile"
+
 
 @lru_cache
 def get_settings() -> Settings:

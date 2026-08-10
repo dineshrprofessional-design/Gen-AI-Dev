@@ -1,8 +1,13 @@
 """Grounded answer generation with forced refusal.
 
-Uses xAI's Grok through its OpenAI-compatible endpoint. The key is read from
-`XAI_API_KEY`; without it, retrieval still works and generation reports that it
-is unconfigured rather than failing obscurely.
+Uses Groq's OpenAI-compatible endpoint. The key is read from `GROQ_API_KEY`
+in `.env` or the environment; without it, retrieval still works and
+generation reports itself unconfigured rather than failing obscurely.
+
+> Groq (`gsk_...`, api.groq.com) is an inference provider running Llama,
+> Qwen and similar models. It is a different company from xAI (`xai-...`,
+> api.x.ai), which makes the Grok model. The names are easy to confuse and
+> the keys are not interchangeable.
 
 ## The refusal must be forced, not suggested
 
@@ -21,10 +26,22 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from app.core.config import get_settings
 from app.rag.store import SearchHit
 
-XAI_BASE_URL = "https://api.x.ai/v1"
-DEFAULT_MODEL = os.environ.get("XAI_MODEL", "grok-4")
+GROQ_BASE_URL = "https://api.groq.com/openai/v1"
+
+
+def _api_key() -> str:
+    """Key from the environment or .env. The environment wins."""
+    return os.environ.get("GROQ_API_KEY") or get_settings().groq_api_key
+
+
+def _model() -> str:
+    return os.environ.get("GROQ_MODEL") or get_settings().groq_model
+
+
+DEFAULT_MODEL = _model()
 
 REFUSAL_TOKEN = "INSUFFICIENT_CONTEXT"
 
@@ -95,23 +112,24 @@ class GenerationUnavailable(RuntimeError):
 
 
 def is_configured() -> bool:
-    return bool(os.environ.get("XAI_API_KEY"))
+    return bool(_api_key())
 
 
 def _client():
-    key = os.environ.get("XAI_API_KEY")
+    key = _api_key()
     if not key:
         raise GenerationUnavailable(
-            "XAI_API_KEY is not set. Retrieval works without it; "
-            "generation needs a key from https://console.x.ai"
+            "No GROQ_API_KEY found. Put it in the .env file at the repo "
+            "root, or set it in the environment, then restart the server. "
+            "Retrieval works without it; generation does not."
         )
     from openai import OpenAI
 
-    return OpenAI(api_key=key, base_url=XAI_BASE_URL)
+    return OpenAI(api_key=key, base_url=GROQ_BASE_URL)
 
 
 def list_models() -> list[str]:
-    """Ask xAI which models this key can use, rather than guessing a name."""
+    """Ask Groq which models this key can use, rather than guessing a name."""
     return sorted(m.id for m in _client().models.list().data)
 
 
@@ -126,10 +144,11 @@ def build_context(hits: list[SearchHit]) -> str:
 def answer(
     question: str,
     hits: list[SearchHit],
-    model: str = DEFAULT_MODEL,
+    model: str | None = None,
     score_floor: float = SCORE_FLOOR,
 ) -> Answer:
     """Answer strictly from `hits`, or refuse."""
+    model = model or _model()
     context_ids = [h.chunk_id for h in hits]
     top_score = hits[0].score if hits else 0.0
 
@@ -146,6 +165,7 @@ def answer(
                 else f"top score {top_score:.3f} below floor {score_floor:.2f}"
             ),
             context_ids=context_ids,
+            model=model,
             top_score=top_score,
         )
 
@@ -153,6 +173,7 @@ def answer(
     # and mandates the exact refusal token.
     completion = _client().chat.completions.create(
         model=model,
+        temperature=0,
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
             {
@@ -164,7 +185,7 @@ def answer(
     )
     text = (completion.choices[0].message.content or "").strip()
 
-    refused = text.strip().upper().startswith(REFUSAL_TOKEN)
+    refused = REFUSAL_TOKEN in text.upper()
     cited = list(dict.fromkeys(_CITATION.findall(text)))
 
     return Answer(
