@@ -15,3 +15,6 @@ dist/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Generated vector index — rebuild with: python -m app.rag.index --all
+.rag_index/
