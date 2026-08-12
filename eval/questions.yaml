@@ -1,0 +1,98 @@
+# Gold question set — 8 questions with known answers.
+#
+# Written from the pages BEFORE any retrieval existed. That ordering is the
+# whole point: questions written after seeing what search returns measure your
+# question-writing, not your chunker.
+#
+# Each question names where the answer lives (page + anchor) and what the answer
+# is. `must_contain` strings are verified to appear at that location, so a
+# question can never quietly point at the wrong place.
+#
+# `depends_on` records what kind of structure the answer sits in:
+#   table_row  — the answer is a cell in a parameter table
+#   code_fence — the answer is inside a fenced code sample
+#   prose      — the answer is in ordinary paragraph text
+#
+# The task requires at least 3 questions to depend on a table row or code fence.
+# Five do here, because those are the ones a naive chunker breaks.
+
+questions:
+  - id: q1
+    question: What is the default value of retry_backoff_ms on Client.send() in v3?
+    answer: "250 milliseconds"
+    depends_on: table_row
+    gold:
+      sdk_version: v3
+      page_id: client-send
+      anchor: parameters
+    must_contain: ["retry_backoff_ms", "250"]
+
+  - id: q2
+    question: What type is the max_redirects parameter on Client.send()?
+    answer: "int, defaulting to 5"
+    depends_on: table_row
+    gold:
+      sdk_version: v3
+      page_id: client-send
+      anchor: parameters
+    must_contain: ["max_redirects", "int", "5"]
+
+  - id: q3
+    question: Which parameter is required when calling Client.send() in v3?
+    answer: "payload — every other parameter is optional"
+    depends_on: table_row
+    gold:
+      sdk_version: v3
+      page_id: client-send
+      anchor: parameters
+    must_contain: ["payload", "yes"]
+
+  - id: q4
+    question: What status codes trigger an automatic retry by default?
+    answer: "500 and 502, via the retry_on parameter"
+    depends_on: table_row
+    gold:
+      sdk_version: v3
+      page_id: client-send
+      anchor: parameters
+    must_contain: ["retry_on", "[500,502]"]
+
+  - id: q5
+    question: How do you pass a custom retry backoff and idempotency key to Client.send()?
+    answer: "client.send(payload=..., retry_backoff_ms=500, idempotency_key='req-0001')"
+    depends_on: code_fence
+    gold:
+      sdk_version: v3
+      page_id: client-send
+      anchor: example
+    must_contain: ["client.send(", "retry_backoff_ms=500", "idempotency_key"]
+
+  - id: q6
+    question: How is jitter applied to the retry backoff delay?
+    answer: "Full jitter — the wait before attempt n is drawn at random from [0, retry_backoff_ms * 2 ** n)"
+    depends_on: prose
+    gold:
+      sdk_version: v3
+      page_id: client-send
+      anchor: notes
+    must_contain: ["full jitter", "2 ** n"]
+
+  - id: q7
+    question: What is the default chunk_size for Client.stream()?
+    answer: "1024"
+    depends_on: table_row
+    gold:
+      sdk_version: v3
+      page_id: client-stream
+      anchor: parameters
+    must_contain: ["chunk_size", "1024"]
+
+  - id: q8
+    question: Does retry_backoff_ms actually do anything in v2?
+    answer: "No — it is accepted but ignored. Automatic retries arrived in v3."
+    depends_on: prose
+    gold:
+      sdk_version: v2
+      page_id: client-send
+      anchor: notes
+    must_contain: ["accepted in v2 but ignored"]
