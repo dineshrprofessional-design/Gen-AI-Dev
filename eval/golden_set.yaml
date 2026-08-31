@@ -1,0 +1,176 @@
+# Week 4 golden set — 12 real developer questions, hit-rate@3.
+#
+# Written from the pages in docs/ BEFORE any retrieval was run against them.
+# That ordering is the whole deliverable: a golden set assembled from questions
+# you already pass measures your question-writing, not your retriever.
+#
+# Deliberately NOT a copy of eval/questions.yaml. Those 8 Week 3 questions are
+# phrased "What is the default value of retry_backoff_ms on Client.send() in
+# v3?" — they name the method and the version, which is not how anyone types a
+# question, and they score 8/8 at k=3. They stay untouched as a regression set.
+#
+# Here the phrasing is terse and usually version-less, the way it arrives in a
+# support channel. Terse is not the same as ambiguous: where a bare question
+# would have two defensible answers (bare "default chunk_size" differs between
+# v2 and v3) the minimum disambiguating token is kept. Two questions were
+# written and then rejected for being unscoreable; see results.md.
+#
+# `exact_token` names the literal string the question hinges on — the thing
+# dense retrieval is structurally bad at. Requirement 1 asks for at least 4;
+# there are 7. All 7 are symbol/identifier tokens because this corpus contains
+# no error codes and no version strings at all (grep proof in results.md).
+
+questions:
+  - id: q01
+    question: what is the default for retry_backoff_ms
+    answer: "250 ms — the base delay before jitter"
+    depends_on: table_row
+    gold:
+      sdk_version: v3
+      page_id: client-send
+      anchor: parameters
+    must_contain: ["retry_backoff_ms", "250"]
+    exact_token: retry_backoff_ms
+    note: >
+      The token appears in 6 chunks across 3 pages. Empirically the gold chunk
+      sits at rank 4 under this phrasing, behind two v2 chunks and a prose note.
+
+  - id: q02
+    question: what causes RedirectLoopError
+    answer: "Following more than max_redirects redirects; the default is 5"
+    depends_on: table_row
+    gold:
+      sdk_version: v3
+      page_id: client-send
+      anchor: parameters
+    must_contain: ["RedirectLoopError", "max_redirects"]
+    exact_token: RedirectLoopError
+    note: One occurrence corpus-wide, buried in a 16-row table.
+
+  - id: q03
+    question: pool_reap_seconds default
+    answer: "90 seconds of idleness"
+    depends_on: table_row
+    gold:
+      sdk_version: v3
+      page_id: client-configure
+      anchor: parameters
+    must_contain: ["pool_reap_seconds", "90"]
+    exact_token: pool_reap_seconds
+    note: The same page's Notes section also carries the token and reads more explanatory.
+
+  - id: q04
+    question: rate_limit_rps default
+    answer: "20 requests per second"
+    depends_on: table_row
+    gold:
+      sdk_version: v3
+      page_id: client-batch
+      anchor: parameters
+    must_contain: ["rate_limit_rps", "20"]
+    exact_token: rate_limit_rps
+    note: >
+      Token appears in 3 chunks of the same page (params, example=50, notes).
+      Only the params row carries the default, but Notes states "limit of 20
+      requests per second" — so a Notes hit can answer correctly while the
+      metric records a miss.
+
+  - id: q05
+    question: chunk_bytes default for upload
+    answer: "8388608 bytes (8 MiB)"
+    depends_on: table_row
+    gold:
+      sdk_version: v3
+      page_id: client-upload
+      anchor: parameters
+    must_contain: ["chunk_bytes", "8388608"]
+    exact_token: chunk_bytes
+    note: Collision — client-batch defines chunk_bytes as 1048576 on a different page.
+
+  - id: q06
+    question: what raises CancelledError
+    answer: "close(force=True) — in-flight requests are cancelled and their futures raise it"
+    depends_on: prose
+    gold:
+      sdk_version: v3
+      page_id: client-close
+      anchor: notes
+    must_contain: ["CancelledError", "force=True"]
+    exact_token: CancelledError
+    note: One occurrence corpus-wide, and the gold is prose rather than a table row.
+
+  - id: q07
+    question: what does StreamClosed mean
+    answer: "A v2 stream dropped its connection; it does not reconnect, so restart from the beginning"
+    depends_on: prose
+    gold:
+      sdk_version: v2
+      page_id: client-stream
+      anchor: clientstream
+    must_contain: ["StreamClosed", "does not reconnect"]
+    exact_token: StreamClosed
+    note: One occurrence, and the gold is an intro chunk — neither parameters nor notes.
+
+  - id: q08
+    question: v3 stream chunk_size default
+    answer: "1024 bytes"
+    depends_on: table_row
+    gold:
+      sdk_version: v3
+      page_id: client-stream
+      anchor: parameters
+    must_contain: ["chunk_size", "1024"]
+    exact_token: null
+    note: >
+      The v2 page's Notes literally states the v3 answer ("raised to 1024 in
+      v3"), so the wrong page is a very attractive hit.
+
+  - id: q09
+    question: did chunk_size change between v2 and v3
+    answer: "Yes — 512 in v2, raised to 1024 in v3"
+    depends_on: prose
+    gold:
+      sdk_version: v2
+      page_id: client-stream
+      anchor: notes
+    must_contain: ["512", "1024"]
+    exact_token: null
+    note: Inverted version trap — the only chunk stating the change sits on the v2 page.
+
+  - id: q10
+    question: setting force=False on close does nothing?
+    answer: "Correct in v2 — force is always true there. In v3 the default is false and requests drain"
+    depends_on: prose
+    gold:
+      sdk_version: v2
+      page_id: client-close
+      anchor: notes
+    must_contain: ["force", "no effect"]
+    exact_token: null
+    note: Opposite-polarity near-duplicate; the v3 Notes chunk says the reverse.
+
+  - id: q11
+    question: does retries_enabled=false stop retry_backoff_ms working
+    answer: "Yes — it is accepted but ignored, mirroring v2 behaviour"
+    depends_on: prose
+    gold:
+      sdk_version: v3
+      page_id: client-configure
+      anchor: notes
+    must_contain: ["retries_enabled", "accepted", "ignored"]
+    exact_token: null
+    note: Cross-page token collision; v2/client-send#notes is near-identical in wording.
+
+  - id: q12
+    question: concurrency 64 with rate_limit_rps 20 - do I get 64 rps
+    answer: "No — 20 requests per second. The more restrictive of the two wins"
+    depends_on: prose
+    gold:
+      sdk_version: v3
+      page_id: client-batch
+      anchor: notes
+    must_contain: ["concurrency", "not 64"]
+    exact_token: null
+    note: >
+      Written as a G-detector. The gold should land at or near rank 1, so a
+      wrong answer here is a generation failure that no retriever can fix.

@@ -1,0 +1,70 @@
+=== inspection dump: dense (top 5) ===
+    * = the gold chunk    A = this chunk contains the answer strings
+
+q01  'what is the default for retry_backoff_ms'
+  gold=v3/client-send#parameters::1  -> HIT at rank 4   <- outside top-3
+   A 1. 0.6371   v3/client-send#notes::3           
+     2. 0.6274   v2/client-send#notes::2           
+     3. 0.5590   v2/client-send#parameters::1      
+  *A 4. 0.5527   v3/client-send#parameters::1      
+     5. 0.5223   v3/client-configure#notes::3      
+
+q02  'what causes RedirectLoopError'
+  gold=v3/client-send#parameters::1  -> HIT at rank 1
+  *A 1. 0.4287   v3/client-send#parameters::1      
+     2. 0.4218   v3/client-send#clientsend::0      
+     3. 0.4170   v3/client-upload#notes::3         
+     4. 0.4163   v3/client-configure#notes::3      
+     5. 0.4105   v3/client-batch#example::2        
+
+q03  'pool_reap_seconds default'
+  gold=v3/client-configure#parameters::1  -> HIT at rank 3
+     1. 0.5708   v3/client-configure#notes::3      
+     2. 0.5569   v2/client-configure#notes::3      
+  *A 3. 0.5536   v3/client-configure#parameters::1 
+     4. 0.5074   v2/client-configure#example::2    
+     5. 0.5057   v3/client-configure#example::2    
+
+q04  'rate_limit_rps default'
+  gold=v3/client-batch#parameters::1  -> HIT at rank 4   <- outside top-3
+   A 1. 0.6038   v3/client-batch#notes::3          
+     2. 0.5429   v3/client-configure#notes::3      
+     3. 0.5239   v2/client-configure#notes::3      
+  *A 4. 0.5213   v3/client-batch#parameters::1     
+     5. 0.5145   v3/client-configure#parameters::1 
+
+q05  'chunk_bytes default for upload'
+  gold=v3/client-upload#parameters::1  -> HIT at rank 2
+     1. 0.5976   v3/client-upload#clientupload::0  
+  *A 2. 0.5813   v3/client-upload#parameters::1    
+     3. 0.5734   v2/client-stream#notes::3         
+     4. 0.5234   v3/client-upload#notes::3         
+     5. 0.5194   v3/client-stream#parameters::1    
+
+q06  'what raises CancelledError'
+  gold=v3/client-close#notes::3  -> HIT at rank 1
+  *A 1. 0.5280   v3/client-close#notes::3          
+     2. 0.5052   v3/client-upload#notes::3         
+     3. 0.4672   v3/client-send#clientsend::0      
+     4. 0.4667   v2/client-send#notes::2           
+     5. 0.4646   v2/client-stream#clientstream::0  
+
+q07  'what does StreamClosed mean'
+  gold=v2/client-stream#clientstream::0  -> HIT at rank 1
+  *A 1. 0.5867   v2/client-stream#clientstream::0  
+     2. 0.5689   v2/client-close#clientclose::0    
+     3. 0.5258   v3/client-stream#clientstream::0  
+     4. 0.5144   v3/client-close#clientclose::0    
+     5. 0.5132   v3/client-close#notes::3          
+
+q08  'v3 stream chunk_size default'
+  gold=v3/client-stream#parameters::1  -> HIT at rank 2
+   A 1. 0.6810   v2/client-stream#notes::3         
+  *A 2. 0.5526   v3/client-stream#parameters::1    
+     3. 0.5003   v2/client-configure#notes::3      
+     4. 0.5000   v2/client-stream#parameters::1    
+     5. 0.4787   v2/client-stream#clientstream::0  
+
+q09  'did chunk_size change between v2 and v3'
+  gold=v2/client-stream#notes::3  -> HIT at rank 1
+  *A 1

@@ -62,6 +62,10 @@ class VectorStore(Protocol):
 
     def reset(self) -> None: ...
 
+    def ids(self) -> list[str]: ...
+
+    def vectors(self, chunk_ids: list[str]) -> dict[str, list[float]]: ...
+
 
 class InMemoryStore:
     """Pure-python cosine search. No dependencies, no I/O, no persistence."""
@@ -92,6 +96,12 @@ class InMemoryStore:
 
     def reset(self) -> None:
         self._rows.clear()
+
+    def ids(self) -> list[str]:
+        return sorted(self._rows)
+
+    def vectors(self, chunk_ids: list[str]) -> dict[str, list[float]]:
+        return {c: self._rows[c][0] for c in chunk_ids if c in self._rows}
 
 
 class ChromaStore:
@@ -150,6 +160,24 @@ class ChromaStore:
         self._collection = self._client.get_or_create_collection(
             name=self.name, metadata={"hnsw:space": "cosine"}
         )
+
+    def ids(self) -> list[str]:
+        """Every chunk_id in the collection. Read-only; used by the verifier."""
+        return sorted(self._collection.get(include=[])["ids"])
+
+    def vectors(self, chunk_ids: list[str]) -> dict[str, list[float]]:
+        """Stored embeddings by id.
+
+        Needed only by hybrid retrieval, to recover a cosine-scale score for a
+        chunk BM25 surfaced but the dense arm did not return.
+        """
+        if not chunk_ids:
+            return {}
+        got = self._collection.get(ids=chunk_ids, include=["embeddings"])
+        return {
+            cid: (vec.tolist() if hasattr(vec, "tolist") else list(vec))
+            for cid, vec in zip(got["ids"], got["embeddings"])
+        }
 
 
 def get_store(

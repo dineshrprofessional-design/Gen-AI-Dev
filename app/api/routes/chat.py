@@ -4,6 +4,7 @@ Retrieval always works. Generation works when XAI_API_KEY is set, and reports
 itself unconfigured otherwise rather than failing obscurely.
 """
 
+import time
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, status
@@ -29,6 +30,9 @@ class AskRequest(BaseModel):
     sdk_version: str | None = None
     generate: bool = True
     model: str = DEFAULT_MODEL
+    # Week 4: BM25 + RRF fusion. Off by default, so the shipped behaviour of
+    # this route is exactly what it was before the change.
+    hybrid: bool = False
 
 
 class RetrievedChunk(BaseModel):
@@ -39,6 +43,11 @@ class RetrievedChunk(BaseModel):
     heading_path: str
     sdk_version: str
     text: str
+    # Fusion diagnostics, present only when hybrid retrieval ran. `score` stays
+    # the dense cosine either way, so the refusal floor keeps its meaning.
+    rrf_score: float | None = None
+    dense_rank: int | None = None
+    bm25_rank: int | None = None
 
 
 class AskResponse(BaseModel):
@@ -46,6 +55,11 @@ class AskResponse(BaseModel):
     strategy: str
     sdk_version_filter: str | None
     chunks: list[RetrievedChunk]
+    hybrid: bool = False
+    # Retrieval wall time for THIS request. Measured in the route, not inside
+    # search(), so the measured evaluation path carries no timing overhead.
+    retrieval_ms: float = 0.0
+    stage_ms: dict[str, float] = Field(default_factory=dict)
     generation_available: bool
     answer: str | None = None
     refused: bool = False
@@ -96,6 +110,8 @@ def ask(payload: AskRequest) -> AskResponse:
         )
 
     where = {"sdk_version": payload.sdk_version} if payload.sdk_version else None
+    stage_ms: dict[str, float] = {}
+    started = time.perf_counter()
     try:
         hits = search(
             payload.question,
@@ -103,6 +119,8 @@ def ask(payload: AskRequest) -> AskResponse:
             k=payload.k,
             persist_dir=Path(DEFAULT_INDEX),
             where=where,
+            hybrid=payload.hybrid,
+            stats=stage_ms,
         )
     except Exception as exc:
         raise HTTPException(
@@ -110,6 +128,8 @@ def ask(payload: AskRequest) -> AskResponse:
             f"search failed — has the index been built? "
             f"Run `python -m app.rag.index --all`. ({exc})",
         ) from exc
+
+    retrieval_ms = (time.perf_counter() - started) * 1000
 
     chunks = [
         RetrievedChunk(
@@ -120,6 +140,9 @@ def ask(payload: AskRequest) -> AskResponse:
             heading_path=str(hit.metadata.get("heading_path") or ""),
             sdk_version=str(hit.metadata.get("sdk_version") or ""),
             text=hit.text,
+            rrf_score=hit.metadata.get("rrf_score"),
+            dense_rank=hit.metadata.get("dense_rank"),
+            bm25_rank=hit.metadata.get("bm25_rank"),
         )
         for rank, hit in enumerate(hits, start=1)
     ]
@@ -129,6 +152,9 @@ def ask(payload: AskRequest) -> AskResponse:
         strategy=payload.strategy,
         sdk_version_filter=payload.sdk_version,
         chunks=chunks,
+        hybrid=payload.hybrid,
+        retrieval_ms=round(retrieval_ms, 1),
+        stage_ms={k: round(v, 3) for k, v in stage_ms.items()},
         generation_available=is_configured(),
     )
 

@@ -72,9 +72,31 @@ def search(
     k: int = 5,
     persist_dir: Path | None = DEFAULT_INDEX,
     where: dict[str, Any] | None = None,
+    hybrid: bool = False,
+    stats: dict[str, float] | None = None,
 ) -> list[SearchHit]:
+    """Dense vector search, or BM25 + RRF fusion when `hybrid` is set.
+
+    The Week 4 retrieval change is this one keyword and the branch below it. The
+    dense path's final line is unchanged, so every caller - the chat route, the
+    Week 3 evaluator, the CLI - keeps its existing behaviour by default. The
+    import is function-local, matching how chromadb and sentence-transformers
+    are already deferred in this package, so the module load graph is unmoved.
+    """
     embedder = get_embedder(embedder_name)
     store = get_store(strategy, embedder.name, persist_dir)
+    if hybrid:
+        from app.rag.retrieval import hybrid_search
+
+        return hybrid_search(
+            query,
+            embedder=embedder,
+            store=store,
+            strategy=strategy,
+            k=k,
+            where=where,
+            stats=stats,
+        )
     return store.search(embedder.embed_query(query), k=k, where=where)
 
 
@@ -84,10 +106,26 @@ def print_stats(stats: dict[str, Any]) -> None:
         print(f"  {key:<14} {stats[key]}")
 
 
-def print_hits(hits: list[SearchHit], query: str) -> None:
+def print_hits(hits: list[SearchHit], query: str, hybrid: bool = False) -> None:
     print(f'\nquery: "{query}"')
     if not hits:
         print("  no results")
+        return
+    if hybrid:
+        # Fusion diagnostics. Printed only for --hybrid, so the dense table
+        # below stays byte-identical to what it printed before this change.
+        print(f"  {'#':<3} {'score':<8} {'rrf':<9} {'d':<4} {'b':<4} chunk_id")
+        print("  " + "-" * 76)
+        for rank, hit in enumerate(hits, start=1):
+            meta = hit.metadata
+            d = meta.get("dense_rank")
+            b = meta.get("bm25_rank")
+            print(
+                f"  {rank:<3} {hit.score:<8.4f} "
+                f"{meta.get('rrf_score', 0.0):<9.6f} "
+                f"{'-' if d is None else d:<4} {'-' if b is None else b:<4} "
+                f"{hit.chunk_id}"
+            )
         return
     print(f"  {'#':<3} {'score':<8} {'target':<34} chunk_id")
     print("  " + "-" * 76)
@@ -110,6 +148,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--filter-version", default=None, help="restrict a search to one sdk_version"
     )
+    parser.add_argument(
+        "--hybrid", action="store_true", help="BM25 + RRF fusion instead of dense only"
+    )
     args = parser.parse_args(argv)
 
     if args.search:
@@ -122,11 +163,12 @@ def main(argv: list[str] | None = None) -> int:
                 k=args.k,
                 persist_dir=args.index,
                 where=where,
+                hybrid=args.hybrid,
             )
         except Exception as exc:
             print(f"search failed: {exc}", file=sys.stderr)
             return 1
-        print_hits(hits, args.search)
+        print_hits(hits, args.search, hybrid=args.hybrid)
         return 0
 
     strategies = sorted(CHUNKERS) if args.all else [args.strategy]
