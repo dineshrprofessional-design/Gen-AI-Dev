@@ -29,6 +29,9 @@ class AskRequest(BaseModel):
     sdk_version: str | None = None
     generate: bool = True
     model: str = DEFAULT_MODEL
+    # Week 4: BM25 + RRF fusion. Off by default, so the shipped behaviour of
+    # this route is exactly what it was before the change.
+    hybrid: bool = False
 
 
 class RetrievedChunk(BaseModel):
@@ -39,6 +42,11 @@ class RetrievedChunk(BaseModel):
     heading_path: str
     sdk_version: str
     text: str
+    # Fusion diagnostics, present only when hybrid retrieval ran. `score` stays
+    # the dense cosine either way, so the refusal floor keeps its meaning.
+    rrf_score: float | None = None
+    dense_rank: int | None = None
+    bm25_rank: int | None = None
 
 
 class AskResponse(BaseModel):
@@ -46,6 +54,7 @@ class AskResponse(BaseModel):
     strategy: str
     sdk_version_filter: str | None
     chunks: list[RetrievedChunk]
+    hybrid: bool = False
     generation_available: bool
     answer: str | None = None
     refused: bool = False
@@ -103,6 +112,7 @@ def ask(payload: AskRequest) -> AskResponse:
             k=payload.k,
             persist_dir=Path(DEFAULT_INDEX),
             where=where,
+            hybrid=payload.hybrid,
         )
     except Exception as exc:
         raise HTTPException(
@@ -120,6 +130,9 @@ def ask(payload: AskRequest) -> AskResponse:
             heading_path=str(hit.metadata.get("heading_path") or ""),
             sdk_version=str(hit.metadata.get("sdk_version") or ""),
             text=hit.text,
+            rrf_score=hit.metadata.get("rrf_score"),
+            dense_rank=hit.metadata.get("dense_rank"),
+            bm25_rank=hit.metadata.get("bm25_rank"),
         )
         for rank, hit in enumerate(hits, start=1)
     ]
@@ -129,6 +142,7 @@ def ask(payload: AskRequest) -> AskResponse:
         strategy=payload.strategy,
         sdk_version_filter=payload.sdk_version,
         chunks=chunks,
+        hybrid=payload.hybrid,
         generation_available=is_configured(),
     )
 

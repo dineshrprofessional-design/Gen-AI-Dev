@@ -75,6 +75,8 @@
   .pill{font-size:.71rem;padding:.08rem .45rem;border-radius:999px;
         border:1px solid var(--border);color:var(--muted)}
   .pill.v3{border-color:var(--accent);color:var(--accent)}
+  .pill.fuse{font-variant-numeric:tabular-nums;letter-spacing:.02em}
+  .fusenote{margin:.1rem 0 .7rem;font-size:.82rem;opacity:.72;max-width:62ch}
   pre.body{margin:0;padding:.75rem;white-space:pre-wrap;word-break:break-word;
            max-height:300px;overflow:auto}
   .alert{padding:.85rem 1rem;border:1px solid var(--bad);border-left-width:4px;
@@ -115,6 +117,13 @@
         <span>Top-k</span>
         <select id="k">
           <option>3</option><option selected>5</option><option>8</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Retrieval</span>
+        <select id="retrieval">
+          <option value="dense" selected>dense</option>
+          <option value="hybrid">hybrid (BM25+RRF)</option>
         </select>
       </label>
       <button type="submit" id="go">Ask</button>
@@ -175,6 +184,7 @@ $("form").onsubmit = async e => {
       body: JSON.stringify({
         question, strategy:$("strategy").value, k:Number($("k").value),
         sdk_version: $("version").value || null, generate: canGenerate,
+        hybrid: $("retrieval").value === "hybrid",
       })
     });
     const data = await res.json();
@@ -214,7 +224,12 @@ function render(d){
 
   html += `<h3 class="sec">Retrieved chunks — ${d.chunks.length}
     · chunker <code>${esc(d.strategy)}</code>
+    · retrieval <code>${d.hybrid?"hybrid":"dense"}</code>
     ${d.sdk_version_filter?`· filtered to <code>${esc(d.sdk_version_filter)}</code>`:"· no version filter"}</h3>`;
+  if(d.hybrid){
+    html += `<p class="fusenote">Ranked by RRF over dense and BM25 ranks, so a chunk can sit
+      above one with a higher cosine. The score shown is still the dense cosine.</p>`;
+  }
 
   if(!d.chunks.length){
     html += `<p class="empty">Nothing retrieved.</p>`;
@@ -228,6 +243,8 @@ function render(d){
           <span class="grow1"></span>
           <span class="pill ${c.sdk_version==="v3"?"v3":""}">${esc(c.sdk_version)}</span>
           <span class="pill">${c.score.toFixed(3)}</span>
+          ${c.rrf_score==null?"":`<span class="pill fuse" title="dense rank / BM25 rank">d${
+            c.dense_rank??"–"} b${c.bm25_rank??"–"}</span>`}
         </header>
         <pre class="body" ${c.rank>2?"hidden":""}>${esc(c.text)}</pre>
       </article>`).join("");
