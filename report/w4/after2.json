@@ -1,0 +1,925 @@
+{
+  "config": {
+    "hybrid": true,
+    "strategy": "structure",
+    "embedder": "bge-m3",
+    "k": 5,
+    "hit_at": 3,
+    "reps": 5,
+    "docs_root": "docs",
+    "index_dir": ".rag_index",
+    "golden_path": "eval\\golden_set.jsonl"
+  },
+  "fingerprint": {
+    "corpus_sha256": "b3df167a299714e8",
+    "doc_count": 10,
+    "chunk_count": 38,
+    "chunk_id_sha256": "07e94668aef5bf24",
+    "index_chunk_count": 38,
+    "index_id_sha256": "07e94668aef5bf24",
+    "strategy": "structure",
+    "chunker_params": {
+      "max_chars": 1200
+    },
+    "embedder": "bge-m3",
+    "embedder_model": "BAAI/bge-m3",
+    "collection": "structure__bge-m3",
+    "golden_set_sha256": "218f4a9ec6834555"
+  },
+  "environment": {
+    "python": "3.12.0",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "chromadb": "1.5.9"
+  },
+  "outcomes": [
+    {
+      "question_id": "q01",
+      "question": "what is the default for retry_backoff_ms",
+      "depends_on": "table_row",
+      "exact_token": "retry_backoff_ms",
+      "gold_chunk_id": "v3/client-send#parameters::1",
+      "hit_rank": 3,
+      "hits": [
+        {
+          "rank": 1,
+          "chunk_id": "v3/client-send#notes::3",
+          "score": 0.6371,
+          "rrf_score": 0.032018442622950824,
+          "dense_rank": 1,
+          "bm25_rank": 4,
+          "is_gold": false,
+          "contains_answer": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v2/client-send#notes::2",
+          "score": 0.6274,
+          "rrf_score": 0.03200204813108039,
+          "dense_rank": 2,
+          "bm25_rank": 3,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3/client-send#parameters::1",
+          "score": 0.5527,
+          "rrf_score": 0.031754032258064516,
+          "dense_rank": 4,
+          "bm25_rank": 2,
+          "is_gold": true,
+          "contains_answer": true
+        },
+        {
+          "rank": 4,
+          "chunk_id": "v2/client-send#parameters::1",
+          "score": 0.559,
+          "rrf_score": 0.03125763125763126,
+          "dense_rank": 3,
+          "bm25_rank": 5,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "v3/client-configure#notes::3",
+          "score": 0.5223,
+          "rrf_score": 0.029877369007803793,
+          "dense_rank": 5,
+          "bm25_rank": 9,
+          "is_gold": false,
+          "contains_answer": false
+        }
+      ],
+      "latencies_ms": [
+        514.467,
+        515.236,
+        499.514,
+        519.879,
+        497.506
+      ],
+      "embed_only_ms": 439.433,
+      "component_ms": {
+        "embed_ms": 439.729,
+        "dense_ms": 13.161,
+        "bm25_ms": 0.871,
+        "fuse_ms": 0.388
+      }
+    },
+    {
+      "question_id": "q02",
+      "question": "what causes RedirectLoopError",
+      "depends_on": "table_row",
+      "exact_token": "RedirectLoopError",
+      "gold_chunk_id": "v3/client-send#parameters::1",
+      "hit_rank": 1,
+      "hits": [
+        {
+          "rank": 1,
+          "chunk_id": "v3/client-send#parameters::1",
+          "score": 0.4287,
+          "rrf_score": 0.03252247488101534,
+          "dense_rank": 1,
+          "bm25_rank": 2,
+          "is_gold": true,
+          "contains_answer": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3/client-batch#clientsendbatch::0",
+          "score": 0.397,
+          "rrf_score": 0.03131881575727918,
+          "dense_rank": 7,
+          "bm25_rank": 1,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3/client-send#clientsend::0",
+          "score": 0.4218,
+          "rrf_score": 0.016129032258064516,
+          "dense_rank": 2,
+          "bm25_rank": null,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "v3/client-upload#notes::3",
+          "score": 0.417,
+          "rrf_score": 0.015873015873015872,
+          "dense_rank": 3,
+          "bm25_rank": null,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "v3/client-configure#notes::3",
+          "score": 0.4163,
+          "rrf_score": 0.015625,
+          "dense_rank": 4,
+          "bm25_rank": null,
+          "is_gold": false,
+          "contains_answer": false
+        }
+      ],
+      "latencies_ms": [
+        446.806,
+        427.67,
+        442.663,
+        429.205,
+        476.018
+      ],
+      "embed_only_ms": 397.58,
+      "component_ms": {
+        "embed_ms": 424.358,
+        "dense_ms": 15.013,
+        "bm25_ms": 0.251,
+        "fuse_ms": 0.321
+      }
+    },
+    {
+      "question_id": "q03",
+      "question": "pool_reap_seconds default",
+      "depends_on": "table_row",
+      "exact_token": "pool_reap_seconds",
+      "gold_chunk_id": "v3/client-configure#parameters::1",
+      "hit_rank": 2,
+      "hits": [
+        {
+          "rank": 1,
+          "chunk_id": "v3/client-configure#notes::3",
+          "score": 0.5708,
+          "rrf_score": 0.03252247488101534,
+          "dense_rank": 1,
+          "bm25_rank": 2,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3/client-configure#parameters::1",
+          "score": 0.5536,
+          "rrf_score": 0.032266458495966696,
+          "dense_rank": 3,
+          "bm25_rank": 1,
+          "is_gold": true,
+          "contains_answer": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v2/client-configure#notes::3",
+          "score": 0.5569,
+          "rrf_score": 0.031054405392392875,
+          "dense_rank": 2,
+          "bm25_rank": 7,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "v3/client-stream#parameters::1",
+          "score": 0.4449,
+          "rrf_score": 0.02967032967032967,
+          "dense_rank": 10,
+          "bm25_rank": 5,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "v2/client-send#parameters::1",
+          "score": 0.4428,
+          "rrf_score": 0.029513888888888888,
+          "dense_rank": 12,
+          "bm25_rank": 4,
+          "is_gold": false,
+          "contains_answer": false
+        }
+      ],
+      "latencies_ms": [
+        414.096,
+        452.963,
+        419.701,
+        435.127,
+        420.437
+      ],
+      "embed_only_ms": 374.122,
+      "component_ms": {
+        "embed_ms": 367.779,
+        "dense_ms": 11.193,
+        "bm25_ms": 0.351,
+        "fuse_ms": 0.29
+      }
+    },
+    {
+      "question_id": "q04",
+      "question": "rate_limit_rps default",
+      "depends_on": "table_row",
+      "exact_token": "rate_limit_rps",
+      "gold_chunk_id": "v3/client-batch#parameters::1",
+      "hit_rank": 2,
+      "hits": [
+        {
+          "rank": 1,
+          "chunk_id": "v3/client-batch#notes::3",
+          "score": 0.6038,
+          "rrf_score": 0.03252247488101534,
+          "dense_rank": 1,
+          "bm25_rank": 2,
+          "is_gold": false,
+          "contains_answer": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3/client-batch#parameters::1",
+          "score": 0.5213,
+          "rrf_score": 0.03149801587301587,
+          "dense_rank": 4,
+          "bm25_rank": 3,
+          "is_gold": true,
+          "contains_answer": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v2/client-configure#notes::3",
+          "score": 0.5239,
+          "rrf_score": 0.03057889822595705,
+          "dense_rank": 3,
+          "bm25_rank": 8,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "v3/client-stream#parameters::1",
+          "score": 0.5029,
+          "rrf_score": 0.030303030303030304,
+          "dense_rank": 6,
+          "bm25_rank": 6,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "v2/client-send#parameters::1",
+          "score": 0.4863,
+          "rrf_score": 0.029877369007803793,
+          "dense_rank": 9,
+          "bm25_rank": 5,
+          "is_gold": false,
+          "contains_answer": false
+        }
+      ],
+      "latencies_ms": [
+        393.79,
+        376.757,
+        379.792,
+        378.092,
+        375.37
+      ],
+      "embed_only_ms": 328.785,
+      "component_ms": {
+        "embed_ms": 322.309,
+        "dense_ms": 12.602,
+        "bm25_ms": 0.311,
+        "fuse_ms": 0.303
+      }
+    },
+    {
+      "question_id": "q05",
+      "question": "chunk_bytes default for upload",
+      "depends_on": "table_row",
+      "exact_token": "chunk_bytes",
+      "gold_chunk_id": "v3/client-upload#parameters::1",
+      "hit_rank": 2,
+      "hits": [
+        {
+          "rank": 1,
+          "chunk_id": "v3/client-upload#clientupload::0",
+          "score": 0.5976,
+          "rrf_score": 0.03278688524590164,
+          "dense_rank": 1,
+          "bm25_rank": 1,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3/client-upload#parameters::1",
+          "score": 0.5813,
+          "rrf_score": 0.03200204813108039,
+          "dense_rank": 2,
+          "bm25_rank": 3,
+          "is_gold": true,
+          "contains_answer": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3/client-upload#example::2",
+          "score": 0.481,
+          "rrf_score": 0.03128054740957967,
+          "dense_rank": 6,
+          "bm25_rank": 2,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "v3/client-upload#notes::3",
+          "score": 0.5234,
+          "rrf_score": 0.03125,
+          "dense_rank": 4,
+          "bm25_rank": 4,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "v3/client-batch#parameters::1",
+          "score": 0.4565,
+          "rrf_score": 0.030090497737556562,
+          "dense_rank": 8,
+          "bm25_rank": 5,
+          "is_gold": false,
+          "contains_answer": false
+        }
+      ],
+      "latencies_ms": [
+        433.131,
+        425.795,
+        430.694,
+        483.496,
+        451.108
+      ],
+      "embed_only_ms": 388.5,
+      "component_ms": {
+        "embed_ms": 395.589,
+        "dense_ms": 13.094,
+        "bm25_ms": 0.48,
+        "fuse_ms": 0.325
+      }
+    },
+    {
+      "question_id": "q06",
+      "question": "what raises CancelledError",
+      "depends_on": "prose",
+      "exact_token": "CancelledError",
+      "gold_chunk_id": "v3/client-close#notes::3",
+      "hit_rank": 1,
+      "hits": [
+        {
+          "rank": 1,
+          "chunk_id": "v3/client-close#notes::3",
+          "score": 0.528,
+          "rrf_score": 0.03252247488101534,
+          "dense_rank": 1,
+          "bm25_rank": 2,
+          "is_gold": true,
+          "contains_answer": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v2/client-stream#clientstream::0",
+          "score": 0.4646,
+          "rrf_score": 0.03177805800756621,
+          "dense_rank": 5,
+          "bm25_rank": 1,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3/client-batch#clientsendbatch::0",
+          "score": 0.4158,
+          "rrf_score": 0.028693528693528692,
+          "dense_rank": 18,
+          "bm25_rank": 3,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "v3/client-upload#notes::3",
+          "score": 0.5052,
+          "rrf_score": 0.016129032258064516,
+          "dense_rank": 2,
+          "bm25_rank": null,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "v3/client-send#clientsend::0",
+          "score": 0.4672,
+          "rrf_score": 0.015873015873015872,
+          "dense_rank": 3,
+          "bm25_rank": null,
+          "is_gold": false,
+          "contains_answer": false
+        }
+      ],
+      "latencies_ms": [
+        360.414,
+        375.46,
+        380.648,
+        409.614,
+        389.464
+      ],
+      "embed_only_ms": 331.995,
+      "component_ms": {
+        "embed_ms": 325.691,
+        "dense_ms": 14.53,
+        "bm25_ms": 0.332,
+        "fuse_ms": 0.26
+      }
+    },
+    {
+      "question_id": "q07",
+      "question": "what does StreamClosed mean",
+      "depends_on": "prose",
+      "exact_token": "StreamClosed",
+      "gold_chunk_id": "v2/client-stream#clientstream::0",
+      "hit_rank": 1,
+      "hits": [
+        {
+          "rank": 1,
+          "chunk_id": "v2/client-stream#clientstream::0",
+          "score": 0.5867,
+          "rrf_score": 0.03278688524590164,
+          "dense_rank": 1,
+          "bm25_rank": 1,
+          "is_gold": true,
+          "contains_answer": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v2/client-close#notes::3",
+          "score": 0.4128,
+          "rrf_score": 0.029709507042253523,
+          "dense_rank": 11,
+          "bm25_rank": 4,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3/client-configure#parameters::1",
+          "score": 0.4073,
+          "rrf_score": 0.028814262023217248,
+          "dense_rank": 12,
+          "bm25_rank": 7,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "v3/client-batch#clientsendbatch::0",
+          "score": 0.3862,
+          "rrf_score": 0.028629032258064516,
+          "dense_rank": 20,
+          "bm25_rank": 2,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "v3/client-configure#clientconfigure::0",
+          "score": 0.3867,
+          "rrf_score": 0.028531243721117136,
+          "dense_rank": 19,
+          "bm25_rank": 3,
+          "is_gold": false,
+          "contains_answer": false
+        }
+      ],
+      "latencies_ms": [
+        447.359,
+        399.734,
+        453.187,
+        443.429,
+        455.603
+      ],
+      "embed_only_ms": 395.304,
+      "component_ms": {
+        "embed_ms": 400.715,
+        "dense_ms": 12.677,
+        "bm25_ms": 0.357,
+        "fuse_ms": 0.241
+      }
+    },
+    {
+      "question_id": "q08",
+      "question": "v3 stream chunk_size default",
+      "depends_on": "table_row",
+      "exact_token": null,
+      "gold_chunk_id": "v3/client-stream#parameters::1",
+      "hit_rank": 2,
+      "hits": [
+        {
+          "rank": 1,
+          "chunk_id": "v2/client-stream#notes::3",
+          "score": 0.681,
+          "rrf_score": 0.03252247488101534,
+          "dense_rank": 1,
+          "bm25_rank": 2,
+          "is_gold": false,
+          "contains_answer": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3/client-stream#parameters::1",
+          "score": 0.5526,
+          "rrf_score": 0.03252247488101534,
+          "dense_rank": 2,
+          "bm25_rank": 1,
+          "is_gold": true,
+          "contains_answer": true
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v2/client-stream#parameters::1",
+          "score": 0.5,
+          "rrf_score": 0.03149801587301587,
+          "dense_rank": 4,
+          "bm25_rank": 3,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "v2/client-configure#notes::3",
+          "score": 0.5003,
+          "rrf_score": 0.031024531024531024,
+          "dense_rank": 3,
+          "bm25_rank": 6,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "v2/client-stream#clientstream::0",
+          "score": 0.4787,
+          "rrf_score": 0.031009615384615385,
+          "dense_rank": 5,
+          "bm25_rank": 4,
+          "is_gold": false,
+          "contains_answer": false
+        }
+      ],
+      "latencies_ms": [
+        442.798,
+        444.03,
+        431.304,
+        434.667,
+        446.057
+      ],
+      "embed_only_ms": 372.146,
+      "component_ms": {
+        "embed_ms": 399.253,
+        "dense_ms": 10.592,
+        "bm25_ms": 0.208,
+        "fuse_ms": 0.134
+      }
+    },
+    {
+      "question_id": "q09",
+      "question": "did chunk_size change between v2 and v3",
+      "depends_on": "prose",
+      "exact_token": null,
+      "gold_chunk_id": "v2/client-stream#notes::3",
+      "hit_rank": 1,
+      "hits": [
+        {
+          "rank": 1,
+          "chunk_id": "v2/client-stream#notes::3",
+          "score": 0.6174,
+          "rrf_score": 0.03278688524590164,
+          "dense_rank": 1,
+          "bm25_rank": 1,
+          "is_gold": true,
+          "contains_answer": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v2/client-close#notes::3",
+          "score": 0.4373,
+          "rrf_score": 0.031754032258064516,
+          "dense_rank": 4,
+          "bm25_rank": 2,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v2/client-configure#notes::3",
+          "score": 0.4852,
+          "rrf_score": 0.031054405392392875,
+          "dense_rank": 2,
+          "bm25_rank": 7,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "v2/client-send#notes::2",
+          "score": 0.4464,
+          "rrf_score": 0.031024531024531024,
+          "dense_rank": 3,
+          "bm25_rank": 6,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "v2/client-close#clientclose::0",
+          "score": 0.4092,
+          "rrf_score": 0.030536130536130537,
+          "dense_rank": 6,
+          "bm25_rank": 5,
+          "is_gold": false,
+          "contains_answer": false
+        }
+      ],
+      "latencies_ms": [
+        494.439,
+        464.833,
+        464.571,
+        514.733,
+        506.441
+      ],
+      "embed_only_ms": 426.492,
+      "component_ms": {
+        "embed_ms": 430.445,
+        "dense_ms": 14.727,
+        "bm25_ms": 0.522,
+        "fuse_ms": 0.475
+      }
+    },
+    {
+      "question_id": "q10",
+      "question": "setting force=False on close does nothing?",
+      "depends_on": "prose",
+      "exact_token": null,
+      "gold_chunk_id": "v2/client-close#notes::3",
+      "hit_rank": 1,
+      "hits": [
+        {
+          "rank": 1,
+          "chunk_id": "v2/client-close#notes::3",
+          "score": 0.6712,
+          "rrf_score": 0.03278688524590164,
+          "dense_rank": 1,
+          "bm25_rank": 1,
+          "is_gold": true,
+          "contains_answer": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v2/client-close#parameters::1",
+          "score": 0.5104,
+          "rrf_score": 0.03149801587301587,
+          "dense_rank": 3,
+          "bm25_rank": 4,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3/client-close#parameters::1",
+          "score": 0.4814,
+          "rrf_score": 0.03149801587301587,
+          "dense_rank": 4,
+          "bm25_rank": 3,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "v3/client-close#notes::3",
+          "score": 0.5885,
+          "rrf_score": 0.031054405392392875,
+          "dense_rank": 2,
+          "bm25_rank": 7,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "v3/client-configure#notes::3",
+          "score": 0.4671,
+          "rrf_score": 0.030834914611005692,
+          "dense_rank": 8,
+          "bm25_rank": 2,
+          "is_gold": false,
+          "contains_answer": false
+        }
+      ],
+      "latencies_ms": [
+        446.665,
+        445.073,
+        437.191,
+        444.268,
+        430.309
+      ],
+      "embed_only_ms": 372.057,
+      "component_ms": {
+        "embed_ms": 376.246,
+        "dense_ms": 13.676,
+        "bm25_ms": 0.365,
+        "fuse_ms": 0.342
+      }
+    },
+    {
+      "question_id": "q11",
+      "question": "does retries_enabled=false stop retry_backoff_ms working",
+      "depends_on": "prose",
+      "exact_token": null,
+      "gold_chunk_id": "v3/client-configure#notes::3",
+      "hit_rank": 1,
+      "hits": [
+        {
+          "rank": 1,
+          "chunk_id": "v3/client-configure#notes::3",
+          "score": 0.6024,
+          "rrf_score": 0.032266458495966696,
+          "dense_rank": 3,
+          "bm25_rank": 1,
+          "is_gold": true,
+          "contains_answer": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v2/client-send#notes::2",
+          "score": 0.6579,
+          "rrf_score": 0.032018442622950824,
+          "dense_rank": 1,
+          "bm25_rank": 4,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v2/client-close#notes::3",
+          "score": 0.492,
+          "rrf_score": 0.030834914611005692,
+          "dense_rank": 8,
+          "bm25_rank": 2,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "v3/client-send#notes::3",
+          "score": 0.6199,
+          "rrf_score": 0.030834914611005692,
+          "dense_rank": 2,
+          "bm25_rank": 8,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "v2/client-configure#notes::3",
+          "score": 0.5629,
+          "rrf_score": 0.030776515151515152,
+          "dense_rank": 4,
+          "bm25_rank": 6,
+          "is_gold": false,
+          "contains_answer": false
+        }
+      ],
+      "latencies_ms": [
+        658.991,
+        614.536,
+        660.656,
+        684.888,
+        641.616
+      ],
+      "embed_only_ms": 587.96,
+      "component_ms": {
+        "embed_ms": 586.528,
+        "dense_ms": 12.253,
+        "bm25_ms": 0.281,
+        "fuse_ms": 0.128
+      }
+    },
+    {
+      "question_id": "q12",
+      "question": "concurrency 64 with rate_limit_rps 20 - do I get 64 rps",
+      "depends_on": "prose",
+      "exact_token": null,
+      "gold_chunk_id": "v3/client-batch#notes::3",
+      "hit_rank": 1,
+      "hits": [
+        {
+          "rank": 1,
+          "chunk_id": "v3/client-batch#notes::3",
+          "score": 0.6816,
+          "rrf_score": 0.03278688524590164,
+          "dense_rank": 1,
+          "bm25_rank": 1,
+          "is_gold": true,
+          "contains_answer": true
+        },
+        {
+          "rank": 2,
+          "chunk_id": "v3/client-batch#parameters::1",
+          "score": 0.4941,
+          "rrf_score": 0.03200204813108039,
+          "dense_rank": 3,
+          "bm25_rank": 2,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 3,
+          "chunk_id": "v3/client-batch#example::2",
+          "score": 0.4802,
+          "rrf_score": 0.03149801587301587,
+          "dense_rank": 4,
+          "bm25_rank": 3,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 4,
+          "chunk_id": "v3/client-configure#notes::3",
+          "score": 0.5132,
+          "rrf_score": 0.030621785881252923,
+          "dense_rank": 2,
+          "bm25_rank": 9,
+          "is_gold": false,
+          "contains_answer": false
+        },
+        {
+          "rank": 5,
+          "chunk_id": "v3/client-send#notes::3",
+          "score": 0.4281,
+          "rrf_score": 0.02900988017658188,
+          "dense_rank": 11,
+          "bm25_rank": 7,
+          "is_gold": false,
+          "contains_answer": false
+        }
+      ],
+      "latencies_ms": [
+        663.877,
+        652.657,
+        642.497,
+        671.33,
+        621.773
+      ],
+      "embed_only_ms": 609.288,
+      "component_ms": {
+        "embed_ms": 568.145,
+        "dense_ms": 12.949,
+        "bm25_ms": 0.4,
+        "fuse_ms": 0.277
+      }
+    }
+  ]
+}

@@ -1,0 +1,537 @@
+[
+  {
+    "question_id": "q01",
+    "question": "what is the default for retry_backoff_ms",
+    "gold_chunk_id": "v3/client-send#parameters::1",
+    "exact_token": "retry_backoff_ms",
+    "expected_answer": "250 ms \u2014 the base delay before jitter",
+    "must_contain": [
+      "retry_backoff_ms",
+      "250"
+    ],
+    "top3": [
+      {
+        "rank": 1,
+        "chunk_id": "v3/client-send#notes::3",
+        "score": 0.6371,
+        "contains_answer": true
+      },
+      {
+        "rank": 2,
+        "chunk_id": "v2/client-send#notes::2",
+        "score": 0.6274,
+        "contains_answer": false
+      },
+      {
+        "rank": 3,
+        "chunk_id": "v3/client-send#parameters::1",
+        "score": 0.5527,
+        "contains_answer": true
+      }
+    ],
+    "gold_rank": 3,
+    "gold_in_top3": true,
+    "answerable_from_top3": true,
+    "in_corpus": true,
+    "generated": "The default `retry_backoff_ms` is\u202f250\u202f[ v3/client-send#parameters::1 ].",
+    "refused": false,
+    "refusal_reason": "",
+    "citations": [],
+    "invalid_citations": [],
+    "top_score": 0.6371,
+    "answer_contains_expected": true,
+    "population": "pass",
+    "proposed_label": "pass"
+  },
+  {
+    "question_id": "q02",
+    "question": "what causes RedirectLoopError",
+    "gold_chunk_id": "v3/client-send#parameters::1",
+    "exact_token": "RedirectLoopError",
+    "expected_answer": "Following more than max_redirects redirects; the default is 5",
+    "must_contain": [
+      "RedirectLoopError",
+      "max_redirects"
+    ],
+    "top3": [
+      {
+        "rank": 1,
+        "chunk_id": "v3/client-send#parameters::1",
+        "score": 0.4287,
+        "contains_answer": true
+      },
+      {
+        "rank": 2,
+        "chunk_id": "v3/client-batch#clientsendbatch::0",
+        "score": 0.397,
+        "contains_answer": false
+      },
+      {
+        "rank": 3,
+        "chunk_id": "v3/client-send#clientsend::0",
+        "score": 0.4218,
+        "contains_answer": false
+      }
+    ],
+    "gold_rank": 1,
+    "gold_in_top3": true,
+    "answerable_from_top3": true,
+    "in_corpus": true,
+    "generated": "INSUFFICIENT_CONTEXT",
+    "refused": true,
+    "refusal_reason": "top score 0.429 below floor 0.45",
+    "citations": [],
+    "invalid_citations": [],
+    "top_score": 0.4287,
+    "answer_contains_expected": false,
+    "population": "gate",
+    "proposed_label": "score-floor refusal"
+  },
+  {
+    "question_id": "q03",
+    "question": "pool_reap_seconds default",
+    "gold_chunk_id": "v3/client-configure#parameters::1",
+    "exact_token": "pool_reap_seconds",
+    "expected_answer": "90 seconds of idleness",
+    "must_contain": [
+      "pool_reap_seconds",
+      "90"
+    ],
+    "top3": [
+      {
+        "rank": 1,
+        "chunk_id": "v3/client-configure#notes::3",
+        "score": 0.5708,
+        "contains_answer": false
+      },
+      {
+        "rank": 2,
+        "chunk_id": "v3/client-configure#parameters::1",
+        "score": 0.5536,
+        "contains_answer": true
+      },
+      {
+        "rank": 3,
+        "chunk_id": "v2/client-configure#notes::3",
+        "score": 0.5569,
+        "contains_answer": false
+      }
+    ],
+    "gold_rank": 2,
+    "gold_in_top3": true,
+    "answerable_from_top3": true,
+    "in_corpus": true,
+    "generated": "The default for `pool_reap_seconds` is\u202f90\u202fseconds. [v3/client-configure#parameters::1]",
+    "refused": false,
+    "refusal_reason": "",
+    "citations": [
+      "v3/client-configure#parameters::1"
+    ],
+    "invalid_citations": [],
+    "top_score": 0.5708,
+    "answer_contains_expected": true,
+    "population": "pass",
+    "proposed_label": "pass"
+  },
+  {
+    "question_id": "q04",
+    "question": "rate_limit_rps default",
+    "gold_chunk_id": "v3/client-batch#parameters::1",
+    "exact_token": "rate_limit_rps",
+    "expected_answer": "20 requests per second",
+    "must_contain": [
+      "rate_limit_rps",
+      "20"
+    ],
+    "top3": [
+      {
+        "rank": 1,
+        "chunk_id": "v3/client-batch#notes::3",
+        "score": 0.6038,
+        "contains_answer": true
+      },
+      {
+        "rank": 2,
+        "chunk_id": "v3/client-batch#parameters::1",
+        "score": 0.5213,
+        "contains_answer": true
+      },
+      {
+        "rank": 3,
+        "chunk_id": "v2/client-configure#notes::3",
+        "score": 0.5239,
+        "contains_answer": false
+      }
+    ],
+    "gold_rank": 2,
+    "gold_in_top3": true,
+    "answerable_from_top3": true,
+    "in_corpus": true,
+    "generated": "The default `rate_limit_rps` is\u202f20\u202f[ v3/client-batch#parameters::1 ].",
+    "refused": false,
+    "refusal_reason": "",
+    "citations": [],
+    "invalid_citations": [],
+    "top_score": 0.6038,
+    "answer_contains_expected": true,
+    "population": "pass",
+    "proposed_label": "pass"
+  },
+  {
+    "question_id": "q05",
+    "question": "chunk_bytes default for upload",
+    "gold_chunk_id": "v3/client-upload#parameters::1",
+    "exact_token": "chunk_bytes",
+    "expected_answer": "8388608 bytes (8 MiB)",
+    "must_contain": [
+      "chunk_bytes",
+      "8388608"
+    ],
+    "top3": [
+      {
+        "rank": 1,
+        "chunk_id": "v3/client-upload#clientupload::0",
+        "score": 0.5976,
+        "contains_answer": false
+      },
+      {
+        "rank": 2,
+        "chunk_id": "v3/client-upload#parameters::1",
+        "score": 0.5813,
+        "contains_answer": true
+      },
+      {
+        "rank": 3,
+        "chunk_id": "v3/client-upload#example::2",
+        "score": 0.481,
+        "contains_answer": false
+      }
+    ],
+    "gold_rank": 2,
+    "gold_in_top3": true,
+    "answerable_from_top3": true,
+    "in_corpus": true,
+    "generated": "The default `chunk_bytes` value is\u202f8,388,608\u202fbytes [v3/client-upload#parameters::1].",
+    "refused": false,
+    "refusal_reason": "",
+    "citations": [
+      "v3/client-upload#parameters::1"
+    ],
+    "invalid_citations": [],
+    "top_score": 0.5976,
+    "answer_contains_expected": true,
+    "population": "pass",
+    "proposed_label": "pass"
+  },
+  {
+    "question_id": "q06",
+    "question": "what raises CancelledError",
+    "gold_chunk_id": "v3/client-close#notes::3",
+    "exact_token": "CancelledError",
+    "expected_answer": "close(force=True) \u2014 in-flight requests are cancelled and their futures raise it",
+    "must_contain": [
+      "CancelledError",
+      "force=True"
+    ],
+    "top3": [
+      {
+        "rank": 1,
+        "chunk_id": "v3/client-close#notes::3",
+        "score": 0.528,
+        "contains_answer": true
+      },
+      {
+        "rank": 2,
+        "chunk_id": "v2/client-stream#clientstream::0",
+        "score": 0.4646,
+        "contains_answer": false
+      },
+      {
+        "rank": 3,
+        "chunk_id": "v3/client-batch#clientsendbatch::0",
+        "score": 0.4158,
+        "contains_answer": false
+      }
+    ],
+    "gold_rank": 1,
+    "gold_in_top3": true,
+    "answerable_from_top3": true,
+    "in_corpus": true,
+    "generated": "The futures of in\u2011flight requests that are cancelled when `Client.close(force=True)` is used raise `CancelledError`\u3010v3/client-close#notes::3\u3011.",
+    "refused": false,
+    "refusal_reason": "",
+    "citations": [],
+    "invalid_citations": [],
+    "top_score": 0.528,
+    "answer_contains_expected": true,
+    "population": "pass",
+    "proposed_label": "pass"
+  },
+  {
+    "question_id": "q07",
+    "question": "what does StreamClosed mean",
+    "gold_chunk_id": "v2/client-stream#clientstream::0",
+    "exact_token": "StreamClosed",
+    "expected_answer": "A v2 stream dropped its connection; it does not reconnect, so restart from the beginning",
+    "must_contain": [
+      "StreamClosed",
+      "does not reconnect"
+    ],
+    "top3": [
+      {
+        "rank": 1,
+        "chunk_id": "v2/client-stream#clientstream::0",
+        "score": 0.5867,
+        "contains_answer": true
+      },
+      {
+        "rank": 2,
+        "chunk_id": "v2/client-close#notes::3",
+        "score": 0.4128,
+        "contains_answer": false
+      },
+      {
+        "rank": 3,
+        "chunk_id": "v3/client-configure#parameters::1",
+        "score": 0.4073,
+        "contains_answer": false
+      }
+    ],
+    "gold_rank": 1,
+    "gold_in_top3": true,
+    "answerable_from_top3": true,
+    "in_corpus": true,
+    "generated": "`StreamClosed` is the exception raised when a streaming connection drops in v2; it signals that the generator has been closed and the caller must restart the stream from the beginning. [v2/client-stream#clientstream::0]",
+    "refused": false,
+    "refusal_reason": "",
+    "citations": [
+      "v2/client-stream#clientstream::0"
+    ],
+    "invalid_citations": [],
+    "top_score": 0.5867,
+    "answer_contains_expected": true,
+    "population": "pass",
+    "proposed_label": "pass"
+  },
+  {
+    "question_id": "q08",
+    "question": "v3 stream chunk_size default",
+    "gold_chunk_id": "v3/client-stream#parameters::1",
+    "exact_token": null,
+    "expected_answer": "1024 bytes",
+    "must_contain": [
+      "chunk_size",
+      "1024"
+    ],
+    "top3": [
+      {
+        "rank": 1,
+        "chunk_id": "v2/client-stream#notes::3",
+        "score": 0.681,
+        "contains_answer": true
+      },
+      {
+        "rank": 2,
+        "chunk_id": "v3/client-stream#parameters::1",
+        "score": 0.5526,
+        "contains_answer": true
+      },
+      {
+        "rank": 3,
+        "chunk_id": "v2/client-stream#parameters::1",
+        "score": 0.5,
+        "contains_answer": false
+      }
+    ],
+    "gold_rank": 2,
+    "gold_in_top3": true,
+    "answerable_from_top3": true,
+    "in_corpus": true,
+    "generated": "The default `chunk_size` for `Client.stream()` in v3 is\u202f1024\u202fbytes\u3010v3/client-stream#parameters::1\u3011.",
+    "refused": false,
+    "refusal_reason": "",
+    "citations": [],
+    "invalid_citations": [],
+    "top_score": 0.681,
+    "answer_contains_expected": true,
+    "population": "pass",
+    "proposed_label": "pass"
+  },
+  {
+    "question_id": "q09",
+    "question": "did chunk_size change between v2 and v3",
+    "gold_chunk_id": "v2/client-stream#notes::3",
+    "exact_token": null,
+    "expected_answer": "Yes \u2014 512 in v2, raised to 1024 in v3",
+    "must_contain": [
+      "512",
+      "1024"
+    ],
+    "top3": [
+      {
+        "rank": 1,
+        "chunk_id": "v2/client-stream#notes::3",
+        "score": 0.6174,
+        "contains_answer": true
+      },
+      {
+        "rank": 2,
+        "chunk_id": "v2/client-close#notes::3",
+        "score": 0.4373,
+        "contains_answer": false
+      },
+      {
+        "rank": 3,
+        "chunk_id": "v2/client-configure#notes::3",
+        "score": 0.4852,
+        "contains_answer": false
+      }
+    ],
+    "gold_rank": 1,
+    "gold_in_top3": true,
+    "answerable_from_top3": true,
+    "in_corpus": true,
+    "generated": "Yes, the default `chunk_size` was increased from 512\u202fbytes in v2 to 1024\u202fbytes in v3\u3010v2/client-stream#notes::3\u3011.",
+    "refused": false,
+    "refusal_reason": "",
+    "citations": [],
+    "invalid_citations": [],
+    "top_score": 0.6174,
+    "answer_contains_expected": true,
+    "population": "pass",
+    "proposed_label": "pass"
+  },
+  {
+    "question_id": "q10",
+    "question": "setting force=False on close does nothing?",
+    "gold_chunk_id": "v2/client-close#notes::3",
+    "exact_token": null,
+    "expected_answer": "Correct in v2 \u2014 force is always true there. In v3 the default is false and requests drain",
+    "must_contain": [
+      "force",
+      "no effect"
+    ],
+    "top3": [
+      {
+        "rank": 1,
+        "chunk_id": "v2/client-close#notes::3",
+        "score": 0.6712,
+        "contains_answer": true
+      },
+      {
+        "rank": 2,
+        "chunk_id": "v2/client-close#parameters::1",
+        "score": 0.5104,
+        "contains_answer": false
+      },
+      {
+        "rank": 3,
+        "chunk_id": "v3/client-close#parameters::1",
+        "score": 0.4814,
+        "contains_answer": false
+      }
+    ],
+    "gold_rank": 1,
+    "gold_in_top3": true,
+    "answerable_from_top3": true,
+    "in_corpus": true,
+    "generated": "Yes. In v2 the `force` argument is always treated as\u202f`True`; setting it to\u202f`False` has no effect and exists only for compatibility with the v3 preview\u202f[ v2/client-close#notes::3 ].",
+    "refused": false,
+    "refusal_reason": "",
+    "citations": [],
+    "invalid_citations": [],
+    "top_score": 0.6712,
+    "answer_contains_expected": true,
+    "population": "pass",
+    "proposed_label": "pass"
+  },
+  {
+    "question_id": "q11",
+    "question": "does retries_enabled=false stop retry_backoff_ms working",
+    "gold_chunk_id": "v3/client-configure#notes::3",
+    "exact_token": null,
+    "expected_answer": "Yes \u2014 it is accepted but ignored, mirroring v2 behaviour",
+    "must_contain": [
+      "retries_enabled",
+      "accepted",
+      "ignored"
+    ],
+    "top3": [
+      {
+        "rank": 1,
+        "chunk_id": "v3/client-configure#notes::3",
+        "score": 0.6024,
+        "contains_answer": true
+      },
+      {
+        "rank": 2,
+        "chunk_id": "v2/client-send#notes::2",
+        "score": 0.6579,
+        "contains_answer": false
+      },
+      {
+        "rank": 3,
+        "chunk_id": "v2/client-close#notes::3",
+        "score": 0.492,
+        "contains_answer": false
+      }
+    ],
+    "gold_rank": 1,
+    "gold_in_top3": true,
+    "answerable_from_top3": true,
+    "in_corpus": true,
+    "generated": "Yes. Setting `retries_enabled` to\u202ffalse disables the automatic retry path, and the per\u2011call `retry_backoff_ms` (as well as `max_retries`) is accepted but ignored\u3010v3/client-configure#notes::3\u3011.",
+    "refused": false,
+    "refusal_reason": "",
+    "citations": [],
+    "invalid_citations": [],
+    "top_score": 0.6024,
+    "answer_contains_expected": true,
+    "population": "pass",
+    "proposed_label": "pass"
+  },
+  {
+    "question_id": "q12",
+    "question": "concurrency 64 with rate_limit_rps 20 - do I get 64 rps",
+    "gold_chunk_id": "v3/client-batch#notes::3",
+    "exact_token": null,
+    "expected_answer": "No \u2014 20 requests per second. The more restrictive of the two wins",
+    "must_contain": [
+      "concurrency",
+      "not 64"
+    ],
+    "top3": [
+      {
+        "rank": 1,
+        "chunk_id": "v3/client-batch#notes::3",
+        "score": 0.6816,
+        "contains_answer": true
+      },
+      {
+        "rank": 2,
+        "chunk_id": "v3/client-batch#parameters::1",
+        "score": 0.4941,
+        "contains_answer": false
+      },
+      {
+        "rank": 3,
+        "chunk_id": "v3/client-batch#example::2",
+        "score": 0.4802,
+        "contains_answer": false
+      }
+    ],
+    "gold_rank": 1,
+    "gold_in_top3": true,
+    "answerable_from_top3": true,
+    "in_corpus": true,
+    "generated": "No. The client will honor the lower limit, so with `concurrency=64` and `rate_limit_rps=20` you will get about\u202f20\u202frequests per second, not 64\u202frps\u3010v3/client-batch#notes::3\u3011",
+    "refused": false,
+    "refusal_reason": "",
+    "citations": [],
+    "invalid_citations": [],
+    "top_score": 0.6816,
+    "answer_contains_expected": true,
+    "population": "pass",
+    "proposed_label": "pass"
+  }
+]
