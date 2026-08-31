@@ -148,7 +148,7 @@ The clusters, counts, severities and example trace_ids are in
 > the residue will name what the regex alone couldn't fix.
 
 Committed to git with today's date — commit hash pasted here after the commit
-exists: `PREDICTION_COMMIT_HASH`.
+exists: `d76564c`.
 
 ## 6. Why a public benchmark would have missed the top 3 modes (requirement 6)
 
