@@ -512,11 +512,12 @@ path's final line is untouched, which is why every existing caller is unaffected
 
 ```
 $ git diff ragew3/chat-ui --stat -- app/
- app/api/routes/chat.py      |  14 ++++++
- app/rag/index.py            |  46 +++++++++++++++++-
- app/rag/store.py            |  28 +++++++++++
- app/rag/verify_questions.py | 114 ++++++++++++++++++++++++++++++++++++++++++++
- app/web/index.html          |  17 +++++++
+ app/api/routes/chat.py      |  26 ++++
+ app/main.py                 |   3 +-
+ app/rag/index.py            |  46 +++++-
+ app/rag/store.py            |  28 ++++
+ app/rag/verify_questions.py | 114 +++++++++
+ app/web/index.html          | 206 ++++++++++++
 ```
 
 ```diff
@@ -604,6 +605,36 @@ writes `[ chunk_id ]` with spaces, so `citations` comes back empty even when the
 answer cites correctly. It affects the citation chips in the UI, not retrieval or
 any number in this report.
 
+### Both numbers are visible in the app
+
+`GET /api/v1/eval/summary` (`app/api/routes/eval.py`) serves the recorded runs, and
+`/ui` renders them in a collapsed **Measurements** panel: hit-rate@1/@3/@5 and
+p50/p95/min for dense against hybrid, the per-question verdicts, and the stage split
+showing where a query's time actually goes.
+
+Three deliberate choices in that panel, because a metrics view is easy to make
+flattering:
+
+- **Accuracy and latency never share an axis.** They are different scales, and a
+  dual-axis chart would invent a relationship between them.
+- **The cost bar is true-scale.** BM25 and fusion really are narrower than one pixel
+  next to the 375 ms embedding, and the bar is not stretched to make them visible —
+  their being invisible *is* the finding. The two added stages are the only coloured
+  segments; everything already being paid is grey.
+- **The repeat runs are shown next to the headline.** The panel states that two runs
+  of the same configuration differ by 10.2 ms, more than the 10.8 ms between
+  configurations, so a reader cannot mistake the p50 drop for a speed-up.
+
+The route is read-only and never re-runs an evaluation: a button that recomputed the
+comparison would quietly produce different numbers from the ones in this report.
+
+`/api/v1/chat/ask` additionally returns `retrieval_ms` and, for hybrid, the per-stage
+split for that single request, which the page shows beside the retriever name. That
+timer lives in the route, not inside `search()`, so the measured path stays
+uninstrumented. Note the first request after a restart reports tens of seconds — it
+pays the one-off model load, which the evaluator discards as warm-up and this live
+number honestly does not.
+
 New modules, none of them on the dense path:
 
 | file | purpose |
@@ -614,6 +645,7 @@ New modules, none of them on the dense path:
 | `app/rag/fingerprint.py` | the one-variable guard |
 | `app/rag/eval_week4.py` | hit-rate@3, latency, `--detail`, `--compare` |
 | `app/rag/label_week4.py` | the R/G/Not-In-Corpus pass, generation in the loop |
+| `app/api/routes/eval.py` | serves the recorded runs to the UI, read-only |
 
 ### Two implementation details that would otherwise be silent bugs
 

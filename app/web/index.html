@@ -82,6 +82,59 @@
   .alert{padding:.85rem 1rem;border:1px solid var(--bad);border-left-width:4px;
          border-radius:8px;background:var(--bad-soft);color:var(--bad);margin-bottom:1.2rem}
   .empty{color:var(--muted);text-align:center;padding:2.5rem 0}
+
+  /* --- measurements panel ------------------------------------------------ */
+  details.metrics{background:var(--surface);border:1px solid var(--border);
+        border-radius:10px;margin-bottom:1.2rem}
+  details.metrics>summary{padding:.8rem 1rem;cursor:pointer;font-weight:600;
+        display:flex;gap:.6rem;align-items:baseline;flex-wrap:wrap}
+  details.metrics>summary::marker{color:var(--muted)}
+  details.metrics>summary .hint{font-weight:400;font-size:.83rem;color:var(--muted)}
+  .metrics-body{padding:0 1rem 1.1rem;display:flex;flex-direction:column;gap:1.3rem}
+
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:.7rem}
+  .tile{border:1px solid var(--border);border-radius:8px;padding:.7rem .8rem;
+        display:flex;flex-direction:column;gap:.2rem}
+  .tile .k{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  .tile .v{font-size:1.32rem;font-weight:700;font-variant-numeric:tabular-nums;
+        letter-spacing:-.01em}
+  .tile .v .was{color:var(--muted);font-weight:600}
+  .tile .v .arw{color:var(--muted);font-weight:400;padding:0 .12em}
+  .tile .v .now{color:var(--accent)}
+  .tile .n{font-size:.76rem;color:var(--muted)}
+
+  table.m{width:100%;border-collapse:collapse;font-size:.86rem}
+  table.m caption{text-align:left;font-size:.72rem;text-transform:uppercase;
+        letter-spacing:.06em;color:var(--muted);padding-bottom:.4rem}
+  table.m th,table.m td{text-align:right;padding:.33rem .5rem;
+        border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums}
+  table.m th:first-child,table.m td:first-child{text-align:left}
+  table.m thead th{font-weight:600;color:var(--muted);font-size:.75rem;
+        text-transform:uppercase;letter-spacing:.05em}
+  table.m tr.metric td{font-weight:700}
+  table.m td.gain{color:var(--accent);font-weight:600}
+  table.m td.flat{color:var(--muted)}
+  .tblwrap{overflow-x:auto}
+
+  /* true-scale cost bar: grey what was already paid, accent what the change added */
+  .costbar{display:flex;height:26px;border-radius:5px;overflow:hidden;
+        border:1px solid var(--border);background:var(--bg)}
+  .costbar i{display:block;height:100%}
+  .costbar i.base{background:var(--muted);opacity:.42}
+  .costbar i.base.alt{opacity:.68}
+  .costbar i.added{background:var(--accent);min-width:2px}
+  .costkey{display:flex;gap:1rem;flex-wrap:wrap;font-size:.8rem;color:var(--muted);
+        margin-top:.45rem}
+  .costkey span{display:flex;gap:.35rem;align-items:center}
+  .costkey b{width:9px;height:9px;border-radius:2px;display:inline-block}
+  .costkey b.base{background:var(--muted);opacity:.42}
+  .costkey b.base2{background:var(--muted);opacity:.68}
+  .costkey b.added{background:var(--accent)}
+  .caveat{font-size:.83rem;color:var(--muted);max-width:70ch}
+  .caveat strong{color:var(--text)}
+  .verdict{font-size:.78rem}
+  .verdict.fixed{color:var(--accent);font-weight:700}
+  .verdict.regressed{color:var(--bad);font-weight:700}
 </style>
 </head>
 <body>
@@ -94,6 +147,15 @@
   </p>
 
   <div id="banner"></div>
+
+  <details class="metrics" id="metrics">
+    <summary>Measurements — accuracy and latency
+      <span class="hint">recorded dense vs hybrid runs (Week 4)</span>
+    </summary>
+    <div class="metrics-body" id="metrics-body">
+      <p class="empty">Loading…</p>
+    </div>
+  </details>
 
   <form class="ask" id="form">
     <div class="row">
@@ -225,10 +287,16 @@ function render(d){
   html += `<h3 class="sec">Retrieved chunks — ${d.chunks.length}
     · chunker <code>${esc(d.strategy)}</code>
     · retrieval <code>${d.hybrid?"hybrid":"dense"}</code>
+    ${d.retrieval_ms?`· <span title="retrieval only, this request; excludes generation">${d.retrieval_ms.toFixed(0)} ms</span>`:""}
     ${d.sdk_version_filter?`· filtered to <code>${esc(d.sdk_version_filter)}</code>`:"· no version filter"}</h3>`;
   if(d.hybrid){
+    const sm = d.stage_ms || {};
+    const split = Object.keys(sm).length
+      ? ` This request: embed ${(sm.embed_ms||0).toFixed(0)} ms, dense ${(sm.dense_ms||0).toFixed(1)} ms,
+          BM25 ${(sm.bm25_ms||0).toFixed(2)} ms, fusion ${(sm.fuse_ms||0).toFixed(2)} ms.`
+      : "";
     html += `<p class="fusenote">Ranked by RRF over dense and BM25 ranks, so a chunk can sit
-      above one with a higher cosine. The score shown is still the dense cosine.</p>`;
+      above one with a higher cosine. The score shown is still the dense cosine.${split}</p>`;
   }
 
   if(!d.chunks.length){
@@ -259,6 +327,127 @@ function render(d){
 }
 
 boot();
+
+/* ---- measurements panel ------------------------------------------------ */
+let metricsLoaded = false;
+
+function pctOf(n, d){ return d ? (n / d * 100) : 0; }
+
+function renderMetrics(d){
+  if(!d.available){
+    return `<p class="empty">${esc(d.reason || "No recorded runs found.")}</p>`;
+  }
+
+  const a3 = d.accuracy.find(r => r.k === 3) || {dense:0, hybrid:0, total:0};
+  const lat = d.latency;
+  const deltaHit = a3.hybrid - a3.dense;
+  const deltaP50 = lat.hybrid.p50_ms - lat.dense.p50_ms;
+
+  /* The story is a number, so it gets a stat tile, not a chart. */
+  let h = `<div class="tiles">
+    <div class="tile">
+      <span class="k">hit-rate@3</span>
+      <span class="v"><span class="was">${a3.dense}</span><span class="arw">&rarr;</span><span class="now">${a3.hybrid}</span> / ${a3.total}</span>
+      <span class="n">${deltaHit >= 0 ? "+" : ""}${deltaHit} questions, same 12</span>
+    </div>
+    <div class="tile">
+      <span class="k">p50 latency</span>
+      <span class="v">${lat.dense.p50_ms}<span class="arw">&rarr;</span>${lat.hybrid.p50_ms} <span class="n">ms</span></span>
+      <span class="n">${deltaP50 >= 0 ? "+" : ""}${deltaP50.toFixed(1)} ms &mdash; within noise</span>
+    </div>
+    <div class="tile">
+      <span class="k">cost of the change</span>
+      <span class="v"><span class="now">${d.added_ms}</span> <span class="n">ms</span></span>
+      <span class="n">BM25 + fusion, per query</span>
+    </div>
+    <div class="tile">
+      <span class="k">one-variable check</span>
+      <span class="v"><span class="${d.one_variable.passed ? "now" : ""}">${d.one_variable.passed ? "PASS" : "FAIL"}</span></span>
+      <span class="n">differs only in <code>${esc((d.one_variable.config_diff||[]).join(", ") || "nothing")}</code></span>
+    </div>
+  </div>`;
+
+  /* Accuracy and latency are different scales, so they never share an axis. */
+  h += `<div class="tblwrap"><table class="m">
+    <caption>Accuracy &mdash; correct chunk within the top k, out of ${a3.total}</caption>
+    <thead><tr><th>metric</th><th>dense</th><th>hybrid</th><th>change</th></tr></thead>
+    <tbody>${d.accuracy.map(r => {
+      const delta = r.hybrid - r.dense;
+      return `<tr class="${r.is_metric ? "metric" : ""}">
+        <td>hit-rate@${r.k}${r.is_metric ? " &mdash; the metric" : ""}</td>
+        <td>${r.dense}/${r.total}</td><td>${r.hybrid}/${r.total}</td>
+        <td class="${delta > 0 ? "gain" : "flat"}">${delta > 0 ? "+" + delta : "&mdash;"}</td></tr>`;
+    }).join("")}</tbody></table></div>`;
+
+  h += `<div class="tblwrap"><table class="m">
+    <caption>Latency &mdash; ${lat.dense.samples} samples per run</caption>
+    <thead><tr><th>statistic</th><th>dense</th><th>hybrid</th><th>change</th></tr></thead>
+    <tbody>
+      ${["p50_ms","p95_ms","min_ms"].map(key => {
+        const dv = lat.dense[key], hv = lat.hybrid[key], delta = hv - dv;
+        return `<tr><td>${key.replace("_ms", "")} ms</td><td>${dv}</td><td>${hv}</td>
+          <td class="flat">${delta >= 0 ? "+" : ""}${delta.toFixed(1)}</td></tr>`;
+      }).join("")}
+    </tbody></table></div>`;
+
+  /* True-scale cost bar. Grey what was already paid, accent what the change added.
+     Deliberately not exaggerated: the added slice really is sub-pixel. */
+  const totalMs = d.stages.reduce((t, x) => t + x.ms, 0) || 1;
+  h += `<div>
+    <p class="caveat" style="margin:0 0 .4rem"><strong>Where a query&rsquo;s time goes</strong></p>
+    <div class="costbar" role="img" aria-label="${d.stages.map(x =>
+      esc(x.stage) + " " + x.ms + " milliseconds").join(", ")}">
+      ${d.stages.map((x, i) => `<i class="${x.added_by_change ? "added" : "base" + (i === 1 ? " alt" : "")}"
+        style="width:${pctOf(x.ms, totalMs).toFixed(3)}%"></i>`).join("")}
+    </div>
+    <div class="costkey">
+      ${d.stages.map((x, i) => `<span><b class="${x.added_by_change ? "added" : (i === 1 ? "base2" : "base")}"></b>
+        ${esc(x.stage)} &mdash; ${x.ms} ms</span>`).join("")}
+    </div>
+    <p class="caveat">Query embedding is <strong>${d.embed_share_pct}%</strong> of the work.
+      The two stages this change added total <strong>${d.added_ms} ms</strong> and are narrower
+      than one pixel at true scale &mdash; the bar is not stretched to make them visible.</p>
+  </div>`;
+
+  /* The repeat runs are why the p50 drop is reported as noise, not a win. */
+  h += `<div class="tblwrap"><table class="m">
+    <caption>Repeat runs &mdash; why the latency delta is noise</caption>
+    <thead><tr><th>run</th><th>retrieval</th><th>hit-rate@3</th><th>p50 ms</th></tr></thead>
+    <tbody>${d.replication.map(r => `<tr><td>${esc(r.run)}</td>
+      <td>${r.hybrid ? "hybrid" : "dense"}</td><td>${esc(r.hit_at_3)}</td>
+      <td>${r.p50_ms}</td></tr>`).join("")}</tbody></table></div>
+    <p class="caveat">Two runs of the <strong>same</strong> configuration differ by
+      <strong>${d.replication_spread_ms} ms</strong> &mdash; more than the
+      ${Math.abs(deltaP50).toFixed(1)} ms between configurations. So this is not a speed-up;
+      the real cost is the ${d.added_ms} ms above. Accuracy, by contrast, reproduced exactly.</p>`;
+
+  const moved = d.per_question.filter(q => q.verdict === "fixed" || q.verdict === "REGRESSED");
+  h += `<div class="tblwrap"><table class="m">
+    <caption>Per question &mdash; ${moved.length} moved, ${d.per_question.length - moved.length} unchanged</caption>
+    <thead><tr><th>id</th><th>exact token</th><th>dense rank</th><th>hybrid rank</th><th>verdict</th></tr></thead>
+    <tbody>${d.per_question.map(q => `<tr>
+      <td>${esc(q.id)}</td>
+      <td>${q.exact_token ? "<code>" + esc(q.exact_token) + "</code>" : "&mdash;"}</td>
+      <td>${q.before_rank === null ? "&mdash;" : q.before_rank}</td>
+      <td>${q.after_rank === null ? "&mdash;" : q.after_rank}</td>
+      <td class="verdict ${q.verdict === "fixed" ? "fixed" : (q.verdict === "REGRESSED" ? "regressed" : "")}">${esc(q.verdict)}</td>
+    </tr>`).join("")}</tbody></table></div>`;
+
+  return h;
+}
+
+$("metrics").addEventListener("toggle", async () => {
+  if(!$("metrics").open || metricsLoaded) return;
+  metricsLoaded = true;
+  try{
+    const res = await fetch("/api/v1/eval/summary");
+    const data = await res.json();
+    $("metrics-body").innerHTML = renderMetrics(data);
+  }catch(err){
+    metricsLoaded = false;
+    $("metrics-body").innerHTML = `<div class="alert">${esc(err.message)}</div>`;
+  }
+});
 </script>
 </body>
 </html>

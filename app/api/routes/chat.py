@@ -4,6 +4,7 @@ Retrieval always works. Generation works when XAI_API_KEY is set, and reports
 itself unconfigured otherwise rather than failing obscurely.
 """
 
+import time
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, status
@@ -55,6 +56,10 @@ class AskResponse(BaseModel):
     sdk_version_filter: str | None
     chunks: list[RetrievedChunk]
     hybrid: bool = False
+    # Retrieval wall time for THIS request. Measured in the route, not inside
+    # search(), so the measured evaluation path carries no timing overhead.
+    retrieval_ms: float = 0.0
+    stage_ms: dict[str, float] = Field(default_factory=dict)
     generation_available: bool
     answer: str | None = None
     refused: bool = False
@@ -105,6 +110,8 @@ def ask(payload: AskRequest) -> AskResponse:
         )
 
     where = {"sdk_version": payload.sdk_version} if payload.sdk_version else None
+    stage_ms: dict[str, float] = {}
+    started = time.perf_counter()
     try:
         hits = search(
             payload.question,
@@ -113,6 +120,7 @@ def ask(payload: AskRequest) -> AskResponse:
             persist_dir=Path(DEFAULT_INDEX),
             where=where,
             hybrid=payload.hybrid,
+            stats=stage_ms,
         )
     except Exception as exc:
         raise HTTPException(
@@ -120,6 +128,8 @@ def ask(payload: AskRequest) -> AskResponse:
             f"search failed — has the index been built? "
             f"Run `python -m app.rag.index --all`. ({exc})",
         ) from exc
+
+    retrieval_ms = (time.perf_counter() - started) * 1000
 
     chunks = [
         RetrievedChunk(
@@ -143,6 +153,8 @@ def ask(payload: AskRequest) -> AskResponse:
         sdk_version_filter=payload.sdk_version,
         chunks=chunks,
         hybrid=payload.hybrid,
+        retrieval_ms=round(retrieval_ms, 1),
+        stage_ms={k: round(v, 3) for k, v in stage_ms.items()},
         generation_available=is_configured(),
     )
 
