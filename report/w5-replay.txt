@@ -1,0 +1,22 @@
+seed=20260831  picked b98918daf643 of 141 organic traces
+
+trace b98918daf643  ts=2026-08-31T18:47:34+0530  git=41e8301  prompt=faf82290b6be
+question : 'what type is telemetry'
+config   : strategy=structure hybrid=True k=5 filter=None
+NOTE: environment drifted since the trace: git_sha (trace 41e8301, now 111f87e)
+
+retrieval, original vs replayed:
+  #   recorded chunk_id                    score    replayed chunk_id                    score    match
+  1   v3/client-configure#example::2       0.4167   v3/client-configure#example::2       0.4167   yes
+  2   v3/client-configure#parameters::1    0.3709   v3/client-configure#parameters::1    0.3709   yes
+  3   v3/client-upload#parameters::1       0.3766   v3/client-upload#parameters::1       0.3766   yes
+  4   v3/client-stream#parameters::1       0.3409   v3/client-stream#parameters::1       0.3409   yes
+  5   v2/client-close#parameters::1        0.3300   v2/client-close#parameters::1        0.3300   yes
+  -> retrieval replay IDENTICAL
+
+model    : openai/gpt-oss-120b  params={'temperature': 0}
+original : 'INSUFFICIENT_CONTEXT'
+replayed : 'INSUFFICIENT_CONTEXT'
+  -> outputs IDENTICAL  (temperature=0; provider does not guarantee token determinism)
+
+not reconstructable from the trace: wall-clock latency, timestamp.

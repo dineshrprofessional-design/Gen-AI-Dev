@@ -1,0 +1,753 @@
+{
+  "seed": 20260831,
+  "hybrid": true,
+  "organic": [
+    {
+      "trace_id": "7dedd4bcf02c",
+      "kind": "casual",
+      "q": "idempotency key default"
+    },
+    {
+      "trace_id": "cdf657a5fa61",
+      "kind": "param",
+      "q": "how do I set max_bytes"
+    },
+    {
+      "trace_id": "299d539de4c7",
+      "kind": "param",
+      "q": "what type is api_key"
+    },
+    {
+      "trace_id": "afa7c219b556",
+      "kind": "method",
+      "q": "what does Client.send_batch() do"
+    },
+    {
+      "trace_id": "4f657e9e3424",
+      "kind": "out_of_corpus",
+      "q": "how do I paginate results"
+    },
+    {
+      "trace_id": "1121ba01598c",
+      "kind": "param",
+      "q": "checksum default"
+    },
+    {
+      "trace_id": "901abd61c5aa",
+      "kind": "out_of_corpus",
+      "q": "is there an async version of the client"
+    },
+    {
+      "trace_id": "3fa847c2570e",
+      "kind": "prose",
+      "q": "what happens if I delete the upload state file"
+    },
+    {
+      "trace_id": "d9d7e96ac3e7",
+      "kind": "param",
+      "q": "what type is pool_size"
+    },
+    {
+      "trace_id": "58ada6da7d70",
+      "kind": "method",
+      "q": "show me an example of Client.send()"
+    },
+    {
+      "trace_id": "ae3bd2a5cf9a",
+      "kind": "out_of_corpus",
+      "q": "is there a sandbox environment"
+    },
+    {
+      "trace_id": "98eb06883683",
+      "kind": "param",
+      "q": "what is the default for retain_hours"
+    },
+    {
+      "trace_id": "9d88b87ad51d",
+      "kind": "method",
+      "q": "what does Client.close() do"
+    },
+    {
+      "trace_id": "dc234a87d74b",
+      "kind": "param",
+      "q": "is headers required"
+    },
+    {
+      "trace_id": "d0050af91a73",
+      "kind": "param",
+      "q": "is pool_timeout_ms required"
+    },
+    {
+      "trace_id": "06e91ea29831",
+      "kind": "param",
+      "q": "chunk_size default"
+    },
+    {
+      "trace_id": "164e62221526",
+      "kind": "out_of_corpus",
+      "q": "how do I authenticate with OAuth2"
+    },
+    {
+      "trace_id": "5ec194a0b653",
+      "kind": "prose",
+      "q": "are 4xx responses retried"
+    },
+    {
+      "trace_id": "307038802984",
+      "kind": "out_of_corpus",
+      "q": "what does error E1042 mean"
+    },
+    {
+      "trace_id": "99811137afeb",
+      "kind": "param",
+      "q": "how do I set idempotency_key"
+    },
+    {
+      "trace_id": "b226ff8a5996",
+      "kind": "method",
+      "q": "what does Client.send() do"
+    },
+    {
+      "trace_id": "d1ed2b96d352",
+      "kind": "param",
+      "q": "what is the default for timeout_ms"
+    },
+    {
+      "trace_id": "80d79221caed",
+      "kind": "param",
+      "q": "how do I set heartbeat_ms"
+    },
+    {
+      "trace_id": "ed39c11daf46",
+      "kind": "out_of_corpus",
+      "q": "how do I configure a proxy with authentication"
+    },
+    {
+      "trace_id": "0c6c1871f849",
+      "kind": "param",
+      "q": "is default_timeout_ms required"
+    },
+    {
+      "trace_id": "ab30ddcbefb8",
+      "kind": "out_of_corpus",
+      "q": "can I use the client from multiple threads"
+    },
+    {
+      "trace_id": "e454b0d76a7a",
+      "kind": "prose",
+      "q": "is 503 retried automatically"
+    },
+    {
+      "trace_id": "11f973b06cc0",
+      "kind": "param",
+      "q": "timeout_ms default"
+    },
+    {
+      "trace_id": "a7f5a81e346c",
+      "kind": "xversion",
+      "q": "did api_key change between v2 and v3"
+    },
+    {
+      "trace_id": "5fc0976db105",
+      "kind": "method",
+      "q": "show me an example of Client.stream()"
+    },
+    {
+      "trace_id": "54a9be44c588",
+      "kind": "param",
+      "q": "what type is fail_fast"
+    },
+    {
+      "trace_id": "0e5f382c7ad1",
+      "kind": "casual",
+      "q": "heartbeat ms default"
+    },
+    {
+      "trace_id": "32564ed47694",
+      "kind": "out_of_corpus",
+      "q": "how do I retry only idempotent requests"
+    },
+    {
+      "trace_id": "da78a479f1e1",
+      "kind": "param",
+      "q": "how do I set chunk_bytes"
+    },
+    {
+      "trace_id": "841b7eca5b21",
+      "kind": "out_of_corpus",
+      "q": "does the client support HTTP/2"
+    },
+    {
+      "trace_id": "7423a5f2bd5d",
+      "kind": "prose",
+      "q": "is the connection pool created eagerly"
+    },
+    {
+      "trace_id": "4144f6399c1e",
+      "kind": "multipart",
+      "q": "compare v2 and v3 close behaviour"
+    },
+    {
+      "trace_id": "ee2fa57345e0",
+      "kind": "param",
+      "q": "what is the default for api_key"
+    },
+    {
+      "trace_id": "d70acaab4f04",
+      "kind": "xversion",
+      "q": "did pool_size change between v2 and v3"
+    },
+    {
+      "trace_id": "53fe4190ba35",
+      "kind": "prose",
+      "q": "how is jitter applied to retries"
+    },
+    {
+      "trace_id": "4288963edfb5",
+      "kind": "out_of_corpus",
+      "q": "can I pin the TLS certificate"
+    },
+    {
+      "trace_id": "3899f8072767",
+      "kind": "xversion",
+      "q": "did timeout_ms change between v2 and v3"
+    },
+    {
+      "trace_id": "f575d140d59b",
+      "kind": "param",
+      "q": "force default"
+    },
+    {
+      "trace_id": "fe8458963985",
+      "kind": "out_of_corpus",
+      "q": "how do I mock the client in tests"
+    },
+    {
+      "trace_id": "e32cc6629b43",
+      "kind": "param",
+      "q": "what type is retry_on"
+    },
+    {
+      "trace_id": "bb89764cca9d",
+      "kind": "multipart",
+      "q": "pool_size vs pool_reap_seconds"
+    },
+    {
+      "trace_id": "8e615e6f8727",
+      "kind": "param",
+      "q": "how do I set pool_size"
+    },
+    {
+      "trace_id": "5b7e53f354f8",
+      "kind": "param",
+      "q": "is retry_backoff_ms required"
+    },
+    {
+      "trace_id": "aa983b01fd36",
+      "kind": "out_of_corpus",
+      "q": "can I disable telemetry for GDPR compliance"
+    },
+    {
+      "trace_id": "29be387d288a",
+      "kind": "param",
+      "q": "how do I set log_level"
+    },
+    {
+      "trace_id": "825ab35c9c8e",
+      "kind": "prose",
+      "q": "why is my batch slower than concurrency suggests"
+    },
+    {
+      "trace_id": "b98918daf643",
+      "kind": "param",
+      "q": "what type is telemetry"
+    },
+    {
+      "trace_id": "26dc3dcb052a",
+      "kind": "method",
+      "q": "what does Client.upload() do"
+    },
+    {
+      "trace_id": "f05571195997",
+      "kind": "param",
+      "q": "what type is chunk_bytes"
+    },
+    {
+      "trace_id": "74fc530a791d",
+      "kind": "prose",
+      "q": "what happens when force=True on close"
+    },
+    {
+      "trace_id": "75b9af823736",
+      "kind": "casual",
+      "q": "max bytes default"
+    },
+    {
+      "trace_id": "7228661381de",
+      "kind": "out_of_corpus",
+      "q": "does send_batch support streaming responses"
+    },
+    {
+      "trace_id": "58e64fb714f1",
+      "kind": "prose",
+      "q": "does close block forever if requests never finish"
+    },
+    {
+      "trace_id": "cbaa3d073d15",
+      "kind": "param",
+      "q": "how do I set proxy"
+    },
+    {
+      "trace_id": "ba1a71263771",
+      "kind": "param",
+      "q": "base_url default"
+    },
+    {
+      "trace_id": "26c0a525cc86",
+      "kind": "xversion",
+      "q": "did payload change between v2 and v3"
+    },
+    {
+      "trace_id": "0a4f4db19537",
+      "kind": "casual",
+      "q": "api key default"
+    },
+    {
+      "trace_id": "f722433dd06a",
+      "kind": "method",
+      "q": "show me an example of Client.upload()"
+    },
+    {
+      "trace_id": "5993adc55e75",
+      "kind": "param",
+      "q": "what type is base_url"
+    },
+    {
+      "trace_id": "daa72396415f",
+      "kind": "out_of_corpus",
+      "q": "how much does the SDK cost per million tokens"
+    },
+    {
+      "trace_id": "f41c922e5db5",
+      "kind": "param",
+      "q": "is payloads required"
+    },
+    {
+      "trace_id": "10f13fb9a6ba",
+      "kind": "xversion",
+      "q": "did base_url change between v2 and v3"
+    },
+    {
+      "trace_id": "6659349bf2cb",
+      "kind": "xversion",
+      "q": "did log_level change between v2 and v3"
+    },
+    {
+      "trace_id": "493b0e8f6b28",
+      "kind": "out_of_corpus",
+      "q": "is there a changelog for v3.2.0"
+    },
+    {
+      "trace_id": "667dee438b7c",
+      "kind": "out_of_corpus",
+      "q": "how do I set a global user agent for my org"
+    },
+    {
+      "trace_id": "b99e83649a0e",
+      "kind": "param",
+      "q": "how do I set path"
+    },
+    {
+      "trace_id": "390685c6db99",
+      "kind": "prose",
+      "q": "does checksum slow down uploads"
+    },
+    {
+      "trace_id": "8afc353f603d",
+      "kind": "multipart",
+      "q": "stream vs send for large responses"
+    },
+    {
+      "trace_id": "cb01b5cd48c7",
+      "kind": "out_of_corpus",
+      "q": "which python versions are supported"
+    },
+    {
+      "trace_id": "8073773b30be",
+      "kind": "casual",
+      "q": "log level default"
+    },
+    {
+      "trace_id": "44491c769398",
+      "kind": "param",
+      "q": "is chunk_size required"
+    },
+    {
+      "trace_id": "089d246f7071",
+      "kind": "param",
+      "q": "what type is payload"
+    },
+    {
+      "trace_id": "701d7f79dcf2",
+      "kind": "param",
+      "q": "what is the default for rate_limit_rps"
+    },
+    {
+      "trace_id": "7bebc599a19d",
+      "kind": "param",
+      "q": "what is the default for heartbeat_ms"
+    },
+    {
+      "trace_id": "6f0db69168da",
+      "kind": "out_of_corpus",
+      "q": "what error codes can send return"
+    },
+    {
+      "trace_id": "5eb498ae5c95",
+      "kind": "method",
+      "q": "what does Client.configure() do"
+    },
+    {
+      "trace_id": "d84a2cd4f913",
+      "kind": "casual",
+      "q": "base url default"
+    },
+    {
+      "trace_id": "63630111127e",
+      "kind": "casual",
+      "q": "chunk size default"
+    },
+    {
+      "trace_id": "9443851bfb93",
+      "kind": "casual",
+      "q": "default timeout ms default"
+    },
+    {
+      "trace_id": "b93926e56eb2",
+      "kind": "param",
+      "q": "what is the default for compress"
+    },
+    {
+      "trace_id": "6b7f70a38014",
+      "kind": "param",
+      "q": "stream default"
+    },
+    {
+      "trace_id": "fdbba1a47ad6",
+      "kind": "param",
+      "q": "trace_id default"
+    },
+    {
+      "trace_id": "6035ab71c521",
+      "kind": "method",
+      "q": "show me an example of Client.send_batch()"
+    },
+    {
+      "trace_id": "7ce45a257fa3",
+      "kind": "method",
+      "q": "what does Client.stream() do"
+    },
+    {
+      "trace_id": "d4f4948c3bce",
+      "kind": "param",
+      "q": "what type is pool_reap_seconds"
+    },
+    {
+      "trace_id": "e8009c07bee0",
+      "kind": "out_of_corpus",
+      "q": "how do I get webhook callbacks when a batch finishes"
+    },
+    {
+      "trace_id": "b4dfe81c8023",
+      "kind": "method",
+      "q": "show me an example of Client.close()"
+    },
+    {
+      "trace_id": "b2acfd288f5a",
+      "kind": "param",
+      "q": "how do I set verify_tls"
+    },
+    {
+      "trace_id": "179023eb0b6a",
+      "kind": "xversion",
+      "q": "did default_timeout_ms change between v2 and v3"
+    },
+    {
+      "trace_id": "c2e100a61c3f",
+      "kind": "out_of_corpus",
+      "q": "how do I turn on debug logging to a file"
+    },
+    {
+      "trace_id": "58f880176f21",
+      "kind": "param",
+      "q": "what is the default for retry_backoff_ms"
+    },
+    {
+      "trace_id": "92d3b9c8d281",
+      "kind": "out_of_corpus",
+      "q": "how do I cancel a single request in a batch"
+    },
+    {
+      "trace_id": "67babf113e70",
+      "kind": "prose",
+      "q": "can I call close twice"
+    },
+    {
+      "trace_id": "4e72e80de681",
+      "kind": "out_of_corpus",
+      "q": "what is the SLA for the api"
+    },
+    {
+      "trace_id": "1d2fea30715c",
+      "kind": "out_of_corpus",
+      "q": "how do I rotate my api key without downtime"
+    },
+    {
+      "trace_id": "25b0ddf587fc",
+      "kind": "param",
+      "q": "what is the default for ordered"
+    },
+    {
+      "trace_id": "37d1904cf9d0",
+      "kind": "param",
+      "q": "how do I set user_agent"
+    },
+    {
+      "trace_id": "c582768d0fe6",
+      "kind": "out_of_corpus",
+      "q": "how do I install the sdk"
+    },
+    {
+      "trace_id": "71a6a3036aa8",
+      "kind": "multipart",
+      "q": "difference between timeout_ms and default_timeout_ms"
+    },
+    {
+      "trace_id": "39fc857740fa",
+      "kind": "prose",
+      "q": "how long is an upload handle valid"
+    },
+    {
+      "trace_id": "6a3088515e2f",
+      "kind": "multipart",
+      "q": "chunk_bytes on upload vs send_batch are they the same thing"
+    },
+    {
+      "trace_id": "81b0645ed43d",
+      "kind": "prose",
+      "q": "does raising concurrency increase throughput"
+    },
+    {
+      "trace_id": "7a7abc208979",
+      "kind": "casual",
+      "q": "fail fast default"
+    },
+    {
+      "trace_id": "d245ee1688db",
+      "kind": "xversion",
+      "q": "did chunk_size change between v2 and v3"
+    },
+    {
+      "trace_id": "8083c6ebf12c",
+      "kind": "param",
+      "q": "what is the default for log_level"
+    },
+    {
+      "trace_id": "50557d79e7e5",
+      "kind": "param",
+      "q": "how do I set default_timeout_ms"
+    },
+    {
+      "trace_id": "6381d24ba6e5",
+      "kind": "multipart",
+      "q": "retry_backoff_ms vs max_retries how do they interact"
+    },
+    {
+      "trace_id": "4452ba533635",
+      "kind": "prose",
+      "q": "when are idle connections reaped"
+    },
+    {
+      "trace_id": "b997ed790de3",
+      "kind": "param",
+      "q": "what is the default for retries_enabled"
+    },
+    {
+      "trace_id": "112b08b4a200",
+      "kind": "casual",
+      "q": "chunk bytes default"
+    },
+    {
+      "trace_id": "e4f91e087765",
+      "kind": "out_of_corpus",
+      "q": "what regions are the api servers in"
+    },
+    {
+      "trace_id": "187edede03a2",
+      "kind": "param",
+      "q": "what type is concurrency"
+    },
+    {
+      "trace_id": "1e951e47c68d",
+      "kind": "param",
+      "q": "progress_every default"
+    },
+    {
+      "trace_id": "b0848be7b8c3",
+      "kind": "param",
+      "q": "payload default"
+    },
+    {
+      "trace_id": "62688a8e842b",
+      "kind": "out_of_corpus",
+      "q": "can the client cache responses"
+    },
+    {
+      "trace_id": "180e975fe883",
+      "kind": "xversion",
+      "q": "did retry_backoff_ms change between v2 and v3"
+    },
+    {
+      "trace_id": "794c1fff1f5e",
+      "kind": "prose",
+      "q": "does stream reconnect after a drop"
+    },
+    {
+      "trace_id": "eccc385c782d",
+      "kind": "param",
+      "q": "how do I set max_retries"
+    },
+    {
+      "trace_id": "d5d65684f524",
+      "kind": "param",
+      "q": "what is the default for close_sessions"
+    },
+    {
+      "trace_id": "672ae6da050a",
+      "kind": "xversion",
+      "q": "did force change between v2 and v3"
+    },
+    {
+      "trace_id": "9337811e7c01",
+      "kind": "casual",
+      "q": "close sessions default"
+    },
+    {
+      "trace_id": "342a8b3d3b0f",
+      "kind": "param",
+      "q": "what type is max_redirects"
+    },
+    {
+      "trace_id": "4ae9fb5db7f3",
+      "kind": "multipart",
+      "q": "force vs drain on close"
+    },
+    {
+      "trace_id": "c832c65e52a3",
+      "kind": "method",
+      "q": "show me an example of Client.configure()"
+    },
+    {
+      "trace_id": "a7a841b711cc",
+      "kind": "out_of_corpus",
+      "q": "what is the maximum payload size for send"
+    },
+    {
+      "trace_id": "3546e1ca5789",
+      "kind": "casual",
+      "q": "content type default"
+    },
+    {
+      "trace_id": "bcc84d1515d9",
+      "kind": "prose",
+      "q": "what does the client do when the endpoint returns 5xx"
+    },
+    {
+      "trace_id": "2d20c4d8c66f",
+      "kind": "param",
+      "q": "what is the default for force"
+    },
+    {
+      "trace_id": "31d593df8683",
+      "kind": "multipart",
+      "q": "concurrency vs rate_limit_rps which one wins"
+    },
+    {
+      "trace_id": "d8dcda93a0a3",
+      "kind": "out_of_corpus",
+      "q": "what is the rate limit on the /v1/embeddings endpoint"
+    },
+    {
+      "trace_id": "9323d597806f",
+      "kind": "param",
+      "q": "what is the default for drain"
+    },
+    {
+      "trace_id": "bc0ce13aea98",
+      "kind": "out_of_corpus",
+      "q": "is there a javascript version"
+    },
+    {
+      "trace_id": "c3cd1fd6cb26",
+      "kind": "xversion",
+      "q": "did heartbeat_ms change between v2 and v3"
+    },
+    {
+      "trace_id": "7553f7261c09",
+      "kind": "out_of_corpus",
+      "q": "how do I report a bug in the sdk"
+    },
+    {
+      "trace_id": "1d825f16f385",
+      "kind": "param",
+      "q": "how do I set content_type"
+    },
+    {
+      "trace_id": "f21e9284710c",
+      "kind": "param",
+      "q": "how do I set resume"
+    }
+  ],
+  "demo": [
+    {
+      "trace_id": "4ed93f95eefa",
+      "q": "What is the default value of retry_backoff_ms?"
+    },
+    {
+      "trace_id": "0f716df1f40c",
+      "q": "Which parameter is required when calling Client.send()?"
+    },
+    {
+      "trace_id": "759633170b5a",
+      "q": "What is the default chunk_size for Client.stream()?"
+    },
+    {
+      "trace_id": "a3316371230a",
+      "q": "How do I close a client without cancelling in-flight requests?"
+    },
+    {
+      "trace_id": "4fb06208fdab",
+      "q": "What is the rate limit on the /v1/embeddings endpoint?"
+    },
+    {
+      "trace_id": "29e1a872fee7",
+      "q": "How do I authenticate with OAuth2?"
+    },
+    {
+      "trace_id": "655dbfdf558b",
+      "q": "What is the default value of retry_backoff_ms on Client.send() in v3?"
+    },
+    {
+      "trace_id": "706860c6d48e",
+      "q": "What type is the max_redirects parameter on Client.send()?"
+    },
+    {
+      "trace_id": "3051c2f6b87d",
+      "q": "What status codes trigger an automatic retry by default?"
+    },
+    {
+      "trace_id": "dcdf464065a0",
+      "q": "How is jitter applied to the retry backoff delay?"
+    }
+  ]
+}

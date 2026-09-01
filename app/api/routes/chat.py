@@ -18,6 +18,7 @@ from app.rag.generate import (
     is_configured,
     list_models,
 )
+from app.rag import trace
 from app.rag.index import DEFAULT_INDEX, search
 
 router = APIRouter(prefix="/chat", tags=["chat"])
@@ -60,6 +61,7 @@ class AskResponse(BaseModel):
     # search(), so the measured evaluation path carries no timing overhead.
     retrieval_ms: float = 0.0
     stage_ms: dict[str, float] = Field(default_factory=dict)
+    trace_id: str = ""
     generation_available: bool
     answer: str | None = None
     refused: bool = False
@@ -98,6 +100,30 @@ def chat_status() -> StatusResponse:
         models=models,
         note=note,
     )
+
+
+def _traced(payload: AskRequest, response: AskResponse, hits) -> AskResponse:
+    """Every exit of /ask funnels through here, so no outcome escapes the log."""
+    record = trace.build_trace(
+        trace_id=response.trace_id,
+        question=payload.question,
+        strategy=payload.strategy,
+        hybrid=payload.hybrid,
+        k=payload.k,
+        sdk_version_filter=payload.sdk_version,
+        hits=hits,
+        model=response.model or payload.model,
+        raw_output=response.answer,
+        refused=response.refused,
+        refusal_reason=response.refusal_reason,
+        citations=response.citations,
+        invalid_citations=response.invalid_citations,
+        retrieval_ms=response.retrieval_ms,
+        generation_ran=response.answer is not None,
+        error=response.error,
+    )
+    trace.append(record)
+    return response
 
 
 @router.post("/ask", response_model=AskResponse)
@@ -155,20 +181,21 @@ def ask(payload: AskRequest) -> AskResponse:
         hybrid=payload.hybrid,
         retrieval_ms=round(retrieval_ms, 1),
         stage_ms={k: round(v, 3) for k, v in stage_ms.items()},
+        trace_id=trace.new_trace_id(),
         generation_available=is_configured(),
     )
 
     if not payload.generate:
-        return response
+        return _traced(payload, response, hits)
 
     try:
         result = answer(payload.question, hits, model=payload.model)
     except GenerationUnavailable as exc:
         response.error = str(exc)
-        return response
+        return _traced(payload, response, hits)
     except Exception as exc:
         response.error = f"generation failed: {exc}"
-        return response
+        return _traced(payload, response, hits)
 
     response.answer = result.text
     response.refused = result.refused
@@ -176,4 +203,4 @@ def ask(payload: AskRequest) -> AskResponse:
     response.citations = result.citations
     response.invalid_citations = result.invalid_citations
     response.model = result.model
-    return response
+    return _traced(payload, response, hits)
