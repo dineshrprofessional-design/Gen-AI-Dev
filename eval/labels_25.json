@@ -1,0 +1,321 @@
+{
+  "schema": "week6-labels-v1",
+  "created": "2026-09-04",
+  "criterion": {
+    "id": "answer_correct_and_useful",
+    "type": "binary",
+    "question": "Given the question asked and the chunks actually retrieved for it, is this answer correct and useful - does it answer the question that was asked, from the context it was given, without asserting anything that context does not support?",
+    "PASS": "The answer resolves the question asked, every claim is supported by a retrieved chunk, and a correct refusal of a genuinely unanswerable question counts as PASS.",
+    "FAIL": "The answer is wrong, is about a different parameter than the one asked, silently answers only one side of an ambiguous or version-divergent question, asserts something no retrieved chunk supports, or refuses when the retrieved context did contain the answer."
+  },
+  "excluded_from_this_criterion": [
+    "citation bracket style, zero-width characters, capture failures - asserted deterministically by week6_assertions.assert_citation_captured / assert_citation_resolves",
+    "code sample syntax - asserted by assert_code_sample_parses",
+    "code sample grounding - asserted by assert_code_sample_grounded",
+    "presence of an explicit version label - asserted by assert_version_stated"
+  ],
+  "provenance": {
+    "labeller": "Derived by transcription from the human open-coding in notes.md sections 3 and 7.",
+    "human_source_commit": "d76564cc4ead8b2c5d7212b9e2ccfa1d55b6a969",
+    "human_source_committed": "2026-08-31 19:06:49 +0530",
+    "human_source_files": ["notes.md", "taxonomy.md"],
+    "blindness": "The Week 5 open-coding was written while reading each trace in full, before any Week 6 artifact existed and before any LLM judge was designed. It could not have been influenced by judge output.",
+    "honest_limitation": "These are HUMAN-DERIVED labels, not freshly human-elicited ones. Claude transcribed each human observation into the binary; it did not originate the judgments. Every row carries the verbatim human sentence it was derived from under `human_basis`, so any call can be audited or overruled. Rows with `needs_signoff: true` are genuinely borderline and should be adjudicated by a person; if a label is changed, change it in a NEW commit with the reason recorded, never silently after seeing judge output.",
+    "scope_note": "26 of the 32 Phase 1 cases are labelled. The other 6 are golden-set probes with no recorded answer - there is no answer text to judge, so they are labelled by neither human nor judge, and are excluded from the agreement denominator."
+  },
+  "counts": {
+    "labelled": 26,
+    "PASS": 16,
+    "FAIL": 10,
+    "needs_signoff": 2,
+    "unlabelable_probes": 6
+  },
+  "labels": [
+    {
+      "case_id": "w6-001",
+      "trace_id": "bcc84d1515d9",
+      "mode": "1",
+      "question": "what does the client do when the endpoint returns 5xx",
+      "label": "PASS",
+      "human_basis": "the answer is correct and grounded, but the citation is written in full-width brackets and the recorded citations list is empty",
+      "human_source": "notes.md section 3, item 3",
+      "reasoning": "Human calls the answer correct and grounded. The defect is citation capture, which this criterion excludes.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-002",
+      "trace_id": "44491c769398",
+      "mode": "1",
+      "question": "is chunk_size required",
+      "label": "PASS",
+      "human_basis": "correct \"No, optional\" citing the right chunk, but the citation has spaces inside the brackets and was not captured",
+      "human_source": "notes.md section 3, item 4",
+      "reasoning": "Human calls it correct and correctly cited. Capture failure is excluded.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-003",
+      "trace_id": "4452ba533635",
+      "mode": "1",
+      "question": "when are idle connections reaped",
+      "label": "PASS",
+      "human_basis": "correct (90 s via pool_reap_seconds), bracket citation, citations field empty",
+      "human_source": "notes.md section 3, item 7",
+      "reasoning": "Human calls it correct.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-004",
+      "trace_id": "39fc857740fa",
+      "mode": "1",
+      "question": "how long is an upload handle valid",
+      "label": "PASS",
+      "human_basis": "correct 24-hour / retain_hours answer with two accurate spaced-bracket citations recorded as none",
+      "human_source": "notes.md section 3, item 8",
+      "reasoning": "Human calls it correct with accurate citations.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-005",
+      "trace_id": "c832c65e52a3",
+      "mode": "1",
+      "question": "show me an example of Client.configure()",
+      "label": "PASS",
+      "human_basis": "returned the v3 example fence verbatim and correctly, with a citation recorded as none",
+      "human_source": "notes.md section 3, item 12",
+      "reasoning": "Human calls it verbatim and correct.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-006",
+      "trace_id": "53fe4190ba35",
+      "mode": "1",
+      "question": "how is jitter applied to retries",
+      "label": "PASS",
+      "human_basis": "correct full-jitter formula; citation, citations field empty",
+      "human_source": "notes.md section 3, item 16",
+      "reasoning": "Human calls the formula correct.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-007",
+      "trace_id": "67babf113e70",
+      "mode": "1",
+      "question": "can I call close twice",
+      "label": "PASS",
+      "human_basis": "correct \"yes, no-ops\" with an accurate spaced citation not captured by the parser",
+      "human_source": "notes.md section 3, item 18",
+      "reasoning": "Human calls it correct with an accurate citation.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-008",
+      "trace_id": "759633170b5a",
+      "mode": "1",
+      "question": "What is the default chunk_size for Client.stream()?",
+      "label": "PASS",
+      "human_basis": "a model answer covering both versions correctly, whose two citations were captured with a leading zero-width character and therefore both flagged invalid",
+      "human_source": "notes.md section 7, demo observations",
+      "reasoning": "Human calls the answer correct on both versions. The zero-width defect is a capture problem, excluded here.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-009",
+      "trace_id": "d84a2cd4f913",
+      "mode": "2",
+      "question": "base url default",
+      "label": "FAIL",
+      "human_basis": "answered with configure's default citing the v2 page for a version-less question; the v3 configure table never appeared in the five chunks, and rank 1 was send's base_url whose default is None, which the answer silently ignores",
+      "human_source": "notes.md section 3, item 11",
+      "reasoning": "Human records a silently ignored contradicting value in the top-ranked chunk. The answer asserts one default while the context offered another.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-010",
+      "trace_id": "0f716df1f40c",
+      "mode": "2",
+      "question": "Which parameter is required when calling Client.send()?",
+      "label": "PASS",
+      "human_basis": "correct \"payload\" but cites the v2 page for a Client.send() question",
+      "human_source": "notes.md section 7, demo observations",
+      "reasoning": "BORDERLINE. The human sentence opens with 'correct', and 'payload is required' is true in both v2 and v3, so the answer's substance is right. The defect is that the citation points at the wrong version's page - a citation-target problem rather than a wrong claim. Labelled PASS on the substance criterion. A reviewer who counts a wrong-version citation as substantive should overrule this to FAIL.",
+      "needs_signoff": true
+    },
+    {
+      "case_id": "w6-011",
+      "trace_id": "d1ed2b96d352",
+      "mode": "2",
+      "question": "what is the default for timeout_ms",
+      "label": "FAIL",
+      "human_basis": "the question is genuinely ambiguous (four tables define timeout_ms); the model enumerated three v3 defaults and never mentioned the v2 page that was ranked 1st",
+      "human_source": "notes.md section 3, item 9",
+      "reasoning": "Human records that the rank-1 chunk's value was omitted entirely. Answers only one side of an ambiguous, version-divergent question.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-014",
+      "trace_id": "b98918daf643",
+      "mode": "3",
+      "question": "what type is telemetry",
+      "label": "FAIL",
+      "human_basis": "the parameters table containing telemetry | bool was retrieved at rank 2, and the pipeline still returned INSUFFICIENT_CONTEXT because the rank-1 chunk's cosine (0.417) is under the 0.45 floor",
+      "human_source": "notes.md section 3, item 1",
+      "reasoning": "Refused while the answer sat in its own context. Squarely the FAIL definition.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-015",
+      "trace_id": "aa983b01fd36",
+      "mode": "3",
+      "question": "can I disable telemetry for GDPR compliance",
+      "label": "FAIL",
+      "human_basis": "the configure table was at rank 2 scoring 0.464 - above the floor - but the gate reads only the rank-1 score (0.445), so the request was refused before the model ran",
+      "human_source": "notes.md section 3, item 2",
+      "reasoning": "Refused with the answer in context.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-016",
+      "trace_id": "655dbfdf558b",
+      "mode": "3",
+      "question": "What is the default value of retry_backoff_ms on Client.send() in v3?",
+      "label": "FAIL",
+      "human_basis": "the flagship demo question (\"...retry_backoff_ms on Client.send() in v3?\") refused, with the answer present in its own rank-2 chunk",
+      "human_source": "notes.md section 7, demo observations",
+      "reasoning": "Refused with the answer in context.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-017",
+      "trace_id": "179023eb0b6a",
+      "mode": "4",
+      "question": "did default_timeout_ms change between v2 and v3",
+      "label": "FAIL",
+      "human_basis": "all five retrieved chunks are Notes sections from pages that do not define default_timeout_ms, neither configure table appeared, and the model refused",
+      "human_source": "notes.md section 3, item 10",
+      "reasoning": "BORDERLINE in one direction only: the refusal was arguably correct GIVEN the context, since no retrieved chunk defined the symbol. Labelled FAIL because the criterion asks whether the answer resolves the question asked, and the user got no answer to an answerable question. Recorded openly because a reviewer scoring strictly 'given the context it was given' could defend PASS.",
+      "needs_signoff": true
+    },
+    {
+      "case_id": "w6-018",
+      "trace_id": "6659349bf2cb",
+      "mode": "4",
+      "question": "did log_level change between v2 and v3",
+      "label": "FAIL",
+      "human_basis": "every retrieved chunk came from v2 pages, none was a configure table (where log_level lives), and the model refused",
+      "human_source": "notes.md section 3, item 15",
+      "reasoning": "Same shape as w6-017. log_level does change (error to warning) and the user got nothing.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-020",
+      "trace_id": "7a7abc208979",
+      "mode": "5",
+      "question": "fail fast default",
+      "label": "FAIL",
+      "human_basis": "none of the five retrieved chunks contains fail_fast, and the model confidently answered about force on close(), describing that as \"failing fast\"; the asked parameter is never mentioned",
+      "human_source": "notes.md section 3, item 14",
+      "reasoning": "Answered about a different parameter than the one asked.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-023",
+      "trace_id": "cbaa3d073d15",
+      "mode": "6",
+      "question": "how do I set proxy",
+      "label": "FAIL",
+      "human_basis": "the answer invents a concrete call client.send(payload, proxy=\"http://my-proxy:8080\") that appears in no retrieved chunk - the docs define the parameter but show no proxy example",
+      "human_source": "notes.md section 3, item 13",
+      "reasoning": "Asserts usage no retrieved chunk supports.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-024",
+      "trace_id": "da78a479f1e1",
+      "mode": "1",
+      "question": "how do I set chunk_bytes",
+      "label": "FAIL",
+      "human_basis": "the question is ambiguous between upload and send_batch; the model answered upload-only, stitched a code sample from the example chunk, and its spaced citations were not captured",
+      "human_source": "notes.md section 3, item 20",
+      "reasoning": "Human records an ambiguous question silently answered on one side only. chunk_bytes is documented on both Client.upload() (8388608) and Client.send_batch() (1048576).",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-026",
+      "trace_id": "187edede03a2",
+      "mode": "clean",
+      "question": "what type is concurrency",
+      "label": "PASS",
+      "human_basis": "correct \"int\", citing the batch parameters table which sat at rank 4 - outside the top 3 but inside the k=5 context - and the citation was captured cleanly",
+      "human_source": "notes.md section 3, item 5",
+      "reasoning": "Human calls it correct with a clean citation.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-027",
+      "trace_id": "b226ff8a5996",
+      "mode": "clean",
+      "question": "what does Client.send() do",
+      "label": "PASS",
+      "human_basis": "a faithful multi-sentence summary; every claim, including the thread-safety sentence I first suspected was invented, is present in the cited intro chunk",
+      "human_source": "notes.md section 3, item 6",
+      "reasoning": "Human explicitly verified every claim against the cited chunk.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-028",
+      "trace_id": "9d88b87ad51d",
+      "mode": "clean",
+      "question": "what does Client.close() do",
+      "label": "PASS",
+      "human_basis": "correct two-version summary with two valid captured citations - one of the few answers whose citations survived intact",
+      "human_source": "notes.md section 3, item 19",
+      "reasoning": "Human calls it correct with valid citations.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-029",
+      "trace_id": "706860c6d48e",
+      "mode": "clean",
+      "question": "What type is the max_redirects parameter on Client.send()?",
+      "label": "PASS",
+      "human_basis": "perfect, clean citation",
+      "human_source": "notes.md section 7, demo observations",
+      "reasoning": "Human calls it perfect.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-030",
+      "trace_id": "493b0e8f6b28",
+      "mode": "clean",
+      "question": "is there a changelog for v3.2.0",
+      "label": "PASS",
+      "human_basis": "out-of-corpus question, refused by the model itself with scores above the floor - the designed behaviour, and I have nothing to add",
+      "human_source": "notes.md section 3, item 17",
+      "reasoning": "Correct refusal of an unanswerable question.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-031",
+      "trace_id": "4fb06208fdab",
+      "mode": "clean",
+      "question": "What is the rate limit on the /v1/embeddings endpoint?",
+      "label": "PASS",
+      "human_basis": "correct refusals of out-of-corpus questions",
+      "human_source": "notes.md section 7, demo observations",
+      "reasoning": "Correct refusal.",
+      "needs_signoff": false
+    },
+    {
+      "case_id": "w6-032",
+      "trace_id": "29e1a872fee7",
+      "mode": "clean",
+      "question": "How do I authenticate with OAuth2?",
+      "label": "PASS",
+      "human_basis": "correct refusals of out-of-corpus questions",
+      "human_source": "notes.md section 7, demo observations",
+      "reasoning": "Correct refusal.",
+      "needs_signoff": false
+    }
+  ]
+}
