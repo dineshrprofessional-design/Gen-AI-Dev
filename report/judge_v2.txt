@@ -1,0 +1,167 @@
+==============================================================================
+WEEK 6 — JUDGE V2
+==============================================================================
+model                : openai/gpt-oss-120b
+temperature          : 0
+criteria judged      : 1 (binary PASS/FAIL)
+criteria excluded    : 4 (moved to deterministic assertions in Phase 2)
+labels commit        : fb8c06d 2026-09-04 17:47:03 +0530
+
+------------------------------------------------------------------------------
+JUDGE PROMPT (verbatim, as sent)
+------------------------------------------------------------------------------
+You evaluate a documentation assistant's answer about a Python SDK.
+
+You are given the question a user asked, the numbered context chunks the assistant was given, and the answer it produced.
+
+Judge exactly ONE thing:
+
+  Is this answer correct and useful - does it answer the question that was asked, from the context it was given, without asserting anything that context does not support?
+
+PASS when the answer resolves the question that was asked and every claim in it is supported by one of the context chunks. A refusal ("INSUFFICIENT_CONTEXT") is PASS only when the context genuinely does not contain the answer.
+
+FAIL when the answer is wrong; or is about a different parameter than the one asked; or silently answers only one side of a question the context shows has two different answers; or asserts something no context chunk supports; or refuses even though the answer was present in the context it was given.
+
+Do NOT consider any of the following. They are checked separately by deterministic code and are not your concern:
+  - how citations are bracketed, or whether citations were captured at all
+  - whether code samples are syntactically valid
+  - whether an explicit version label appears in the text
+
+Reply with exactly two lines and nothing else:
+VERDICT: PASS
+REASON: <one sentence>
+
+or
+
+VERDICT: FAIL
+REASON: <one sentence>
+
+Before you judge, study these two worked examples. Both look correct on a sentence-by-sentence reading and both are FAIL. Grounding every sentence is necessary but it is not sufficient.
+
+EXAMPLE 1
+Question: fail fast default
+Chunk ids in the context: v2/client-close#notes::3, v3/client-send#parameters::1, v3/client-close#notes::3, v2/client-send#parameters::1, v3/client-close#parameters::1
+Answer produced:
+In version 2 the `force` flag defaults to **true**, so `Client.close()` fails fast by cancelling in‑flight requests. In version 3 the default is **false**, meaning the close operation drains requests instead of failing fast.  
+
+- v2 default: `force` = true [ v2/client-close#notes::3 ]  
+- v3 default: `force` = false [ v3/client-close#parameters::1 ]
+Correct judgement:
+VERDICT: FAIL
+REASON: Every sentence is true and supported by the context, but the question asked about `fail_fast` and the answer is about `force` — a different parameter, which the context never connects to the one asked.
+
+EXAMPLE 2
+Question: how do I set proxy
+Chunk ids in the context: v3/client-send#parameters::1, v2/client-configure#parameters::1, v3/client-configure#notes::3, v3/client-configure#parameters::1, v3/client-upload#parameters::1
+Answer produced:
+Pass the proxy URL as the `proxy` argument when calling `Client.send()` (e.g., `client.send(payload, proxy="http://my-proxy:8080")`). [ v3/client‑send#parameters::1 ]
+Correct judgement:
+VERDICT: FAIL
+REASON: The context documents that a `proxy` parameter exists, but no chunk shows a call using it; the concrete invocation in the answer is presented as documented usage and is not.
+
+Now judge the case below by the same standard. Reply with the two lines and nothing else.
+
+------------------------------------------------------------------------------
+PER-CASE VERDICTS
+------------------------------------------------------------------------------
+case     mode   human  judge  agree  question
+w6-001   1      PASS   FAIL   NO     'what does the client do when the endpoint re'
+w6-002   1      PASS   PASS   yes    'is chunk_size required'
+w6-003   1      PASS   FAIL   NO     'when are idle connections reaped'
+w6-004   1      PASS   PASS   yes    'how long is an upload handle valid'
+w6-005   1      PASS   PASS   yes    'show me an example of Client.configure()'
+w6-006   1      PASS   PASS   yes    'how is jitter applied to retries'
+w6-007   1      PASS   PASS   yes    'can I call close twice'
+w6-008   1      PASS   PASS   yes    'What is the default chunk_size for Client.st'
+w6-009   2      FAIL   FAIL   yes    'base url default'
+w6-010   2      PASS   PASS   yes    'Which parameter is required when calling Cli'
+w6-011   2      FAIL   FAIL   yes    'what is the default for timeout_ms'
+w6-014   3      FAIL   FAIL   yes    'what type is telemetry'
+w6-015   3      FAIL   FAIL   yes    'can I disable telemetry for GDPR compliance'
+w6-016   3      FAIL   PASS   NO     'What is the default value of retry_backoff_m'
+w6-017   4      FAIL   PASS   NO     'did default_timeout_ms change between v2 and'
+w6-018   4      FAIL   PASS   NO     'did log_level change between v2 and v3'
+w6-020   5      FAIL   PASS   NO     'fail fast default'
+w6-023   6      FAIL   PASS   NO     'how do I set proxy'
+w6-024   1      FAIL   PASS   NO     'how do I set chunk_bytes'
+w6-026   clean  PASS   PASS   yes    'what type is concurrency'
+w6-027   clean  PASS   PASS   yes    'what does Client.send() do'
+w6-028   clean  PASS   PASS   yes    'what does Client.close() do'
+w6-029   clean  PASS   PASS   yes    'What type is the max_redirects parameter on '
+w6-030   clean  PASS   PASS   yes    'is there a changelog for v3.2.0'
+w6-031   clean  PASS   PASS   yes    'What is the rate limit on the /v1/embeddings'
+w6-032   clean  PASS   PASS   yes    'How do I authenticate with OAuth2?'
+
+------------------------------------------------------------------------------
+AGREEMENT
+------------------------------------------------------------------------------
+cases compared       : 26
+agreed               : 18
+disagreed            : 8
+agreement            : 69.2%
+
+confusion matrix (human x judge):
+                 judge PASS   judge FAIL
+  human PASS           14            2
+  human FAIL            6            4
+
+agreement by taxonomy mode:
+  mode     n  agree     pct
+  1        9      6     67%
+  2        3      3    100%
+  3        3      2     67%
+  4        2      0      0%
+  5        1      0      0%
+  6        1      0      0%
+  clean    7      7    100%
+
+------------------------------------------------------------------------------
+DISAGREEMENTS
+------------------------------------------------------------------------------
+
+w6-001  mode 1   human=PASS  judge=FAIL
+  question    : 'what does the client do when the endpoint returns 5xx'
+  human basis : the answer is correct and grounded, but the citation is written in full-width brackets and the recorded citations list is empty
+  judge reason: The answer only mentions automatic retries (v3) and ignores v2 where no automatic retries occur, thus not fully reflecting the context.
+
+w6-003  mode 1   human=PASS  judge=FAIL
+  question    : 'when are idle connections reaped'
+  human basis : correct (90 s via pool_reap_seconds), bracket citation, citations field empty
+  judge reason: The answer only covers v3 behavior and omits the v2 case where idle connections are never reaped, ignoring a second answer present in the context.
+
+w6-016  mode 3   human=FAIL  judge=PASS
+  question    : 'What is the default value of retry_backoff_ms on Client.send() in v3?'
+  human basis : the flagship demo question ("...retry_backoff_ms on Client.send() in v3?") refused, with the answer present in its own rank-2 chunk
+  judge reason: The provided context lacks any default value for retry_backoff_ms in v3, so refusing due to insufficient context is correct.
+
+w6-017  mode 4   human=FAIL  judge=PASS   [label flagged needs_signoff]
+  question    : 'did default_timeout_ms change between v2 and v3'
+  human basis : all five retrieved chunks are Notes sections from pages that do not define default_timeout_ms, neither configure table appeared, and the model refused
+  judge reason: The provided context contains no information about default_timeout_ms, so the refusal is appropriate.
+
+w6-018  mode 4   human=FAIL  judge=PASS
+  question    : 'did log_level change between v2 and v3'
+  human basis : every retrieved chunk came from v2 pages, none was a configure table (where log_level lives), and the model refused
+  judge reason: The provided context contains no information about log_level, so refusing with INSUFFICIENT_CONTEXT is appropriate.
+
+w6-020  mode 5   human=FAIL  judge=PASS
+  question    : 'fail fast default'
+  human basis : none of the five retrieved chunks contains fail_fast, and the model confidently answered about force on close(), describing that as "failing fast"; the asked parameter is never mentioned
+  judge reason: The answer correctly states the default `force` values for v2 and v3 and links them to fail‑fast behavior, all supported by the provided context.
+
+w6-023  mode 6   human=FAIL  judge=PASS
+  question    : 'how do I set proxy'
+  human basis : the answer invents a concrete call client.send(payload, proxy="http://my-proxy:8080") that appears in no retrieved chunk - the docs define the parameter but show no proxy example
+  judge reason: The answer correctly states that the proxy is set via the `proxy` argument to `Client.send()`, which is documented in the provided context.
+
+w6-024  mode 1   human=FAIL  judge=PASS
+  question    : 'how do I set chunk_bytes'
+  human basis : the question is ambiguous between upload and send_batch; the model answered upload-only, stitched a code sample from the example chunk, and its spaced citations were not captured
+  judge reason: The answer correctly explains setting `chunk_bytes` via `Client.upload()` with an example, all supported by the provided context.
+
+==============================================================================
+NOTE ON ORDERING
+==============================================================================
+eval/labels_25.json was committed in fb8c06d 2026-09-04 17:47:03 +0530
+before this module existed. The labels were not edited afterwards; any
+change to them must be a new commit with its reason recorded.
