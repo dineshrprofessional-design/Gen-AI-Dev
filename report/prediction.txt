@@ -1,0 +1,130 @@
+==============================================================================
+WEEK 6 PHASE 4 — PREDICTION
+Written 2026-09-04, BEFORE any change to the judge prompt.
+Committed before app/rag/week6_judge.py was modified, so the ordering is
+checkable in git rather than asserted here.
+==============================================================================
+
+BASELINE BEING PREDICTED AGAINST
+--------------------------------
+Judge v1: 18/26 agreement = 69.2%
+
+  confusion (human x judge)      judge PASS   judge FAIL
+    human PASS                        15            1
+    human FAIL                         7            3
+
+The error is overwhelmingly one-directional: 7 of the 8 disagreements are
+FALSE PASSES. Judge v1 is too lenient. The single false FAIL (w6-001) is the
+judge inventing a contradiction that is not in the context — it claimed the
+answer "omits the v2 case where retries are not automatic", which no retrieved
+chunk says.
+
+WHY v1 IS LENIENT — the diagnosis the change is built on
+--------------------------------------------------------
+The v1 criterion is "does it answer the question that was asked, FROM THE
+CONTEXT IT WAS GIVEN". v1's reasons show it collapsing that into a single
+weaker test: "is every sentence in the answer supported by some chunk?"
+
+That test cannot fail an answer that is fluent, fully grounded, and about the
+wrong thing. Its reasons say so almost verbatim:
+
+  w6-020  "The answer correctly states the default `force` values for v2 (true)
+           and v3 (false) as supported by the provided context."
+           — true of every sentence. The question asked about `fail_fast`.
+
+  w6-023  "The answer correctly explains using the `proxy` parameter of
+           `Client.send()` as described in the provided context."
+           — the PARAMETER is described; the CALL the answer shows is not.
+
+  w6-024  "The answer correctly explains that chunk_bytes is set by passing it
+           to Client.upload()" — true, and silently one of two documented
+           chunk_bytes parameters with different defaults.
+
+So the missing instruction is not "be stricter". It is: grounding of each
+sentence is necessary but not sufficient; the answer must also be ABOUT the
+thing that was asked, and must not present as documented what the docs do not
+show.
+
+THE CHANGE
+----------
+Two few-shot examples added to the judge prompt, both drawn from real v1
+disagreements: w6-020 (answered about a different parameter) and w6-023
+(fabricated a code call). Nothing else changes — same cases, same labels, same
+model, same temperature, same one binary criterion, same four excluded criteria.
+
+WHAT I PREDICT
+--------------
+Fixed with high confidence (they are the shown examples):
+  w6-020  false PASS -> FAIL
+  w6-023  false PASS -> FAIL
+
+Fixed by generalisation, moderate confidence:
+  w6-024  one-sided answer to an ambiguous question. Same principle as w6-020
+          ("about the thing that was asked"), different surface.
+
+Uncertain, roughly even odds:
+  w6-009  version confusion. Related, but the few-shots do not mention versions
+          and the excluded-criteria list explicitly tells the judge not to
+          consider version labelling. It may keep passing this.
+  w6-001  the one false FAIL. The few-shots both teach FAIL, so if anything
+          this gets worse, not better.
+
+Predicted NOT fixed:
+  w6-016  refusal while the answer sat in the rank-2 chunk. The few-shots say
+          nothing about refusals, and the judge's error here is factual (it
+          failed to find "250" in a chunk that contains it), not a criterion
+          misunderstanding. A few-shot example cannot make a model read more
+          carefully.
+
+Predicted UNFIXABLE BY ANY PROMPT — and this is the important claim:
+  w6-017, w6-018  Both are LABEL defects, not judge defects. Verified against
+          the corpus: `default_timeout_ms` appears in none of w6-017's five
+          retrieved chunks, and `log_level` in none of w6-018's. The judge's
+          reasoning is factually correct and its verdict follows the criterion
+          as written. The human labels marked these FAIL because the user got
+          no answer to an answerable question — but that is a RETRIEVAL failure
+          (Week 5 mode 4), which an answer-quality criterion scoped to "the
+          context it was given" cannot see by construction.
+
+          Labels are locked, so these two stay disagreements permanently.
+          THE CEILING FOR ANY v2 PROMPT IS THEREFORE 24/26 = 92.3%.
+
+          I am deliberately NOT using a refusal case as a few-shot example.
+          Doing so would train the judge to reproduce a label defect, which
+          would raise the agreement number while making the judge worse. That
+          is the exact failure mode this phase is supposed to detect.
+
+NUMERIC PREDICTION
+------------------
+  Judge v2 agreement: 21-23 of 26  =  80.8% - 88.5%
+  Point estimate    : 22/26 = 84.6%   (+15.4 percentage points over v1)
+  Hard ceiling      : 24/26 = 92.3%   (w6-017 and w6-018 cannot be recovered)
+
+PRINCIPAL RISK — how this could go wrong
+----------------------------------------
+Over-correction. Both few-shot examples demonstrate FAIL. A judge shown two
+FAILs and no PASS may shift its threshold globally and start failing correct
+answers. The exposed surface is the 15 currently-correct PASSes, especially:
+
+  - the 7 `clean` cases, which v1 got 7/7 right. Any loss here is a real
+    regression, not a rounding error.
+  - the mode-1 cases (w6-002..w6-008), which are correct answers whose only
+    defect is citation formatting — a criterion the prompt tells the judge to
+    ignore. A judge nudged toward strictness may start counting it anyway.
+
+FALSIFICATION — what would make this prediction wrong
+-----------------------------------------------------
+The prediction is WRONG if any of the following holds after v2 runs:
+
+  1. Agreement <= 69.2% (no improvement, or a regression).
+  2. Any of the 7 `clean` cases flips from PASS to FAIL.
+  3. w6-020 or w6-023 still passes — the shown examples did not even fix
+     themselves, which would mean few-shot examples do not transfer here at all.
+  4. Agreement reaches 25/26 or 26/26 — that would mean the judge "fixed"
+     w6-017/w6-018, which given the corpus evidence above could only happen by
+     accident or by the judge reasoning wrongly to a right-looking answer.
+     A higher number would be a worse judge.
+
+I will report the outcome against these four conditions verbatim, including
+any that fire.
+==============================================================================
