@@ -1,0 +1,734 @@
+# Week 6 evaluation set — hand-authored specs.
+#
+#     python -m app.rag.week6_cases --out eval/week6_cases.jsonl
+#     python -m app.rag.week6_cases --validate
+#
+# This file carries ONLY what a human decided: which case exists, which Week 5
+# taxonomy mode it belongs to, and what a correct answer would have to contain.
+#
+# It deliberately does NOT carry the question text, the retrieved context, the
+# model output or the citations for any trace-sourced case. Those are copied
+# verbatim out of `traces/traces.jsonl` by the builder, keyed on `trace_id`.
+# Two Week 6 requirements are then unbreakable by construction rather than by
+# discipline:
+#
+#   - a trace_id that does not exist in traces.jsonl raises at build time, so a
+#     fabricated provenance cannot reach the dataset;
+#   - the question and recorded transcript cannot drift from the real trace,
+#     because they are never typed here in the first place.
+#
+# The same applies to `source: golden_set` cases, which are pulled from
+# eval/golden_set.jsonl by id.
+#
+# ## Honest provenance note
+#
+# These traces are real recorded runs through the real /api/v1/chat/ask route
+# (hybrid retrieval, openai/gpt-oss-120b, temperature 0), produced on 2026-08-31
+# by `app/rag/make_traces.py`. They are NOT organic end-user production traffic
+# — this project has never had users. `notes.md` §0 makes the same disclosure.
+# Every case below records `trace_kind` (organic | demo) from pool_manifest.json
+# so the distinction stays visible downstream.
+#
+# ## Field semantics
+#
+#   mode                  Week 5 taxonomy mode id (1-6), or `clean` for a case
+#                         that was observed working. Every case has one.
+#   case_kind             regression       - a real trace that exhibited this mode
+#                         regression-clean - a real trace that was correct (control)
+#                         probe            - authored/reused; no observed failure,
+#                                            it tests for the mode's risk
+#   expected_behavior     answer | refuse — what a correct system should do
+#   must_contain          literal strings a correct answer must include
+#   must_not_contain      literal strings whose presence proves the failure
+#   expected_citations    at least ONE of these chunk ids must be cited
+#   observed_failure      what actually went wrong in that trace (regression only)
+#
+# `must_contain` values are grounded in docs/ — every number here was read out of
+# the corpus, not remembered.
+
+taxonomy:
+  source: taxonomy.md
+  sample: "seed 20260831, 20 of 141 organic traces"
+  modes:
+    "1":
+      slug: citation-format
+      name: >-
+        Correct answer, but the citation is written in 【】 brackets, [ spaced ]
+        brackets, or with zero-width characters — so it is recorded as no
+        citation or flagged invalid
+      severity: annoys
+      week5_count: 10
+      week5_pct: 50
+      week5_example: bcc84d1515d9
+    "2":
+      slug: version-confusion
+      name: >-
+        Version-less question answered from one version's page, without saying
+        another version gives a different value
+      severity: ships-broken-code
+      week5_count: 3
+      week5_pct: 15
+      week5_example: d84a2cd4f913
+    "3":
+      slug: score-floor-refusal
+      name: >-
+        The score floor refuses although the table containing the answer was
+        retrieved — the gate reads only the rank-1 cosine, which fusion can
+        legally place below a higher-scoring rank-2
+      severity: annoys
+      week5_count: 2
+      week5_pct: 10
+      week5_example: aa983b01fd36
+    "4":
+      slug: version-compare-retrieval
+      name: >-
+        "Did X change between v2 and v3" retrieves Notes chunks from pages that
+        don't define X, never fetches the two tables to compare, and refuses
+      severity: annoys
+      week5_count: 2
+      week5_pct: 10
+      week5_example: 179023eb0b6a
+    "5":
+      slug: wrong-parameter
+      name: >-
+        Confident answer about a different parameter than the one asked, when
+        the asked one was never retrieved
+      severity: ships-broken-code
+      week5_count: 1
+      week5_pct: 5
+      week5_example: 7a7abc208979
+    "6":
+      slug: hallucinated-code
+      name: >-
+        Example code synthesised by the model that appears in no retrieved chunk
+      severity: ships-broken-code
+      week5_count: 1
+      week5_pct: 5
+      week5_example: cbaa3d073d15
+    clean:
+      slug: clean
+      name: >-
+        Observed correct — right answer with clean captured citations, or a
+        correct refusal of an out-of-corpus question. Negative controls, so a
+        pass rate has a denominator that can move in both directions.
+      severity: none
+      week5_count: 4
+      week5_pct: 20
+      week5_example: 187edede03a2
+
+cases:
+
+  # ---------------------------------------------------------------- mode 1 ---
+  # Citation capture. The answers below are all CORRECT; every one of them was
+  # recorded with an empty (or invalid) citations list because _CITATION in
+  # app/rag/generate.py matches only ASCII [chunk::n] with no inner spaces.
+
+  - case_id: w6-001
+    source: trace
+    trace_id: bcc84d1515d9
+    mode: "1"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: prose
+    expected_behavior: answer
+    expected_answer: >-
+      On a 5xx the client retries automatically according to the backoff
+      parameters; 4xx statuses are surfaced immediately and never retried.
+    must_contain: ["retr"]
+    must_not_contain: []
+    expected_citations: ["v3/client-send#clientsend::0"]
+    gold_chunk_id: v3/client-send#clientsend::0
+    observed_failure: >-
+      Answer correct and grounded, but the citation is written as
+      【v3/client-send#clientsend::0】 in full-width brackets, so citations[]
+      was recorded empty.
+
+  - case_id: w6-002
+    source: trace
+    trace_id: 44491c769398
+    mode: "1"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: table_row
+    expected_behavior: answer
+    expected_answer: "No — chunk_size is optional, not required."
+    must_contain: ["optional"]
+    must_not_contain: []
+    expected_citations: ["v3/client-stream#parameters::1"]
+    gold_chunk_id: v3/client-stream#parameters::1
+    observed_failure: >-
+      Correct "No, optional" citing the right chunk, but the brackets contain
+      spaces — [ v3/client-stream#parameters::1 ] — so nothing was captured.
+
+  - case_id: w6-003
+    source: trace
+    trace_id: 4452ba533635
+    mode: "1"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: table_row
+    expected_behavior: answer
+    expected_answer: "After pool_reap_seconds of idle time; the default is 90 seconds."
+    must_contain: ["pool_reap_seconds", "90"]
+    must_not_contain: []
+    expected_citations:
+      - v3/client-configure#notes::3
+      - v3/client-configure#parameters::1
+    gold_chunk_id: v3/client-configure#parameters::1
+    observed_failure: "Correct 90 s answer with a 【】-bracket citation; citations[] empty."
+
+  - case_id: w6-004
+    source: trace
+    trace_id: 39fc857740fa
+    mode: "1"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: table_row
+    expected_behavior: answer
+    expected_answer: "24 hours by default, controlled by retain_hours."
+    must_contain: ["24", "retain_hours"]
+    must_not_contain: []
+    expected_citations:
+      - v3/client-upload#clientupload::0
+      - v3/client-upload#parameters::1
+    gold_chunk_id: v3/client-upload#parameters::1
+    observed_failure: >-
+      Two accurate citations, both in spaced brackets, both recorded as none.
+
+  - case_id: w6-005
+    source: trace
+    trace_id: c832c65e52a3
+    mode: "1"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: code_fence
+    expected_behavior: answer
+    expected_answer: "The v3 configure example fence, reproduced verbatim."
+    must_contain: ["client.configure"]
+    must_not_contain: []
+    expected_citations: ["v3/client-configure#example::2"]
+    gold_chunk_id: v3/client-configure#example::2
+    observed_failure: >-
+      Returned the v3 example fence verbatim and correctly, with a 【】 citation
+      recorded as none.
+
+  - case_id: w6-006
+    source: trace
+    trace_id: 53fe4190ba35
+    mode: "1"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: prose
+    expected_behavior: answer
+    expected_answer: >-
+      Full jitter: a random delay between 0 and retry_backoff_ms * 2^n.
+    must_contain: ["jitter", "retry_backoff_ms"]
+    must_not_contain: []
+    expected_citations: ["v3/client-send#notes::3"]
+    gold_chunk_id: v3/client-send#notes::3
+    observed_failure: "Correct full-jitter formula; 【】 citation, citations[] empty."
+
+  - case_id: w6-007
+    source: trace
+    trace_id: 67babf113e70
+    mode: "1"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: prose
+    expected_behavior: answer
+    expected_answer: "Yes — close() is safe to call more than once; later calls are no-ops."
+    must_contain: ["no-op"]
+    must_not_contain: []
+    expected_citations: ["v3/client-close#clientclose::0"]
+    gold_chunk_id: v3/client-close#clientclose::0
+    observed_failure: "Correct answer, accurate spaced citation not captured by the parser."
+
+  - case_id: w6-008
+    source: trace
+    trace_id: 759633170b5a
+    mode: "1"
+    case_kind: regression
+    sdk_version: both
+    depends_on: table_row
+    expected_behavior: answer
+    expected_answer: "512 bytes in v2, raised to 1024 in v3."
+    must_contain: ["512", "1024"]
+    must_not_contain: []
+    expected_citations:
+      - v2/client-stream#parameters::1
+      - v3/client-stream#parameters::1
+    gold_chunk_id: v3/client-stream#parameters::1
+    observed_failure: >-
+      A model answer covering BOTH versions correctly, whose two citations were
+      captured with a leading zero-width space (U+200B) and therefore both
+      flagged invalid. The worst variant of mode 1: it does not merely lose the
+      citation, it reports a correct citation as fabricated.
+
+  # ---------------------------------------------------------------- mode 2 ---
+  # Version confusion. Severity: ships broken code — a v2 default pasted into a
+  # v3 project is a wrong number that runs.
+
+  - case_id: w6-009
+    source: trace
+    trace_id: d84a2cd4f913
+    mode: "2"
+    case_kind: regression
+    sdk_version: none
+    depends_on: table_row
+    expected_behavior: answer
+    expected_answer: >-
+      Client.configure() defaults base_url to https://api.example.com in both v2
+      and v3; the per-call base_url on v3 Client.send() defaults to None and
+      overrides the client default for that call only. A correct answer names
+      the version it is quoting.
+    must_contain: ["https://api.example.com"]
+    must_not_contain: []
+    expected_citations: ["v3/client-configure#parameters::1"]
+    gold_chunk_id: v3/client-configure#parameters::1
+    observed_failure: >-
+      Answered with configure's default citing the v2 page for a version-less
+      question. The v3 configure table never appeared in the five chunks, and
+      rank 1 was send's base_url whose default is None, which the answer
+      silently ignores.
+
+  - case_id: w6-010
+    source: trace
+    trace_id: 0f716df1f40c
+    mode: "2"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: table_row
+    expected_behavior: answer
+    expected_answer: "payload is the only required parameter on Client.send()."
+    must_contain: ["payload"]
+    must_not_contain: []
+    expected_citations: ["v3/client-send#parameters::1"]
+    gold_chunk_id: v3/client-send#parameters::1
+    observed_failure: >-
+      Correct "payload", but cites the v2 parameters table to answer a
+      Client.send() question whose other four retrieved chunks are all v3,
+      without saying the answer is version-scoped. The citation also uses a
+      non-ASCII hyphen (U+2011) inside the chunk id, so the shipped parser
+      captured nothing and never flagged it either.
+      [Corrected in Phase 2: an earlier draft of this note claimed the cited
+      chunk was never in the context. It was — v2/client-send#parameters::1 sits
+      at rank 4. The citation_resolves assertion caught the error.]
+
+  - case_id: w6-011
+    source: trace
+    trace_id: d1ed2b96d352
+    mode: "2"
+    case_kind: regression
+    sdk_version: none
+    depends_on: table_row
+    expected_behavior: answer
+    expected_answer: >-
+      timeout_ms is defined on four different pages: v2 send 10000, v3 send
+      30000, v3 send_batch 60000, v3 close 5000. A correct answer says the
+      question is ambiguous and enumerates, including the v2 value.
+    must_contain: ["30000"]
+    must_not_contain: []
+    expected_citations: ["v3/client-send#parameters::1"]
+    gold_chunk_id: v3/client-send#parameters::1
+    observed_failure: >-
+      Enumerated three v3 defaults and never mentioned the v2 page, which was
+      ranked 1st in its own context.
+
+  - case_id: w6-012
+    source: golden_set
+    golden_id: q10
+    mode: "2"
+    case_kind: probe
+    sdk_version: both
+    expected_behavior: answer
+    must_contain: ["v2"]
+    must_not_contain: []
+    expected_citations: ["v2/client-close#notes::3"]
+    rationale: >-
+      v2 force defaults to True and the table says "Always true"; v3 force
+      defaults to False. A version-less phrasing of this question is exactly the
+      shape that produced mode 2, so it probes the same seam without an observed
+      failure behind it.
+
+  - case_id: w6-013
+    source: golden_set
+    golden_id: q11
+    mode: "2"
+    case_kind: probe
+    sdk_version: v3
+    expected_behavior: answer
+    must_contain: ["retries_enabled"]
+    must_not_contain: []
+    expected_citations: ["v3/client-configure#notes::3"]
+    rationale: >-
+      retries_enabled is the master switch; retry_backoff_ms is inert when it is
+      false. The interaction is documented only in v3 Notes, so answering from
+      the v2 page gives the wrong behaviour.
+
+  # ---------------------------------------------------------------- mode 3 ---
+  # Score-floor refusal. The gate at generate.py reads hits[0].score only, and
+  # SCORE_FLOOR is 0.45. Under RRF the rank-1 chunk can score below a rank-2.
+
+  - case_id: w6-014
+    source: trace
+    trace_id: b98918daf643
+    mode: "3"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: table_row
+    expected_behavior: answer
+    expected_answer: "telemetry is a bool, default True."
+    must_contain: ["bool"]
+    must_not_contain: ["INSUFFICIENT_CONTEXT"]
+    expected_citations: ["v3/client-configure#parameters::1"]
+    gold_chunk_id: v3/client-configure#parameters::1
+    observed_failure: >-
+      The parameters table containing "telemetry | bool" was retrieved at rank 2,
+      and the pipeline still returned INSUFFICIENT_CONTEXT because the rank-1
+      chunk's cosine (0.4167) is under the 0.45 floor.
+
+  - case_id: w6-015
+    source: trace
+    trace_id: aa983b01fd36
+    mode: "3"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: table_row
+    expected_behavior: answer
+    expected_answer: "Yes — set telemetry=False on Client.configure()."
+    must_contain: ["telemetry"]
+    must_not_contain: ["INSUFFICIENT_CONTEXT"]
+    expected_citations: ["v3/client-configure#parameters::1"]
+    gold_chunk_id: v3/client-configure#parameters::1
+    observed_failure: >-
+      The configure table was at rank 2 scoring 0.464 — above the floor — but the
+      gate reads only the rank-1 score (0.4453), so the request was refused
+      before the model ran. The clearest single case for the mode: the gate's
+      input and the answer's location disagree.
+
+  - case_id: w6-016
+    source: trace
+    trace_id: 655dbfdf558b
+    mode: "3"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: table_row
+    expected_behavior: answer
+    expected_answer: "250 ms — the base delay before jitter."
+    must_contain: ["250"]
+    must_not_contain: ["INSUFFICIENT_CONTEXT"]
+    expected_citations: ["v3/client-send#parameters::1"]
+    gold_chunk_id: v3/client-send#parameters::1
+    observed_failure: >-
+      The flagship demo question — the one every DX review opens with — refused.
+      Unlike w6-014/w6-015 the refusal came from the model, not the floor
+      (reason: "model judged the context insufficient"), with
+      v2/client-send#parameters::1 sitting at rank 5 in its own context. Recorded
+      here under mode 3 because notes.md §7 groups it there as a refusal with the
+      answer reachable; the judge will need to tell the two refusal sources
+      apart.
+
+  # ---------------------------------------------------------------- mode 4 ---
+  # "Did X change between v2 and v3" — retrieval fetches Notes chunks from pages
+  # that never define X, so the two tables are never compared.
+
+  - case_id: w6-017
+    source: trace
+    trace_id: 179023eb0b6a
+    mode: "4"
+    case_kind: regression
+    sdk_version: both
+    depends_on: cross_version
+    expected_behavior: answer
+    expected_answer: >-
+      Yes — Client.configure() default_timeout_ms is 10000 in v2 and 30000 in v3.
+    must_contain: ["10000", "30000"]
+    must_not_contain: ["INSUFFICIENT_CONTEXT"]
+    expected_citations:
+      - v2/client-configure#parameters::1
+      - v3/client-configure#parameters::1
+    gold_chunk_id: v3/client-configure#parameters::1
+    observed_failure: >-
+      All five retrieved chunks are Notes sections from pages that do not define
+      default_timeout_ms; neither configure table appeared, and the model
+      refused.
+
+  - case_id: w6-018
+    source: trace
+    trace_id: 6659349bf2cb
+    mode: "4"
+    case_kind: regression
+    sdk_version: both
+    depends_on: cross_version
+    expected_behavior: answer
+    expected_answer: "Yes — log_level default is error in v2 and warning in v3."
+    must_contain: ["error", "warning"]
+    must_not_contain: ["INSUFFICIENT_CONTEXT"]
+    expected_citations:
+      - v2/client-configure#parameters::1
+      - v3/client-configure#parameters::1
+    gold_chunk_id: v3/client-configure#parameters::1
+    observed_failure: >-
+      Every retrieved chunk came from v2 pages, none was a configure table
+      (where log_level lives), and the model refused.
+
+  - case_id: w6-019
+    source: golden_set
+    golden_id: q09
+    mode: "4"
+    case_kind: probe
+    sdk_version: both
+    expected_behavior: answer
+    must_contain: ["512", "1024"]
+    must_not_contain: ["INSUFFICIENT_CONTEXT"]
+    expected_citations: ["v2/client-stream#notes::3"]
+    rationale: >-
+      The one cross-version question already in the golden set, and the only
+      version-comparison case in the dataset that the shipped hybrid config is
+      known to retrieve — v2 Notes states both values in one chunk. It is the
+      control for w6-017/w6-018: same question shape, but the answer happens to
+      live in a single chunk, so a failure here would mean something different.
+
+  # ---------------------------------------------------------------- mode 5 ---
+  # Wrong parameter answered. Severity: ships broken code — true statements
+  # about the wrong knob.
+
+  - case_id: w6-020
+    source: trace
+    trace_id: 7a7abc208979
+    mode: "5"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: table_row
+    expected_behavior: refuse
+    expected_answer: >-
+      fail_fast is a Client.send_batch() parameter, bool, default False. It was
+      not retrieved in this trace, so the correct behaviour for THIS recorded
+      context is to refuse rather than to answer about a different parameter.
+    must_contain: []
+    must_not_contain: ["force"]
+    expected_citations: ["v3/client-batch#parameters::1"]
+    gold_chunk_id: v3/client-batch#parameters::1
+    observed_failure: >-
+      None of the five retrieved chunks contains fail_fast. The model
+      confidently answered about `force` on close(), describing that as "failing
+      fast", and gave v2/v3 defaults for it. Every sentence is true; none is
+      about the parameter that was asked.
+
+  - case_id: w6-021
+    source: golden_set
+    golden_id: q02
+    mode: "5"
+    case_kind: probe
+    sdk_version: v3
+    expected_behavior: answer
+    must_contain: ["max_redirects"]
+    must_not_contain: []
+    expected_citations: ["v3/client-send#parameters::1"]
+    rationale: >-
+      Asks about an error name (RedirectLoopError) whose answer requires naming
+      the right parameter (max_redirects). The v3 send table has twelve rows, so
+      a near-miss on the wrong row is the mode-5 failure shape.
+
+  - case_id: w6-022
+    source: golden_set
+    golden_id: q06
+    mode: "5"
+    case_kind: probe
+    sdk_version: v3
+    expected_behavior: answer
+    must_contain: ["CancelledError"]
+    must_not_contain: []
+    expected_citations: ["v3/client-close#notes::3"]
+    rationale: >-
+      Same shape as w6-021 on the close page, where force/drain/timeout_ms are
+      three adjacent knobs that are easy to confuse for one another.
+
+  # ---------------------------------------------------------------- mode 6 ---
+  # Example code the model synthesised, present in no retrieved chunk.
+
+  - case_id: w6-023
+    source: trace
+    trace_id: cbaa3d073d15
+    mode: "6"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: table_row
+    expected_behavior: answer
+    expected_answer: >-
+      Pass the proxy parameter to Client.send(); it is a str defaulting to None
+      and applies to that call only. The corpus documents the parameter and
+      contains NO proxy code example, so a correct answer describes the
+      parameter without showing a call.
+    must_contain: ["proxy"]
+    must_not_contain: ["my-proxy"]
+    expected_citations: ["v3/client-send#parameters::1"]
+    gold_chunk_id: v3/client-send#parameters::1
+    observed_failure: >-
+      The answer invents a concrete call — client.send(payload,
+      proxy="http://my-proxy:8080") — that appears in no retrieved chunk. The
+      docs define the parameter but show no proxy example. Plausible, unverified
+      usage: the exact thing a reader pastes into production.
+
+  # Reclassified from mode 6 to mode 1 during Phase 2 — see observed_failure.
+  # Left in file order so the case_id sequence stays stable.
+  - case_id: w6-024
+    source: trace
+    trace_id: da78a479f1e1
+    mode: "1"
+    case_kind: regression
+    sdk_version: v3
+    depends_on: code_fence
+    expected_behavior: answer
+    expected_answer: >-
+      chunk_bytes is defined twice — Client.upload() default 8388608 and
+      Client.send_batch() default 1048576. A correct answer disambiguates rather
+      than silently choosing one.
+    must_contain: ["chunk_bytes"]
+    must_not_contain: []
+    expected_citations:
+      - v3/client-upload#parameters::1
+      - v3/client-batch#parameters::1
+    gold_chunk_id: v3/client-upload#parameters::1
+    observed_failure: >-
+      Answered upload-only for a question ambiguous between Client.upload() and
+      Client.send_batch(), which both document a chunk_bytes with different
+      defaults. Both spaced-bracket citations were recorded as none — the
+      evidenced defect, and mode 1.
+      [Reclassified in Phase 2. The Phase 1 note called the sample's
+      chunk_bytes=16777216 a fabrication; it is the corpus's own example value
+      at docs/v3/client-upload.md:32. The code_sample_grounded assertion found
+      the only genuinely ungrounded line to be the substituted placeholder
+      path="./file.txt", which is not a mode-6 fabrication. cbaa3d073d15
+      (w6-023) remains the one true mode-6 regression, as taxonomy.md records.]
+
+  - case_id: w6-025
+    source: golden_set
+    golden_id: q12
+    mode: "6"
+    case_kind: probe
+    sdk_version: v3
+    expected_behavior: answer
+    must_contain: ["rate_limit_rps"]
+    must_not_contain: []
+    expected_citations: ["v3/client-batch#notes::3"]
+    rationale: >-
+      A reasoning question with two documented numbers (concurrency 8 default,
+      rate_limit_rps 20) that invites the model to compute and present a figure
+      the corpus never states. That fabricated-number shape is mode 6 without a
+      code fence.
+
+  # ----------------------------------------------------------------- clean ---
+  # Negative controls. Without these a "pass rate" only has failures to move
+  # through, and a judge that flags everything scores perfectly.
+
+  - case_id: w6-026
+    source: trace
+    trace_id: 187edede03a2
+    mode: clean
+    case_kind: regression-clean
+    sdk_version: v3
+    depends_on: table_row
+    expected_behavior: answer
+    expected_answer: "concurrency is an int."
+    must_contain: ["int"]
+    must_not_contain: []
+    expected_citations: ["v3/client-batch#parameters::1"]
+    gold_chunk_id: v3/client-batch#parameters::1
+    observed_failure: ""
+
+  - case_id: w6-027
+    source: trace
+    trace_id: b226ff8a5996
+    mode: clean
+    case_kind: regression-clean
+    sdk_version: v3
+    depends_on: prose
+    expected_behavior: answer
+    expected_answer: >-
+      Sends one request and blocks until a response or the retry budget is
+      exhausted; thread-safe; 5xx retried, 4xx surfaced immediately.
+    must_contain: ["thread"]
+    must_not_contain: []
+    expected_citations: ["v3/client-send#clientsend::0"]
+    gold_chunk_id: v3/client-send#clientsend::0
+    observed_failure: ""
+
+  - case_id: w6-028
+    source: trace
+    trace_id: 9d88b87ad51d
+    mode: clean
+    case_kind: regression-clean
+    sdk_version: both
+    depends_on: prose
+    expected_behavior: answer
+    expected_answer: >-
+      Releases the pool. v2 cancels in-flight requests unconditionally; v3
+      drains them and stops the reaper thread.
+    must_contain: ["pool"]
+    must_not_contain: []
+    expected_citations:
+      - v2/client-close#clientclose::0
+      - v3/client-close#clientclose::0
+    gold_chunk_id: v3/client-close#clientclose::0
+    observed_failure: ""
+
+  - case_id: w6-029
+    source: trace
+    trace_id: 706860c6d48e
+    mode: clean
+    case_kind: regression-clean
+    sdk_version: v3
+    depends_on: table_row
+    expected_behavior: answer
+    expected_answer: "int."
+    must_contain: ["int"]
+    must_not_contain: []
+    expected_citations: ["v3/client-send#parameters::1"]
+    gold_chunk_id: v3/client-send#parameters::1
+    observed_failure: ""
+
+  - case_id: w6-030
+    source: trace
+    trace_id: 493b0e8f6b28
+    mode: clean
+    case_kind: regression-clean
+    sdk_version: none
+    depends_on: out_of_corpus
+    expected_behavior: refuse
+    expected_answer: "INSUFFICIENT_CONTEXT — the corpus has no changelog."
+    must_contain: ["INSUFFICIENT_CONTEXT"]
+    must_not_contain: []
+    expected_citations: []
+    gold_chunk_id: ""
+    observed_failure: ""
+
+  - case_id: w6-031
+    source: trace
+    trace_id: 4fb06208fdab
+    mode: clean
+    case_kind: regression-clean
+    sdk_version: none
+    depends_on: out_of_corpus
+    expected_behavior: refuse
+    expected_answer: "INSUFFICIENT_CONTEXT — the corpus documents no HTTP endpoints or rate limits."
+    must_contain: ["INSUFFICIENT_CONTEXT"]
+    must_not_contain: []
+    expected_citations: []
+    gold_chunk_id: ""
+    observed_failure: ""
+
+  - case_id: w6-032
+    source: trace
+    trace_id: 29e1a872fee7
+    mode: clean
+    case_kind: regression-clean
+    sdk_version: none
+    depends_on: out_of_corpus
+    expected_behavior: refuse
+    expected_answer: "INSUFFICIENT_CONTEXT — only api_key auth is documented."
+    must_contain: ["INSUFFICIENT_CONTEXT"]
+    must_not_contain: []
+    expected_citations: []
+    gold_chunk_id: ""
+    observed_failure: ""
