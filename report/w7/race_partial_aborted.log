@@ -1,0 +1,13 @@
+warm-up on w7-01 (both arms, discarded) ...
+  warm-up took 31.5s
+
+rep 1  w7-01   agent PASS  3,280tok    6,267ms 2llm | workflow FAIL  3,406tok   23,997ms
+rep 1  w7-02   agent PASS  2,459tok    2,420ms 2llm | workflow PASS  3,080tok   22,811ms
+rep 1  w7-03   agent FAIL  2,078tok    1,427ms 2llm | workflow FAIL  2,911tok   44,909ms
+rep 1  w7-04   agent PASS  5,695tok   28,831ms 3llm | workflow PASS  2,763tok    3,456ms
+rep 1  w7-05   agent FAIL  5,153tok   23,691ms 3llm | workflow FAIL  2,595tok    3,573ms
+rep 1  w7-06   agent FAIL  4,579tok    8,805ms 3llm | workflow FAIL  3,552tok   23,144ms
+rep 1  w7-07   agent PASS  4,542tok   14,607ms 3llm | workflow FAIL      0tok    2,152ms
+rep 1  w7-08   agent FAIL  1,037tok    2,021ms 2llm | workflow FAIL      0tok   19,777ms
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

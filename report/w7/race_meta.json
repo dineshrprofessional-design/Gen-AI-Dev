@@ -1,0 +1,48 @@
+{
+  "complete": true,
+  "aborted": false,
+  "abort_kind": "",
+  "abort_reason": "",
+  "quota_error": false,
+  "fairness_passed": true,
+  "usable_as_result": true,
+  "reps": 1,
+  "questions": [
+    "w7-01",
+    "w7-02",
+    "w7-03",
+    "w7-04",
+    "w7-05",
+    "w7-06",
+    "w7-07",
+    "w7-08",
+    "w7-09",
+    "w7-10"
+  ],
+  "arms": [
+    "agent",
+    "workflow"
+  ],
+  "rows": 20,
+  "completed_pairs": 10,
+  "expected_pairs": 10,
+  "dataset_problems": [],
+  "identity": {
+    "questions": "ab4495261411fa85",
+    "question_count": "10",
+    "model": "openai/gpt-oss-120b",
+    "temperature": "0.0",
+    "arm_config": "d31606b9f46ae0df",
+    "tool_config": "9bdb0b3bc2a873c5",
+    "tool_schemas": "b18a0c8eca9a5eae",
+    "tool_impl": "542ec2a2ba72f018",
+    "answer_contract": "2d8a20ec36cec716",
+    "parser": "475400dd2c6cfb11",
+    "scorer": "e2556ff3670a4f7f",
+    "chat": "8d2be3987aaf2061",
+    "corpus_docs": "8019fd04535820fe75865d17611a6cf0"
+  },
+  "written_at": "2026-09-16T10:59:40",
+  "promoted_from": "report/w7/race_partial.csv",
+  "promotion_note": "reps=1 promoted from an aborted run; complete leading reps only, re-validated. The requested reps were NOT achieved."
+}

@@ -1,0 +1,55 @@
+====================================================================================================
+PROVED TOOL DEPENDENCIES
+====================================================================================================
+
+For each dependent question: what step 1 returns, why step 2 cannot be
+issued without it, and the measured fact that step 1's tool alone is
+insufficient.
+
+----------------------------------------------------------------------------------------------------
+w7-06  Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?
+
+  Step 1  check_deprecation
+          supplies : ['"retired": true', 'sendMessageV3', '3']
+          missing  : ['max_retries']   <- why step 2 is needed
+  Step 2  search_docs
+          supplies : ['max_retries', '3']
+          missing  : ['"retired": true', 'sendMessageV3']   <- why step 1 is needed
+
+  Dependency: Step 1 check_deprecation(path=/v2/messages) returns retired=true and replaced_by=sendMessageV3, whose api_version is v3. Step 2 must then search the v3 pages for max_retries. The question names only /v2/messages and contains neither "max_retries" nor "v3"; the retirement record is a POINTER and carries no retry count. Until step 1 returns, the searcher does not know which api_version to pass — and v2's Client.send has only three parameters, none of them max_retries, so guessing v2 finds nothing.
+
+----------------------------------------------------------------------------------------------------
+w7-07  Our service posts to POST /v2/messages:multi. Is that endpoint still supported, and what is the default concurrency of whatever replaced it?
+
+  Step 1  check_deprecation
+          supplies : ['"retired": true', 'sendBatchV3']
+          missing  : ['concurrency', '8']   <- why step 2 is needed
+  Step 2  search_docs
+          supplies : ['concurrency', '8']
+          missing  : ['"retired": true', 'sendBatchV3']   <- why step 1 is needed
+
+  Dependency: The strongest dependency in the set. Step 1 check_deprecation (path=/v2/messages:multi) returns replaced_by=sendBatchV3, whose SDK method is Client.send_batch. Step 2 must search the v3 batch page for concurrency. The question never says "batch", "send_batch" or "v3", and Client.send_batch() does not exist in v2 at all — so unlike every other two-hop case there is no v2-shaped fallback to answer from. Step 1 determines step 2's TARGET PAGE, not merely its version.
+
+----------------------------------------------------------------------------------------------------
+w7-08  A service calls POST /v2/connections:close on shutdown. Is that still the right call, and what does its replacement do if in-flight requests have not finished when the timeout elapses?
+
+  Step 1  check_deprecation
+          supplies : ['"retired": true', 'drainConnectionsV3']
+          missing  : ['closed anyway']   <- why step 2 is needed
+  Step 2  search_docs
+          supplies : ['closed anyway']
+          missing  : ['"retired": true', 'drainConnectionsV3']   <- why step 1 is needed
+
+  Dependency: Step 1 check_deprecation(path=/v2/connections:close) returns replaced_by=drainConnectionsV3 (Client.close, v3). Step 2 must then read the v3 close page's Notes prose. This is also the boundary proof: the answer is PROSE in a `## Notes` section, and api/openapi.json is generated from `## Parameters` tables only, so get_openapi_spec provably cannot contain this sentence and check_deprecation returns no documentation text at all.
+
+----------------------------------------------------------------------------------------------------
+w7-09  Is the v2 streaming endpoint retired? If so, how often does its replacement send keep-alive frames?
+
+  Step 1  check_deprecation
+          supplies : ['"retired": true', 'streamMessageV3']
+          missing  : ['heartbeat_ms', '15000']   <- why step 2 is needed
+  Step 2  search_docs
+          supplies : ['heartbeat_ms', '15000']
+          missing  : ['"retired": true', 'streamMessageV3']   <- why step 1 is needed
+
+  Dependency: Step 1 check_deprecation(path=/v2/messages:stream) returns replaced_by=streamMessageV3 (Client.stream, v3). Step 2 searches the v3 stream page for heartbeat_ms. The question names only the v2 endpoint, where the value is 30000; the correct answer 15000 exists only on the v3 page, so the version to search is knowable only from step 1's result.

@@ -1,0 +1,1318 @@
+[
+  {
+    "case_id": "w6-001",
+    "mode": "1",
+    "mode_slug": "citation-format",
+    "case_kind": "regression",
+    "trace_id": "bcc84d1515d9",
+    "question": "what does the client do when the endpoint returns 5xx",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "fail",
+        "detail": "1 of 1 citation(s) written but not captured",
+        "evidence": [
+          "v3/client-send#clientsend::0"
+        ]
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 1 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-002",
+    "mode": "1",
+    "mode_slug": "citation-format",
+    "case_kind": "regression",
+    "trace_id": "44491c769398",
+    "question": "is chunk_size required",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "fail",
+        "detail": "1 of 1 citation(s) written but not captured",
+        "evidence": [
+          "v3/client-stream#parameters::1"
+        ]
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 1 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-003",
+    "mode": "1",
+    "mode_slug": "citation-format",
+    "case_kind": "regression",
+    "trace_id": "4452ba533635",
+    "question": "when are idle connections reaped",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "fail",
+        "detail": "1 of 1 citation(s) written but not captured",
+        "evidence": [
+          "v3/client-configure#notes::3"
+        ]
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 1 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-004",
+    "mode": "1",
+    "mode_slug": "citation-format",
+    "case_kind": "regression",
+    "trace_id": "39fc857740fa",
+    "question": "how long is an upload handle valid",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "fail",
+        "detail": "2 of 2 citation(s) written but not captured",
+        "evidence": [
+          "v3/client-upload#clientupload::0",
+          "v3/client-upload#parameters::1"
+        ]
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 2 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-005",
+    "mode": "1",
+    "mode_slug": "citation-format",
+    "case_kind": "regression",
+    "trace_id": "c832c65e52a3",
+    "question": "show me an example of Client.configure()",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "fail",
+        "detail": "1 of 1 citation(s) written but not captured",
+        "evidence": [
+          "v3/client-configure#example::2"
+        ]
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 1 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "pass",
+        "detail": "1 python fence(s) parse",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "pass",
+        "detail": "1 specimen(s) fully grounded in the context",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-006",
+    "mode": "1",
+    "mode_slug": "citation-format",
+    "case_kind": "regression",
+    "trace_id": "53fe4190ba35",
+    "question": "how is jitter applied to retries",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "fail",
+        "detail": "1 of 1 citation(s) written but not captured",
+        "evidence": [
+          "v3/client-send#notes::3"
+        ]
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 1 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-007",
+    "mode": "1",
+    "mode_slug": "citation-format",
+    "case_kind": "regression",
+    "trace_id": "67babf113e70",
+    "question": "can I call close twice",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "fail",
+        "detail": "1 of 1 citation(s) written but not captured",
+        "evidence": [
+          "v3/client-close#clientclose::0"
+        ]
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 1 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-008",
+    "mode": "1",
+    "mode_slug": "citation-format",
+    "case_kind": "regression",
+    "trace_id": "759633170b5a",
+    "question": "What is the default chunk_size for Client.stream()?",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "all 2 citation(s) captured",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "fail",
+        "detail": "2 valid citation(s) flagged invalid",
+        "evidence": [
+          "\u200bv2/client-stream#parameters::1",
+          "\u200bv3/client-stream#parameters::1"
+        ]
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "pass",
+        "detail": "names a version while quoting chunk_size",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-009",
+    "mode": "2",
+    "mode_slug": "version-confusion",
+    "case_kind": "regression",
+    "trace_id": "d84a2cd4f913",
+    "question": "base url default",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "all 1 citation(s) captured",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 1 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "fail",
+        "detail": "quotes a v2/v3-divergent default for base_url without naming a version",
+        "evidence": [
+          "base_url: v2=['https://api.example.com'] v3=['None', 'https://api.example.com']"
+        ]
+      }
+    ]
+  },
+  {
+    "case_id": "w6-010",
+    "mode": "2",
+    "mode_slug": "version-confusion",
+    "case_kind": "regression",
+    "trace_id": "0f716df1f40c",
+    "question": "Which parameter is required when calling Client.send()?",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "fail",
+        "detail": "1 of 1 citation(s) written but not captured",
+        "evidence": [
+          "v2/client-send#parameters::1"
+        ]
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 1 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-011",
+    "mode": "2",
+    "mode_slug": "version-confusion",
+    "case_kind": "regression",
+    "trace_id": "d1ed2b96d352",
+    "question": "what is the default for timeout_ms",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "all 3 citation(s) captured",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 3 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "fail",
+        "detail": "quotes a v2/v3-divergent default for timeout_ms without naming a version",
+        "evidence": [
+          "timeout_ms: v2=['10000'] v3=['30000', '5000', '60000']"
+        ]
+      }
+    ]
+  },
+  {
+    "case_id": "w6-012",
+    "mode": "2",
+    "mode_slug": "version-confusion",
+    "case_kind": "probe",
+    "trace_id": null,
+    "question": "setting force=False on close does nothing?",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-013",
+    "mode": "2",
+    "mode_slug": "version-confusion",
+    "case_kind": "probe",
+    "trace_id": null,
+    "question": "does retries_enabled=false stop retry_backoff_ms working",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-014",
+    "mode": "3",
+    "mode_slug": "score-floor-refusal",
+    "case_kind": "regression",
+    "trace_id": "b98918daf643",
+    "question": "what type is telemetry",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer refused",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-015",
+    "mode": "3",
+    "mode_slug": "score-floor-refusal",
+    "case_kind": "regression",
+    "trace_id": "aa983b01fd36",
+    "question": "can I disable telemetry for GDPR compliance",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer refused",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-016",
+    "mode": "3",
+    "mode_slug": "score-floor-refusal",
+    "case_kind": "regression",
+    "trace_id": "655dbfdf558b",
+    "question": "What is the default value of retry_backoff_ms on Client.send() in v3?",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer refused",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-017",
+    "mode": "4",
+    "mode_slug": "version-compare-retrieval",
+    "case_kind": "regression",
+    "trace_id": "179023eb0b6a",
+    "question": "did default_timeout_ms change between v2 and v3",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer refused",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-018",
+    "mode": "4",
+    "mode_slug": "version-compare-retrieval",
+    "case_kind": "regression",
+    "trace_id": "6659349bf2cb",
+    "question": "did log_level change between v2 and v3",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer refused",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-019",
+    "mode": "4",
+    "mode_slug": "version-compare-retrieval",
+    "case_kind": "probe",
+    "trace_id": null,
+    "question": "did chunk_size change between v2 and v3",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-020",
+    "mode": "5",
+    "mode_slug": "wrong-parameter",
+    "case_kind": "regression",
+    "trace_id": "7a7abc208979",
+    "question": "fail fast default",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "fail",
+        "detail": "2 of 2 citation(s) written but not captured",
+        "evidence": [
+          "v2/client-close#notes::3",
+          "v3/client-close#parameters::1"
+        ]
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 2 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "pass",
+        "detail": "names a version while quoting force",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-021",
+    "mode": "5",
+    "mode_slug": "wrong-parameter",
+    "case_kind": "probe",
+    "trace_id": null,
+    "question": "what causes RedirectLoopError",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-022",
+    "mode": "5",
+    "mode_slug": "wrong-parameter",
+    "case_kind": "probe",
+    "trace_id": null,
+    "question": "what raises CancelledError",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-023",
+    "mode": "6",
+    "mode_slug": "hallucinated-code",
+    "case_kind": "regression",
+    "trace_id": "cbaa3d073d15",
+    "question": "how do I set proxy",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "fail",
+        "detail": "1 of 1 citation(s) written but not captured",
+        "evidence": [
+          "v3/client-send#parameters::1"
+        ]
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 1 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "fail",
+        "detail": "1 code line(s) appear in no retrieved chunk",
+        "evidence": [
+          "client.send(payload, proxy=\"http://my-proxy:8080\")"
+        ]
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-024",
+    "mode": "1",
+    "mode_slug": "citation-format",
+    "case_kind": "regression",
+    "trace_id": "da78a479f1e1",
+    "question": "how do I set chunk_bytes",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "fail",
+        "detail": "2 of 2 citation(s) written but not captured",
+        "evidence": [
+          "v3/client-upload#parameters::1",
+          "v3/client-upload#example::2"
+        ]
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 2 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "pass",
+        "detail": "1 python fence(s) parse",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "fail",
+        "detail": "1 code line(s) appear in no retrieved chunk",
+        "evidence": [
+          "path=\"./file.txt\","
+        ]
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-025",
+    "mode": "6",
+    "mode_slug": "hallucinated-code",
+    "case_kind": "probe",
+    "trace_id": null,
+    "question": "concurrency 64 with rate_limit_rps 20 - do I get 64 rps",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "skipped",
+        "detail": "no recorded answer",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-026",
+    "mode": "clean",
+    "mode_slug": "clean",
+    "case_kind": "regression-clean",
+    "trace_id": "187edede03a2",
+    "question": "what type is concurrency",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "all 1 citation(s) captured",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 1 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-027",
+    "mode": "clean",
+    "mode_slug": "clean",
+    "case_kind": "regression-clean",
+    "trace_id": "b226ff8a5996",
+    "question": "what does Client.send() do",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "all 1 citation(s) captured",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 1 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-028",
+    "mode": "clean",
+    "mode_slug": "clean",
+    "case_kind": "regression-clean",
+    "trace_id": "9d88b87ad51d",
+    "question": "what does Client.close() do",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "all 2 citation(s) captured",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 2 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-029",
+    "mode": "clean",
+    "mode_slug": "clean",
+    "case_kind": "regression-clean",
+    "trace_id": "706860c6d48e",
+    "question": "What type is the max_redirects parameter on Client.send()?",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "all 1 citation(s) captured",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "all 1 citation(s) resolve",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-030",
+    "mode": "clean",
+    "mode_slug": "clean",
+    "case_kind": "regression-clean",
+    "trace_id": "493b0e8f6b28",
+    "question": "is there a changelog for v3.2.0",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer refused",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-031",
+    "mode": "clean",
+    "mode_slug": "clean",
+    "case_kind": "regression-clean",
+    "trace_id": "4fb06208fdab",
+    "question": "What is the rate limit on the /v1/embeddings endpoint?",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer refused",
+        "evidence": []
+      }
+    ]
+  },
+  {
+    "case_id": "w6-032",
+    "mode": "clean",
+    "mode_slug": "clean",
+    "case_kind": "regression-clean",
+    "trace_id": "29e1a872fee7",
+    "question": "How do I authenticate with OAuth2?",
+    "results": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer refused",
+        "evidence": []
+      }
+    ]
+  }
+]

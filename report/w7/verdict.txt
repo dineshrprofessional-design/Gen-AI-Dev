@@ -1,0 +1,20 @@
+WEEK 7 VERDICT — AGENT vs FIXED WORKFLOW
+10 questions, 1 repetition, same model, temperature 0, fairness gate PASS.
+
+                        agent      workflow     ratio
+  pass rate             50.0%        50.0%      1.00x
+  p50 latency          14,929 ms    20,424 ms   0.73x
+  total tokens         60,492       29,720      2.04x
+  cost / question    $0.001017    $0.000566     1.80x
+
+Does the path vary by input? YES — 7 distinct agent paths vs the workflow's 2.
+Variation comes from single_hop (3 paths: each question needs a different
+single tool) and two_hop (2). cross_version never varies.
+
+Rule applied: path varies AND agent pass rate <= workflow (50%=50%, delta 0,
+not significant).
+
+RECOMMENDATION: FIXED WORKFLOW. The agent's path genuinely varies and it picks
+correct tools, but that variation buys zero passes while costing 2.04x tokens
+and 1.80x money. It was faster (0.73x), contradicting the committed
+prediction: speed is its only win, and speed is not what an agent is for.

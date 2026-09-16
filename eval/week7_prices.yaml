@@ -1,0 +1,22 @@
+# Token prices for the Week 7 race, in USD per 1M tokens.
+#
+# Kept as data, not code, so a grader can see where every dollar figure came from
+# and recompute it under a different rate. `race.csv` will always also carry raw
+# prompt_tokens and completion_tokens, so the cost column is reproducible from
+# first principles even if these rates go stale.
+#
+# `verified_on` empty means UNVERIFIED: the harness will refuse to print a cost
+# column and will report tokens only, rather than publish an invented number.
+
+"openai/gpt-oss-120b":
+  usd_per_1m_input: 0.15
+  usd_per_1m_cached_input: 0.075
+  usd_per_1m_output: 0.60
+  source: "https://console.groq.com/docs/model/openai/gpt-oss-120b"
+  verified_on: "2026-09-15"
+  note: >-
+    Groq on-demand list price. The free tier bills nothing, so cost/question is
+    "what this would cost at list price", not what was actually spent. Cached
+    input is half price and the SDK reports
+    usage.prompt_tokens_details.cached_tokens, so it is billed separately rather
+    than approximated.

@@ -1,0 +1,252 @@
+# Week 7 evaluation set — 10 questions, hand-authored.
+#
+#     python -m app.rag.week7_questions --check      # re-derive eval/week7_questions.jsonl
+#     python -m app.rag.week7_questions --validate   # class mix, metadata, corpus references
+#     python -m app.rag.week7_questions --matrix     # the T2 answerability matrix
+#
+# The mix is deliberate. The brief's named failure is "racing on 10 single-page
+# lookup questions the agent already passes — without the deprecated-endpoint and
+# cross-version cases the workflow wins by construction." So:
+#
+#   3 single_hop      one tool answers completely. Controls: if the agent loses
+#                     here, its planning overhead is exposed. Without them a
+#                     "ship the agent" verdict would be unfalsifiable.
+#   2 cross_version   one tool, two calls. Isolates *dependency* from *call
+#                     count* — a fixed fan-out passes these, which is the point.
+#   4 two_hop         no single tool can answer. The replacement operation must
+#                     be discovered before its details can be looked up.
+#   1 refusal         must decline. Without it, "the agent wins by calling more
+#                     tools" is indistinguishable from "by calling the right ones".
+#
+# ## Two literal fields, deliberately separate
+#
+#   required_facts   literals that must appear in TOOL OUTPUT. This is what the
+#                    T2 answerability matrix is computed from, so T2 measures
+#                    what the tools can actually retrieve.
+#   must_contain     literals the final ANSWER text must contain. This is what
+#                    the scorer checks.
+#
+# They are not the same thing and collapsing them would corrupt both. "Is the
+# batch operation retired?" is answered by the JSON `"retired": false`, which no
+# answer text would ever contain verbatim; conversely an answer must name
+# `send_batch` in prose, which is not the discriminating fact a tool returns.
+#
+# required_facts are matched against the JSON-serialised tool payload, so a
+# structural fact can be expressed as '"retired": true' and will only match the
+# one tool that actually reports retirement status.
+#
+# ## must_not_contain
+#
+# Every two-hop question carries the WRONG-VERSION value of the same symbol, so
+# "answered from the deprecated side" fails deterministically rather than
+# scoring by luck. Literals are chosen to avoid substring collisions: "100"
+# would match inside "10000", so the v2 discriminator for w7-06 is the word
+# "ignored" from the v2 page instead.
+
+questions:
+
+  # ------------------------------------------------------------ single_hop ---
+
+  - id: w7-01
+    question: "In v3, when Client.send() gets a 4xx response, does it retry it?"
+    question_class: single_hop
+    sdk_version: v3
+    expect_refusal: false
+    required_facts: ["4xx", "never retried"]
+    must_contain: ["4xx", "never"]
+    must_not_contain: []
+    expected_tools: ["search_docs"]
+    expected_order: ["search_docs"]
+    dependency: ""
+    rationale: >-
+      Deliberately targets PROSE in the page intro, not a table cell.
+      api/openapi.json is generated from `## Parameters` tables only, so
+      get_openapi_spec provably cannot hold this sentence — which makes the
+      question discriminate between tools instead of merely being easy. An
+      earlier draft asked for max_bytes/524288000 and T2 measured BOTH
+      search_docs and get_openapi_spec answering it, since the spec's
+      request_parameters are derived from that same table. A single-hop question
+      answerable by two tools cannot tell you whether the agent chose correctly.
+
+  - id: w7-02
+    question: "Which HTTP verb and path does Client.upload() call in v3?"
+    question_class: single_hop
+    sdk_version: v3
+    expect_refusal: false
+    required_facts: ["/v3/files", "POST"]
+    must_contain: ["POST", "/v3/files"]
+    must_not_contain: ["/v2/"]
+    expected_tools: ["get_openapi_spec"]
+    expected_order: ["get_openapi_spec"]
+    dependency: ""
+    rationale: >-
+      Provably unanswerable by search_docs: no HTTP path exists anywhere in
+      docs/. That asymmetry is the non-overlap demonstration in miniature.
+
+  - id: w7-03
+    question: "Is the v3 batch operation behind Client.send_batch() retired, or is it still current?"
+    question_class: single_hop
+    sdk_version: v3
+    expect_refusal: false
+    required_facts: ['"retired": false', "sendBatchV3"]
+    must_contain: ["sendBatchV3"]
+    must_not_contain: ["retired in", "replaced by"]
+    expected_tools: ["check_deprecation"]
+    expected_order: ["check_deprecation"]
+    dependency: ""
+    rationale: >-
+      Deliberately a NEGATIVE retirement case. Without it, the four two-hop
+      questions could be passed by a constant "yes, deprecated" and the
+      deprecation tool would look useful while measuring nothing.
+
+  # --------------------------------------------------------- cross_version ---
+
+  - id: w7-04
+    question: "Did the default heartbeat_ms on Client.stream() change between v2 and v3, and if so what are the two values?"
+    question_class: cross_version
+    sdk_version: both
+    expect_refusal: false
+    required_facts: ["heartbeat_ms", "30000", "15000"]
+    must_contain: ["heartbeat_ms", "30000", "15000"]
+    must_not_contain: []
+    expected_tools: ["search_docs"]
+    expected_order: ["search_docs", "search_docs"]
+    dependency: >-
+      Two INDEPENDENT calls: the v2 and v3 arguments are both known from the
+      question text. Neither call's arguments depend on the other's result, so
+      a fixed fan-out passes this. That is what makes it the control that
+      separates dependency from call count.
+    rationale: >-
+      A table-diff-only divergence — no prose anywhere states it. A
+      single-version answer returns one number and reads complete, which is
+      Week 5 taxonomy mode 2 exactly.
+
+  - id: w7-05
+    question: "What does Client.close() do in v2 that it no longer does by default in v3?"
+    question_class: cross_version
+    sdk_version: both
+    expect_refusal: false
+    required_facts: ["cancelled rather than drained", "drain"]
+    must_contain: ["cancel", "drain"]
+    must_not_contain: ["retired", "deprecated"]
+    expected_tools: ["search_docs"]
+    expected_order: ["search_docs", "search_docs"]
+    dependency: >-
+      Two independent calls, as w7-04. Both versions are named in the question.
+    rationale: >-
+      The must_not_contain is the interesting part: an agent holding a
+      retirement tool may reach for retirement language where the correct
+      answer is a plain behavioural difference. Client.close() is NOT retired in
+      either version — only the wire operation behind it is.
+
+  # ---------------------------------------------------------------- two_hop ---
+
+  - id: w7-06
+    question: "Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?"
+    question_class: two_hop
+    sdk_version: v3
+    expect_refusal: false
+    required_facts: ['"retired": true', "sendMessageV3", "max_retries", "3"]
+    must_contain: ["sendMessageV3", "max_retries", "3"]
+    must_not_contain: ["ignored"]
+    expected_tools: ["check_deprecation", "search_docs"]
+    expected_order: ["check_deprecation", "search_docs"]
+    dependency: >-
+      Step 1 check_deprecation(path=/v2/messages) returns retired=true and
+      replaced_by=sendMessageV3, whose api_version is v3. Step 2 must then search
+      the v3 pages for max_retries. The question names only /v2/messages and
+      contains neither "max_retries" nor "v3"; the retirement record is a POINTER
+      and carries no retry count. Until step 1 returns, the searcher does not
+      know which api_version to pass — and v2's Client.send has only three
+      parameters, none of them max_retries, so guessing v2 finds nothing.
+    rationale: >-
+      must_not_contain is "ignored", the v2 page's word for retry_backoff_ms
+      ("accepted in v2 but ignored"). "100" was rejected as a discriminator
+      because it is a substring of v2's timeout_ms default 10000.
+
+  - id: w7-07
+    question: "Our service posts to POST /v2/messages:multi. Is that endpoint still supported, and what is the default concurrency of whatever replaced it?"
+    question_class: two_hop
+    sdk_version: v3
+    expect_refusal: false
+    required_facts: ['"retired": true', "sendBatchV3", "concurrency", "8"]
+    must_contain: ["send_batch", "concurrency", "8"]
+    must_not_contain: ["/v2/batches"]
+    expected_tools: ["check_deprecation", "search_docs"]
+    expected_order: ["check_deprecation", "search_docs"]
+    dependency: >-
+      The strongest dependency in the set. Step 1 check_deprecation
+      (path=/v2/messages:multi) returns replaced_by=sendBatchV3, whose SDK method
+      is Client.send_batch. Step 2 must search the v3 batch page for concurrency.
+      The question never says "batch", "send_batch" or "v3", and
+      Client.send_batch() does not exist in v2 at all — so unlike every other
+      two-hop case there is no v2-shaped fallback to answer from. Step 1
+      determines step 2's TARGET PAGE, not merely its version.
+    rationale: >-
+      sendMultiV2 is the only authored operation with no SDK binding in v2, and
+      api/README.md names it as the largest liberty taken. It exists precisely to
+      make this hop un-shortcuttable.
+
+  - id: w7-08
+    question: "A service calls POST /v2/connections:close on shutdown. Is that still the right call, and what does its replacement do if in-flight requests have not finished when the timeout elapses?"
+    question_class: two_hop
+    sdk_version: v3
+    expect_refusal: false
+    required_facts: ['"retired": true', "drainConnectionsV3", "closed anyway"]
+    must_contain: ["drain", "closed anyway", "warning"]
+    must_not_contain: ["cancelled rather than drained"]
+    expected_tools: ["check_deprecation", "search_docs"]
+    expected_order: ["check_deprecation", "search_docs"]
+    dependency: >-
+      Step 1 check_deprecation(path=/v2/connections:close) returns
+      replaced_by=drainConnectionsV3 (Client.close, v3). Step 2 must then read
+      the v3 close page's Notes prose. This is also the boundary proof: the
+      answer is PROSE in a `## Notes` section, and api/openapi.json is generated
+      from `## Parameters` tables only, so get_openapi_spec provably cannot
+      contain this sentence and check_deprecation returns no documentation text
+      at all.
+    rationale: >-
+      must_not_contain is the v2 behaviour sentence, so an answer describing the
+      deprecated side fails outright.
+
+  - id: w7-09
+    question: "Is the v2 streaming endpoint retired? If so, how often does its replacement send keep-alive frames?"
+    question_class: two_hop
+    sdk_version: v3
+    expect_refusal: false
+    required_facts: ['"retired": true', "streamMessageV3", "heartbeat_ms", "15000"]
+    must_contain: ["heartbeat_ms", "15000"]
+    must_not_contain: ["30000"]
+    expected_tools: ["check_deprecation", "search_docs"]
+    expected_order: ["check_deprecation", "search_docs"]
+    dependency: >-
+      Step 1 check_deprecation(path=/v2/messages:stream) returns
+      replaced_by=streamMessageV3 (Client.stream, v3). Step 2 searches the v3
+      stream page for heartbeat_ms. The question names only the v2 endpoint,
+      where the value is 30000; the correct answer 15000 exists only on the v3
+      page, so the version to search is knowable only from step 1's result.
+    rationale: >-
+      The cleanest discriminator in the set: 30000 and 15000 are both documented
+      heartbeat_ms defaults, so answering from the wrong version produces a
+      plausible number that runs and is wrong — Week 5 mode 2's harm signature.
+
+  # ---------------------------------------------------------------- refusal ---
+
+  - id: w7-10
+    question: "What is the rate limit on the /v1/embeddings endpoint?"
+    question_class: refusal
+    sdk_version: none
+    expect_refusal: true
+    required_facts: []
+    must_contain: ["INSUFFICIENT_CONTEXT"]
+    must_not_contain: ["/v1/embeddings", "requests per second"]
+    expected_tools: []
+    expected_order: []
+    dependency: ""
+    rationale: >-
+      Week 6 case w6-031's question text VERBATIM. It is the continuity bridge
+      proving that authoring an OpenAPI spec did not create an answer where
+      Week 6 committed a refusal: no /v1/ path and no embeddings operation
+      exists in api/, which week7_corpus --validate enforces as gate G2. Its
+      pass/fail is directly comparable to report/judge_v1.txt:67 and
+      report/judge_v2.txt:92.

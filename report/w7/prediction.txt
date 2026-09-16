@@ -1,0 +1,127 @@
+WEEK 7 — DATED PREDICTION, COMMITTED BEFORE THE RACE
+====================================================
+
+Written  : 2026-09-15
+Author   : Step 10, before any full 10-question run of either arm
+Precedent: report/prediction.txt (Week 6), committed at fb8c06d before the judge
+           prompt was touched. Same rule applies here: this file is not edited
+           after results exist. If it is wrong, it stays wrong and the report
+           says so.
+
+
+0. WHAT I ALREADY KNEW WHEN WRITING THIS
+----------------------------------------
+
+Disclosed so the prediction cannot be read as more blind than it is. Steps 8
+and 9 ran six single questions against the two arms. No arm has run the full
+ten, and neither arm has ever been scored side by side.
+
+  question  agent                              workflow
+  w7-01     PASS  3,297 tok   2 LLM calls      PASS  3,413 tok  1 LLM call
+  w7-07     PASS  4,484 tok   3 LLM calls      1 of 4 runs PASS  ~3,250 tok
+  w7-08     not run                            PASS  2,846 tok
+  w7-10     2 of 5 runs PASS; the other 3      PASS  2,591 tok
+            thrashed to 8 iterations,
+            31,405-35,988 tok, 171-213 s
+
+  Never run on either arm: w7-02, w7-03, w7-04, w7-05, w7-06, w7-09.
+
+Two facts already established that this prediction leans on:
+
+  - The agent is BISTABLE on w7-10. Same question, temperature 0, nothing
+    changed between runs: 2 of 5 refused in one call for 1,026 tokens, 3 of 5
+    burned ~31k tokens and returned no answer at all.
+  - The workflow fails w7-07 systematically, not randomly: prompt_tokens was
+    identical (2,846) on every run, and 3 of 4 answers named the HTTP endpoint
+    "POST /v3/batches" instead of the SDK method "send_batch" that must_contain
+    requires. Its s3 is a spec lookup, so it never sees the prose that names
+    the SDK method.
+
+
+1. THE BUDGETS THIS PREDICTION ASSUMES
+--------------------------------------
+
+Fixed now, before the race, and not tuned afterwards:
+
+    max_iterations    8
+    max_tokens        25,000
+    max_cost_usd      0.01
+    max_wall_clock_s  120.0   (excluding provider rate-limit sleep)
+
+Each sits between the largest legitimate run observed and the pathological one:
+
+    largest legitimate   w7-07   3 iters   4,484 tok   $0.00088    21.2 s
+    observed pathology   w7-10   8 iters  35,988 tok   $0.00524   187.9 s
+
+So max_tokens and max_wall_clock_s are load-bearing: they would have cut the
+w7-10 thrash short. max_iterations at 8 would NOT have — the thrash stopped at
+exactly 8 — which is the point of enforcing four rather than one.
+
+
+2. THE PREDICTION
+-----------------
+
+Headline, one number:
+
+    The Agent will NOT beat the fixed workflow on pass rate, and will spend at
+    least 2.5x the tokens to tie it.
+
+Stated numerically:
+
+    P1  Agent pass rate        60%  (6 of 10)
+    P2  Workflow pass rate     60%  (6 of 10)
+    P3  Pass-rate delta        0 questions; |agent - workflow| <= 1
+    P4  Agent total tokens     >= 2.5x the workflow's total tokens
+    P5  Agent p50 latency      >= 1.8x the workflow's p50 latency
+    P6  Verdict row selected   "path varies, agent <= workflow"
+                               -> recommend the FIXED WORKFLOW
+
+
+3. WHY
+------
+
+P1/P2/P3. The two arms fail in different places, and I expect those to roughly
+cancel. The agent should win the two-hop band (w7-06..w7-09) because its second
+hop is a docs search that reaches prose the workflow's spec lookup cannot; the
+workflow should win the refusal control and the single-hop band because it
+cannot thrash. Cancellation to within one question is the specific claim.
+
+P4. The agent re-sends the whole message list every lap. Measured: reading only
+the final lap understates w7-07 by 1.95x and the w7-10 thrash by 4.9x. On a
+question that terminates normally the two arms are close (w7-01: 3,297 vs
+3,413 — the agent is actually CHEAPER there). The 2.5x therefore rests entirely
+on how many questions thrash. If one or two hit the token budget at 25,000, the
+agent lands near 2.7x; if none do, near 1.3x and P4 is false.
+
+P5. Latency follows call count: 1 LLM call plus <= 4 tool calls versus 2-8 LLM
+calls plus however many tools. The cold bge-m3 load is charged to whichever arm
+runs first and is excluded by the warm-up.
+
+
+4. WHAT WOULD FALSIFY THIS
+--------------------------
+
+Any of these makes the prediction wrong, and the report must say which:
+
+    F1  Agent pass rate exceeds the workflow's by 2 or more questions.
+        -> the loop is buying real accuracy; P3 and P6 both fail.
+    F2  Agent total tokens < 2.5x the workflow's.
+        -> P4 fails. Most likely cause: no question thrashes in the real run,
+           which would mean w7-10's bistability was not representative.
+    F3  Either arm's pass rate is below 40% or above 80%.
+        -> P1/P2 are badly calibrated and the 60% estimate was guesswork.
+    F4  The agent's tool path does NOT vary across questions.
+        -> P6's verdict row is wrong; the gain, if any, cannot come from the
+           loop, and the right recommendation becomes "fold the step into the
+           workflow" rather than "keep the workflow".
+
+I am least confident in P4. It is a single-threshold claim resting on a failure
+mode observed on exactly one question, and 10 questions give +-10% granularity.
+If P4 is the only thing that fails, the honest reading is that the agent's cost
+penalty is real but smaller than the w7-10 thrash suggested, not that the
+prediction was directionally right.
+
+I am most confident in P6, and least willing to be talked out of it: even if the
+agent wins on pass rate, a 1-LLM-call arm that ties a 2-8-call arm is the
+cheaper thing to operate, and the verdict table is applied mechanically from the
+measured numbers rather than from this paragraph.
