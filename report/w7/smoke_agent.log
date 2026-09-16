@@ -1,0 +1,127 @@
+model openai/gpt-oss-120b  temperature 0.0  arm sha d31606b9f46ae0df
+budgets {"max_iterations": 8, "max_tokens": 25000, "max_cost_usd": 0.01, "max_wall_clock_s": 120.0}  sha 60da800db60dda82
+
+==============================================================================
+w7-01  [agent]  In v3, when Client.send() gets a 4xx response, does it retry it?
+==============================================================================
+  termination   : final_answer  (model answered without requesting more tools)
+  tool sequence : search_docs
+  authored plan : search_docs   [same — recorded, never enforced]
+  llm calls     : 2   iterations: 2   tool calls: 1
+  tokens        : prompt 3,006  completion 290  cached 0  total 3,296
+  cost          : $0.000625
+  latency       : 21,778 ms raw   21,778 ms excluding 0.0 s of rate-limit sleep
+  budgets       : iters 2/8   tokens 3,296/25,000   cost $0.000625/$0.0100   clock 21.8/120s
+
+  ANSWER:
+    In v3, Client.send() does not retry when it receives a 4xx response; such statuses are returned to the caller immediately and are never retried.
+  VERSION: v3
+  CITATIONS: v3/client-send#clientsend::0
+
+  score: PASS
+    ok  parsed                       
+    ok  refusal_matches_expectation  refused=False, expected=False
+    ok  must_contain                 2/2 present
+    ok  must_not_contain             clean
+    ok  citations_grounded           0 not in corpus, 0 not returned by a tool
+    ok  version_named                VERSION=v3, expected v3
+
+==============================================================================
+w7-04  [agent]  Did the default heartbeat_ms on Client.stream() change between v2 and v3, and if so what are the two values?
+==============================================================================
+  termination   : final_answer  (model answered without requesting more tools)
+  tool sequence : search_docs -> search_docs
+  authored plan : search_docs -> search_docs   [same — recorded, never enforced]
+  llm calls     : 3   iterations: 3   tool calls: 2
+  tokens        : prompt 4,963  completion 353  cached 0  total 5,316
+  cost          : $0.000956
+  latency       : 4,070 ms raw   4,070 ms excluding 0.0 s of rate-limit sleep
+  budgets       : iters 3/8   tokens 5,316/25,000   cost $0.000956/$0.0100   clock 4.1/120s
+
+  ANSWER:
+    Yes, the default heartbeat_ms for Client.stream() changed; in v2 it defaults to 30000 ms, while in v3 it defaults to 15000 ms.
+  VERSION: both
+  CITATIONS: v2/client-stream#parameters::1, v3/client-stream#parameters::1
+
+  score: PASS
+    ok  parsed                       
+    ok  refusal_matches_expectation  refused=False, expected=False
+    ok  must_contain                 3/3 present
+    ok  must_not_contain             clean
+    ok  citations_grounded           0 not in corpus, 0 not returned by a tool
+    ok  version_named                VERSION=both, expected both
+
+==============================================================================
+w7-06  [agent]  Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?
+==============================================================================
+  termination   : final_answer  (model answered without requesting more tools)
+  tool sequence : check_deprecation -> search_docs
+  authored plan : check_deprecation -> search_docs   [same — recorded, never enforced]
+  llm calls     : 3   iterations: 3   tool calls: 2
+  tokens        : prompt 4,237  completion 536  cached 0  total 4,773
+  cost          : $0.000957
+  latency       : 7,558 ms raw   7,558 ms excluding 0.0 s of rate-limit sleep
+  budgets       : iters 3/8   tokens 4,773/25,000   cost $0.000957/$0.0100   clock 7.6/120s
+
+  ANSWER:
+    The POST /v2/messages endpoint is retired (it was replaced in v3 by the sendMessageV3 operation). Its replacement, Client.send in v3, retries up to three additional attempts by default (max_retries = 3).
+  VERSION: v3
+  CITATIONS: sendMessageV2, v3/client-send#parameters::1
+
+  score: PASS
+    ok  parsed                       
+    ok  refusal_matches_expectation  refused=False, expected=False
+    ok  must_contain                 3/3 present
+    ok  must_not_contain             clean
+    ok  citations_grounded           0 not in corpus, 0 not returned by a tool
+    ok  version_named                VERSION=v3, expected v3
+
+==============================================================================
+w7-07  [agent]  Our service posts to POST /v2/messages:multi. Is that endpoint still supported, and what is the default concurrency of whatever replaced it?
+==============================================================================
+  termination   : final_answer  (model answered without requesting more tools)
+  tool sequence : check_deprecation -> search_docs
+  authored plan : check_deprecation -> search_docs   [same — recorded, never enforced]
+  llm calls     : 3   iterations: 3   tool calls: 2
+  tokens        : prompt 4,059  completion 491  cached 0  total 4,550
+  cost          : $0.000903
+  latency       : 26,685 ms raw   26,685 ms excluding 0.0 s of rate-limit sleep
+  budgets       : iters 3/8   tokens 4,550/25,000   cost $0.000903/$0.0100   clock 26.7/120s
+
+  ANSWER:
+    The POST /v2/messages:multi endpoint was retired in v3 and is no longer supported; it was superseded by the batch operation behind Client.send_batch() (operation sendBatchV3). In the replacement, the concurrency parameter defaults to 8.
+  VERSION: v3
+  CITATIONS: sendMultiV2, v3/client-batch#parameters::1
+
+  score: PASS
+    ok  parsed                       
+    ok  refusal_matches_expectation  refused=False, expected=False
+    ok  must_contain                 3/3 present
+    ok  must_not_contain             clean
+    ok  citations_grounded           0 not in corpus, 0 not returned by a tool
+    ok  version_named                VERSION=v3, expected v3
+
+==============================================================================
+w7-10  [agent]  What is the rate limit on the /v1/embeddings endpoint?
+==============================================================================
+  termination   : final_answer  (model answered without requesting more tools)
+  tool sequence : (no tools called)
+  authored plan : (refuse)   [same — recorded, never enforced]
+  llm calls     : 1   iterations: 1   tool calls: 0
+  tokens        : prompt 907  completion 119  cached 0  total 1,026
+  cost          : $0.000207
+  latency       : 712 ms raw   712 ms excluding 0.0 s of rate-limit sleep
+  budgets       : iters 1/8   tokens 1,026/25,000   cost $0.000207/$0.0100   clock 0.7/120s
+
+  ANSWER:
+    INSUFFICIENT_CONTEXT
+  VERSION: none
+  CITATIONS: none
+
+  score: PASS
+    ok  parsed                       
+    ok  refusal_matches_expectation  refused=True, expected=True
+    ok  must_contain                 1/1 present  (n/a)
+    ok  must_not_contain             clean
+    ok  citations_grounded           0 not in corpus, 0 not returned by a tool  (n/a)
+    NO  version_named                VERSION=none, expected none  (n/a)

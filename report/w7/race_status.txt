@@ -1,0 +1,97 @@
+WEEK 7 RACE — STATUS: NOT COMPLETED. NO VERDICT ISSUED.
+=======================================================
+
+Date: 2026-09-15
+
+The harness is finished and proved. The paid run is blocked by the provider's
+daily token quota. No race numbers exist, so no verdict has been written. This
+file records why, with the arithmetic, so the gap is auditable rather than
+silently filled in.
+
+
+1. WHAT STOPPED IT
+------------------
+
+Groq free tier, verbatim from the 429 that ended the run:
+
+    Rate limit reached for model `openai/gpt-oss-120b` ... service tier
+    `on_demand` on tokens per day (TPD): Limit 200000, Used 198458,
+    Requested 2819.
+
+This is a tokens-per-DAY cap, not the 8000 tokens-per-minute throttle the
+harness already handles. `chat_once` retries transport failures and sleeps on
+429s, but it caps each sleep at 45 s — correct for a per-minute limit, useless
+against a retry-after of 9m11s. Five retries exhausted and the call returned an
+error, which the workflow arm reported honestly as `termination=chat_error`
+with 0 tokens.
+
+That 0-token row is what exposed it. The run was aborted at 8 of 30
+question-pairs rather than allowed to finish, because a race in which one arm
+is silently erroring produces a winner that means nothing.
+
+
+2. THE PLANNED RACE DOES NOT FIT THE FREE TIER
+----------------------------------------------
+
+Measured per-question cost, from the 8 completed pairs and the Step 10 smoke
+tests:
+
+    agent      2,078 - 5,695 tokens, mean ~3,700
+    workflow   2,595 - 3,552 tokens, mean ~3,000
+    per pair                          ~6,700
+
+    reps=1   10 pairs   ~67,000  + warm-up ~7,000  =  ~74,000    fits
+    reps=2   20 pairs  ~134,000  + warm-up ~7,000  = ~141,000    fits
+    reps=3   30 pairs  ~201,000  + warm-up ~7,000  = ~208,000    DOES NOT FIT
+
+reps=3 exceeds the 200,000/day cap on its own, before anything else spent that
+day. The Week 7 plan specified reps=3 without checking it against the daily
+quota; that was a planning error, and this is where it surfaced. The TPD window
+is rolling, refilling at roughly 8,300 tokens/hour, so a reps=1 race needs about
+nine hours of accumulated headroom from exhaustion.
+
+
+3. WHAT IS PROVED WITHOUT THE PAID RUN
+--------------------------------------
+
+`python -m app.rag.week7_race --self-test` drives the real `run_race` with a
+scripted model through one seam handed to BOTH arms. Zero network, zero tokens.
+It checks the parts a paid run would otherwise be the first test of:
+
+    row count, both arms, same 10 question objects
+    agent 2 LLM calls/question, workflow exactly 1
+    workflow inside its 4-tool ceiling
+    total tokens == all runs / reps, every agent lap counted
+    p50 == median of per-question medians, recomputed independently
+    cost/question == total cost / runs
+    fairness gate returns exactly ['arm_preamble']
+    race.csv round-trips and reproduces the same four numbers
+    the verdict decision table selects a row
+
+All pass. What the self-test cannot produce is the thing the verdict needs:
+real tool paths from a real model. A scripted model cannot vary its path, and
+path variation is the first branch of the decision rule.
+
+
+4. TO FINISH
+------------
+
+On a day with quota available:
+
+    .venv/bin/python -m app.rag.week7_race --reps 1 --delay 18     # ~74k tokens
+    .venv/bin/python -m app.rag.week7_race --verdict               # decision table
+
+reps=1 is the honest maximum for this tier. It is weaker than planned: both
+arms were measured flaky in Steps 8-9 (the agent bistable on w7-10, the
+workflow systematic-but-not-total on w7-07), so single-rep pass rates on those
+questions are close to a coin flip and the report must say so. reps=2 at
+~141,000 tokens is the better run if a full day's quota is free.
+
+
+5. PARTIAL DATA
+---------------
+
+`race_partial_aborted.log` holds the 8 completed pairs. It is NOT a race
+result and must not be quoted as one: it is rep 1 only, 8 of 10 questions, and
+its last two workflow rows are provider errors rather than measurements. It is
+kept as evidence that the harness ran end to end against a live model.

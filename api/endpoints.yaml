@@ -1,0 +1,147 @@
+# ---------------------------------------------------------------------------
+# AUTHORED FOR WEEK 7. THIS FILE IS THE ONLY INVENTED CONTENT IN api/.
+#
+# docs/ documents a Python SDK and names no HTTP path, verb or operationId
+# anywhere. Every path, verb, operationId and deprecation below was written for
+# Week 7 Task Set E, because the corpus has no genuine deprecation to find:
+# v3 is a strict superset of v2 with zero removed parameters and zero removed
+# methods, which api/changelog.md records mechanically as "Removed: none".
+#
+# No real API was consulted and none is described.
+#
+# Everything else under api/ is GENERATED from docs/ by
+# `python -m app.rag.week7_corpus`. Run `--check` to reproduce it.
+#
+# Constraints this file must respect (asserted by --validate), each protecting a
+# committed Week 6 negative control that currently passes in judge_v1 and judge_v2.
+# The forbidden strings are deliberately NOT spelled out here: the gate scans every
+# byte under api/ with no carve-outs, so naming them in a comment would trip it.
+# See app/rag/week7_corpus.py FORBIDDEN_IN_API for the patterns and their reasons.
+#   * no version-1 paths, no vector-search operation -> w6-031 stays a refusal
+#   * exactly one security scheme, type apiKey       -> w6-032 stays a refusal
+#   * no release-version string anywhere             -> w6-030 stays a refusal
+#   * no documented service throughput ceiling       -> w6-031 stays a refusal
+#
+# Every deprecation carries an `anchor` naming a real sentence in docs/. The
+# quote must be a literal substring of that file (whitespace-normalised), so the
+# fiction is pinned to real text: edit docs/ and this build breaks rather than
+# the story quietly diverging from the corpus.
+# ---------------------------------------------------------------------------
+
+authored: true
+authored_for: "Week 7 Task Set E"
+generator: "app/rag/week7_corpus.py"
+disclosure: "api/README.md"
+
+# The service the SDK is a client for. base_url is NOT invented - it is the real
+# documented default of Client.configure(base_url) in both v2 and v3.
+service:
+  title: "Example SDK Service"
+  server: "https://api.example.com"
+
+# One entry per (sdk_method, api_version). Client.configure is deliberately
+# absent: it sets client-side defaults and never crosses the wire, which
+# docs/v3/client-configure.md states outright. Inventing an endpoint for it
+# would be a liberty taken for no reason.
+operations:
+  - operation_id: sendMessageV2
+    method: POST
+    path: /v2/messages
+    sdk_method: Client.send
+    api_version: v2
+    page_id: client-send
+
+  - operation_id: sendMessageV3
+    method: POST
+    path: /v3/messages
+    sdk_method: Client.send
+    api_version: v3
+    page_id: client-send
+
+  - operation_id: streamMessageV2
+    method: POST
+    path: /v2/messages:stream
+    sdk_method: Client.stream
+    api_version: v2
+    page_id: client-stream
+
+  - operation_id: streamMessageV3
+    method: POST
+    path: /v3/messages:stream
+    sdk_method: Client.stream
+    api_version: v3
+    page_id: client-stream
+
+  - operation_id: closeConnectionsV2
+    method: POST
+    path: /v2/connections:close
+    sdk_method: Client.close
+    api_version: v2
+    page_id: client-close
+
+  - operation_id: drainConnectionsV3
+    method: POST
+    path: /v3/connections:drain
+    sdk_method: Client.close
+    api_version: v3
+    page_id: client-close
+
+  # The one operation with no SDK binding in v2: v2 had no batch method at all.
+  # This is the largest single liberty taken in this file, and it is what makes
+  # question w7-07 a hop the agent cannot shortcut - the replacement is a
+  # different SDK method on a page that exists only in v3.
+  - operation_id: sendMultiV2
+    method: POST
+    path: /v2/messages:multi
+    sdk_method: null
+    api_version: v2
+    page_id: null
+
+  - operation_id: sendBatchV3
+    method: POST
+    path: /v3/batches
+    sdk_method: Client.send_batch
+    api_version: v3
+    page_id: client-batch
+
+  - operation_id: uploadFileV3
+    method: POST
+    path: /v3/files
+    sdk_method: Client.upload
+    api_version: v3
+    page_id: client-upload
+
+# Four tombstones. Each is consistent with - and anchored to - a real sentence
+# in docs/ describing a v2 limitation that v3 removed.
+deprecations:
+  - operation_id: sendMessageV2
+    deprecated_in: v3
+    replaced_by: sendMessageV3
+    reason: "Automatic retries arrived in v3; the v2 operation never retried."
+    anchor:
+      file: docs/v2/client-send.md
+      quote: "Automatic retries arrived in v3."
+
+  - operation_id: streamMessageV2
+    deprecated_in: v3
+    replaced_by: streamMessageV3
+    reason: "The v2 stream cannot resume a dropped connection; v3 can."
+    anchor:
+      file: docs/v2/client-stream.md
+      quote: "Resumable streams arrived in v3."
+
+  - operation_id: closeConnectionsV2
+    deprecated_in: v3
+    replaced_by: drainConnectionsV3
+    reason: "The v2 close cancels in-flight requests; v3 drains them."
+    anchor:
+      file: docs/v2/client-close.md
+      quote: "Graceful draining arrived in v3."
+
+  - operation_id: sendMultiV2
+    deprecated_in: v3
+    replaced_by: sendBatchV3
+    reason: "Superseded by the batch operation behind Client.send_batch()."
+    anchor:
+      file: docs/v3/client-send.md
+      quote: "`Client.send_batch()`, which amortises connection setup across the whole batch"

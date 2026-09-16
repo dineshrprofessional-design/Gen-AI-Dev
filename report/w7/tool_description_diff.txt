@@ -1,0 +1,177 @@
+check_deprecation — description and parameter diff
+==============================================================
+
+BEFORE (v1)
+--------------------------------------------------------------
+Get deprecation and migration information for the API. Use this to find out if something is deprecated, what changed between versions, what replaced a deprecated endpoint, and any relevant notes from the changelog or the spec. Pass the version you are interested in.
+
+parameters: {
+  "query": {
+    "type": "string"
+  },
+  "version": {
+    "type": "string"
+  }
+}
+
+AFTER (v2, shipped)
+--------------------------------------------------------------
+Report whether one HTTP operation is retired, and if it is, which operation replaced it.
+
+Returns only: retirement status, the version it was retired in, the replacing operationId, and that operation's SDK method and api_version.
+
+It returns no parameters, no defaults and no documentation text. Once you have the replacement, look up its details with the other tools.
+
+parameters: {
+  "additionalProperties": false,
+  "properties": {
+    "api_version": {
+      "description": "Which version's operation to check. Required.",
+      "enum": [
+        "v2",
+        "v3"
+      ],
+      "type": "string"
+    },
+    "path": {
+      "description": "Check by HTTP path, e.g. /v2/messages. Give this or sdk_method.",
+      "type": "string"
+    },
+    "sdk_method": {
+      "description": "Check by SDK method. Give this or path.",
+      "enum": [
+        "Client.send",
+        "Client.stream",
+        "Client.close",
+        "Client.configure",
+        "Client.upload",
+        "Client.send_batch"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "api_version"
+  ],
+  "type": "object"
+}
+
+WORD-LEVEL DIFF
+--------------------------------------------------------------
+--- 
++++ 
+@@ -1,43 +1,58 @@
+-Get
+-deprecation
++Report
++whether
++one
++HTTP
++operation
++is
++retired,
+ and
+-migration
+-information
+-for
+-the
+-API.
+-Use
+-this
+-to
+-find
+-out
+ if
+-something
+-is
+-deprecated,
+-what
+-changed
+-between
+-versions,
+-what
++it
++is,
++which
++operation
+ replaced
+-a
+-deprecated
+-endpoint,
+-and
+-any
+-relevant
+-notes
+-from
+-the
+-changelog
+-or
+-the
+-spec.
+-Pass
++it.
++Returns
++only:
++retirement
++status,
+ the
+ version
++it
++was
++retired
++in,
++the
++replacing
++operationId,
++and
++that
++operation's
++SDK
++method
++and
++api_version.
++It
++returns
++no
++parameters,
++no
++defaults
++and
++no
++documentation
++text.
++Once
+ you
+-are
+-interested
+-in.
++have
++the
++replacement,
++look
++up
++its
++details
++with
++the
++other
++tools.
+
+WHAT CHANGED, AND WHY
+--------------------------------------------------------------
+1. three jobs -> one. v1 promised deprecation status AND cross-version
+   differences AND changelog notes. 'what changed between versions' is
+   search_docs territory; a tool with three jobs cannot be shown
+   non-overlapping with anything.
+2. open-ended 'any relevant notes' -> explicit non-goals ('no parameters,
+   no defaults, no documentation text'). The open clause invites a call
+   for anything version-shaped, inflating call count without inflating
+   correctness.
+3. version: string -> api_version: enum [v2, v3], required, no default.
+   Free text admits '3', 'latest', '3.x', each needing normalisation or
+   a runtime error — a silent failure surface.
+4. query: string -> structured sdk_method enum OR path. A free-text query
+   makes this a second search engine, which is the overlap with
+   search_docs.
+5. added the hand-off sentence, so the two-hop plan is discoverable
+   rather than hoped for.

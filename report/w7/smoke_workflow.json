@@ -1,0 +1,1979 @@
+[
+  {
+    "arm": "workflow",
+    "question_id": "w7-01",
+    "question": "In v3, when Client.send() gets a 4xx response, does it retry it?",
+    "output": {
+      "answer": "In v3, Client.send() does not retry when it receives a 4xx response; those status codes are returned to the caller immediately and are never retried.",
+      "sdk_version": "v3",
+      "citations": [
+        "v3/client-send#clientsend::0"
+      ],
+      "refused": false,
+      "raw": "ANSWER: In v3, Client.send() does not retry when it receives a 4xx response; those status codes are returned to the caller immediately and are never retried.  \nVERSION: v3  \nCITATIONS: v3/client-send#clientsend::0",
+      "parse_error": ""
+    },
+    "steps": [
+      {
+        "step": "s1_search",
+        "executed": true,
+        "tool": "search_docs x2",
+        "arguments": {
+          "query": "In v3, when Client.send() gets a 4xx response, does it retry it?",
+          "api_version": [
+            "v2",
+            "v3"
+          ]
+        },
+        "depends_on": "",
+        "derived": "query=the question text (no single table key matched)",
+        "ok": true,
+        "note": "5 passages; v3 truncated at 4000 chars",
+        "latency_ms": 22416.937,
+        "result": {
+          "v2": {
+            "api_version": "v2",
+            "count": 5,
+            "passages": [
+              {
+                "rank": 1,
+                "chunk_id": "v2/client-send#clientsend::0",
+                "heading_path": "Client.send()",
+                "score": 0.6628,
+                "text": "Client.send()\n\n# Client.send()\n\nSends a single request to the configured endpoint and blocks until a response\nis received. Retries are not performed automatically in v2; callers implement\ntheir own retry loop around the call."
+              },
+              {
+                "rank": 2,
+                "chunk_id": "v2/client-send#notes::2",
+                "heading_path": "Client.send() > Notes",
+                "score": 0.642,
+                "text": "Client.send() > Notes\n\n## Notes\n\nThe `retry_backoff_ms` parameter is accepted in v2 but ignored. Automatic\nretries arrived in v3."
+              },
+              {
+                "rank": 3,
+                "chunk_id": "v2/client-configure#notes::3",
+                "heading_path": "Client.configure() > Notes",
+                "score": 0.5697,
+                "text": "Client.configure() > Notes\n\n## Notes\n\nThere is no `retries_enabled` switch in v2 because there is no automatic retry\npath to switch off. There is no connection reaper either: pooled connections\nlive until the client is garbage collected.\n\nThe v2 default `pool_size` is 4, raised to 10 in v3."
+              },
+              {
+                "rank": 4,
+                "chunk_id": "v2/client-close#notes::3",
+                "heading_path": "Client.close() > Notes",
+                "score": 0.5554,
+                "text": "Client.close() > Notes\n\n## Notes\n\n`force` defaults to true in v2 and setting it to false has no effect — the\nparameter exists only so that code written against the v3 preview does not fail\nto import. In v3 the default is false and requests are drained.\n\nThere is no context-manager form in v2."
+              },
+              {
+                "rank": 5,
+                "chunk_id": "v2/client-stream#clientstream::0",
+                "heading_path": "Client.stream()",
+                "score": 0.5549,
+                "text": "Client.stream()\n\n# Client.stream()\n\nOpens a streaming connection and yields events as they arrive. In v2 the\ngenerator does not reconnect: a dropped connection raises `StreamClosed` and the\ncaller must start again from the beginning. Resumable streams arrived in v3."
+              }
+            ]
+          },
+          "v3": {
+            "truncated": true,
+            "note": "result truncated at 4000 chars",
+            "content": "{\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-send#clientsend::0\", \"heading_path\": \"Client.send()\", \"score\": 0.7154, \"text\": \"Client.send()\\n\\n# Client.send()\\n\\nSends a single request to the configured endpoint and blocks until a response is\\nreceived or the retry budget is exhausted. The method is safe to call from\\nmultiple threads; each call takes its own connection from the pool and returns\\nit on completion. Callers issuing many requests at once should prefer\\n`Client.send_batch()`, which amortises connection setup across the whole batch\\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\\nclient retries automatically according to the backoff parameters below; 4xx\\nstatuses are surfaced to the caller immediately and are never retried, because a\\nmalformed request does not become well-formed by being sent again.\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-send#parameters::1\", \"heading_path\": \"Client.send() > Parameters\", \"score\": 0.6332, \"text\": \"Client.send() > Parameters\\n\\n## Parameters\\n\\n| name             | type | default   | required | description                                          |\\n|------------------|------|-----------|----------|------------------------------------------------------|\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-send#example::2\", \"heading_path\": \"Client.send() > Example\", \"score\": 0.6288, \"text\": \"Client.send() > Example\\n\\n## Example\\n\\n```python\\nfrom sdk import Client\\n\\nclient = Client(api_key=\\\"sk-...\\\")\\n\\nresponse = client.send(\\n    payload={\\\"query\\\": \\\"hello\\\"},\\n    retry_backoff_ms=500,\\n    max_retries=5,\\n    idempotency_key=\\\"req-0001\\\",\\n    retry_on=[500, 502, 503],\\n)\\n\\nprint(response.status_code)\\nprint(response.json())\\n```\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-batch#example::2\", \"heading_path\": \"Client.send_batch() > Example\", \"score\": 0.6071, \"text\": \"Client.send_batch() > Example\\n\\n## Example\\n\\n```python\\nresponses = client.send_batch(\\n    payloads=[{\\\"query\\\": q} for q in queries],\\n    concurrency=16,\\n    rate_limit_rps=50,\\n    fail_fast=False,\\n)\\n\\nfailed = [r for r in responses if r.status_code >= 500]\\nprint(f\\\"{len(failed)} of {len(responses)} need a retry\\\")\\n```\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-send#notes::3\", \"heading"
+          }
+        }
+      },
+      {
+        "step": "s2_lookup_primary",
+        "executed": true,
+        "tool": "check_deprecation",
+        "arguments": {
+          "sdk_method": "Client.send",
+          "api_version": "v3"
+        },
+        "depends_on": "",
+        "derived": "target read out of the question text",
+        "ok": true,
+        "note": "retired=False",
+        "latency_ms": 1.425,
+        "result": {
+          "found": true,
+          "operation_id": "sendMessageV3",
+          "api_version": "v3",
+          "sdk_method": "Client.send",
+          "retired": false,
+          "retired_in": null,
+          "retirement_reason": null,
+          "replacement": null
+        }
+      },
+      {
+        "step": "s3_lookup_counterpart",
+        "executed": true,
+        "tool": "get_openapi_spec",
+        "arguments": {
+          "sdk_method": "Client.send",
+          "api_version": "v3"
+        },
+        "depends_on": "s2_lookup_primary",
+        "derived": "s2 reported sendMessageV3 current; read its own spec",
+        "ok": true,
+        "note": "sendMessageV3",
+        "latency_ms": 0.059,
+        "result": {
+          "found": true,
+          "operation_id": "sendMessageV3",
+          "method": "POST",
+          "path": "/v3/messages",
+          "sdk_method": "Client.send",
+          "api_version": "v3",
+          "summary": "Client.send() on v3",
+          "request_parameters": [
+            {
+              "description": "The request body, serialised as JSON before sending.",
+              "in": "body",
+              "name": "payload",
+              "required": true,
+              "schema": {
+                "type": "object"
+              }
+            },
+            {
+              "description": "Total budget for the call, including every retry.",
+              "in": "body",
+              "name": "timeout_ms",
+              "required": false,
+              "schema": {
+                "default": "30000",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Base delay between retries, before jitter is applied.",
+              "in": "body",
+              "name": "retry_backoff_ms",
+              "required": false,
+              "schema": {
+                "default": "250",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Attempts after the first before the call gives up.",
+              "in": "body",
+              "name": "max_retries",
+              "required": false,
+              "schema": {
+                "default": "3",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Deduplicates retries server-side within 24 hours.",
+              "in": "body",
+              "name": "idempotency_key",
+              "required": false,
+              "schema": {
+                "default": "None",
+                "type": "string"
+              }
+            },
+            {
+              "description": "Gzip the request body before transmission.",
+              "in": "body",
+              "name": "compress",
+              "required": false,
+              "schema": {
+                "default": "False",
+                "type": "boolean"
+              }
+            },
+            {
+              "description": "Extra headers merged over the client defaults.",
+              "in": "body",
+              "name": "headers",
+              "required": false,
+              "schema": {
+                "default": "None",
+                "type": "object"
+              }
+            },
+            {
+              "description": "Overrides the client base URL for this call only.",
+              "in": "body",
+              "name": "base_url",
+              "required": false,
+              "schema": {
+                "default": "None",
+                "type": "string"
+              }
+            },
+            {
+              "description": "Return a generator instead of a materialised body.",
+              "in": "body",
+              "name": "stream",
+              "required": false,
+              "schema": {
+                "default": "False",
+                "type": "boolean"
+              }
+            },
+            {
+              "description": "Validate the server certificate chain.",
+              "in": "body",
+              "name": "verify_tls",
+              "required": false,
+              "schema": {
+                "default": "True",
+                "type": "boolean"
+              }
+            },
+            {
+              "description": "HTTP proxy URL applied to this call only.",
+              "in": "body",
+              "name": "proxy",
+              "required": false,
+              "schema": {
+                "default": "None",
+                "type": "string"
+              }
+            },
+            {
+              "description": "Overrides the default SDK user agent string.",
+              "in": "body",
+              "name": "user_agent",
+              "required": false,
+              "schema": {
+                "default": "None",
+                "type": "string"
+              }
+            },
+            {
+              "description": "Status codes that trigger the automatic retry path.",
+              "in": "body",
+              "name": "retry_on",
+              "required": false,
+              "schema": {
+                "default": "[500,502]",
+                "type": "array"
+              }
+            },
+            {
+              "description": "Redirects followed before RedirectLoopError is set.",
+              "in": "body",
+              "name": "max_redirects",
+              "required": false,
+              "schema": {
+                "default": "5",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Time spent waiting for a free pooled connection.",
+              "in": "body",
+              "name": "pool_timeout_ms",
+              "required": false,
+              "schema": {
+                "default": "5000",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Propagated to the server for distributed tracing.",
+              "in": "body",
+              "name": "trace_id",
+              "required": false,
+              "schema": {
+                "default": "None",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success."
+            }
+          },
+          "docs_anchor": "v3/client-send#parameters",
+          "provenance": "parameters derived from docs/v3/client-send.md; path, verb and operationId authored"
+        }
+      },
+      {
+        "step": "s4_read_best_chunk",
+        "executed": true,
+        "tool": "",
+        "arguments": {},
+        "depends_on": "",
+        "derived": "top-ranked v2 passage; none contained a derived parameter (wanted v3; no v3 passage survived truncation)",
+        "ok": true,
+        "note": "v2/client-send#clientsend::0",
+        "latency_ms": 0.0,
+        "result": {
+          "chunk_id": "v2/client-send#clientsend::0",
+          "rank": 1
+        }
+      },
+      {
+        "step": "s5_compose",
+        "executed": true,
+        "tool": "",
+        "arguments": {},
+        "depends_on": "",
+        "derived": "10,208 chars of pre-assembled context",
+        "ok": true,
+        "note": "answered",
+        "latency_ms": 3704.159,
+        "result": {}
+      }
+    ],
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "search_docs",
+        "arguments": {
+          "query": "In v3, when Client.send() gets a 4xx response, does it retry it?",
+          "api_version": "v2"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 22281.971,
+        "result_chunk_ids": [
+          "v2/client-send#clientsend::0",
+          "v2/client-send#notes::2",
+          "v2/client-configure#notes::3",
+          "v2/client-close#notes::3",
+          "v2/client-stream#clientstream::0"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "search_docs",
+        "arguments": {
+          "query": "In v3, when Client.send() gets a 4xx response, does it retry it?",
+          "api_version": "v3"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 130.455,
+        "result_chunk_ids": [
+          "v3/client-send#clientsend::0",
+          "v3/client-send#parameters::1",
+          "v3/client-send#example::2",
+          "v3/client-batch#example::2",
+          "v3/client-send#notes::3"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 3,
+        "name": "check_deprecation",
+        "arguments": {
+          "sdk_method": "Client.send",
+          "api_version": "v3"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 1.392,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      },
+      {
+        "seq": 4,
+        "name": "get_openapi_spec",
+        "arguments": {
+          "sdk_method": "Client.send",
+          "api_version": "v3"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 0.011,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "search_docs",
+      "search_docs",
+      "check_deprecation",
+      "get_openapi_spec"
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 3196,
+        "completion_tokens": 227,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 3704.1,
+        "cumulative_prompt": 3196,
+        "cumulative_completion": 227,
+        "cumulative_cost_usd": 0.0006156
+      }
+    ],
+    "prompt_tokens": 3196,
+    "completion_tokens": 227,
+    "cached_tokens": 0,
+    "total_tokens": 3423,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.0006156,
+    "price_verified": true,
+    "latency_ms": 26129.45,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "composed from the pre-assembled context",
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "0311092397a1cc7c",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "derived_parameter": "",
+    "derived_target": {
+      "sdk_method": "Client.send",
+      "api_version": "v3"
+    },
+    "best_chunk_id": "v2/client-send#clientsend::0",
+    "context_chars": 10208,
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nThe tool results you need have already been gathered for you and appear below. Do not ask for more; answer from what is provided, or refuse if it is not there.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: In v3, when Client.send() gets a 4xx response, does it retry it?\n\nTool results:\n\nMost relevant passage:\n{\"rank\": 1, \"chunk_id\": \"v2/client-send#clientsend::0\", \"heading_path\": \"Client.send()\", \"score\": 0.6628, \"text\": \"Client.send()\\n\\n# Client.send()\\n\\nSends a single request to the configured endpoint and blocks until a response\\nis received. Retries are not performed automatically in v2; callers implement\\ntheir own retry loop around the call.\", \"api_version\": \"v2\"}\n\nTool result 1: search_docs x2 with {\"query\": \"In v3, when Client.send() gets a 4xx response, does it retry it?\", \"api_version\": [\"v2\", \"v3\"]}\n{\"v2\": {\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-send#clientsend::0\", \"heading_path\": \"Client.send()\", \"score\": 0.6628, \"text\": \"Client.send()\\n\\n# Client.send()\\n\\nSends a single request to the configured endpoint and blocks until a response\\nis received. Retries are not performed automatically in v2; callers implement\\ntheir own retry loop around the call.\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-send#notes::2\", \"heading_path\": \"Client.send() > Notes\", \"score\": 0.642, \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` parameter is accepted in v2 but ignored. Automatic\\nretries arrived in v3.\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.5697, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\nThere is no `retries_enabled` switch in v2 because there is no automatic retry\\npath to switch off. There is no connection reaper either: pooled connections\\nlive until the client is garbage collected.\\n\\nThe v2 default `pool_size` is 4, raised to 10 in v3.\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.5554, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\n`force` defaults to true in v2 and setting it to false has no effect — the\\nparameter exists only so that code written against the v3 preview does not fail\\nto import. In v3 the default is false and requests are drained.\\n\\nThere is no context-manager form in v2.\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-stream#clientstream::0\", \"heading_path\": \"Client.stream()\", \"score\": 0.5549, \"text\": \"Client.stream()\\n\\n# Client.stream()\\n\\nOpens a streaming connection and yields events as they arrive. In v2 the\\ngenerator does not reconnect: a dropped connection raises `StreamClosed` and the\\ncaller must start again from the beginning. Resumable streams arrived in v3.\"}]}, \"v3\": {\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-send#clientsend::0\\\", \\\"heading_path\\\": \\\"Client.send()\\\", \\\"score\\\": 0.7154, \\\"text\\\": \\\"Client.send()\\\\n\\\\n# Client.send()\\\\n\\\\nSends a single request to the configured endpoint and blocks until a response is\\\\nreceived or the retry budget is exhausted. The method is safe to call from\\\\nmultiple threads; each call takes its own connection from the pool and returns\\\\nit on completion. Callers issuing many requests at once should prefer\\\\n`Client.send_batch()`, which amortises connection setup across the whole batch\\\\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\\\\nclient retries automatically according to the backoff parameters below; 4xx\\\\nstatuses are surfaced to the caller immediately and are never retried, because a\\\\nmalformed request does not become well-formed by being sent again.\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.6332, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|------------------|------|-----------|----------|------------------------------------------------------|\\\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-send#example::2\\\", \\\"heading_path\\\": \\\"Client.send() > Example\\\", \\\"score\\\": 0.6288, \\\"text\\\": \\\"Client.send() > Example\\\\n\\\\n## Example\\\\n\\\\n```python\\\\nfrom sdk import Client\\\\n\\\\nclient = Client(api_key=\\\\\\\"sk-...\\\\\\\")\\\\n\\\\nresponse = client.send(\\\\n    payload={\\\\\\\"query\\\\\\\": \\\\\\\"hello\\\\\\\"},\\\\n    retry_backoff_ms=500,\\\\n    max_retries=5,\\\\n    idempotency_key=\\\\\\\"req-0001\\\\\\\",\\\\n    retry_on=[500, 502, 503],\\\\n)\\\\n\\\\nprint(response.status_code)\\\\nprint(response.json())\\\\n```\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-batch#example::2\\\", \\\"heading_path\\\": \\\"Client.send_batch() > Example\\\", \\\"score\\\": 0.6071, \\\"text\\\": \\\"Client.send_batch() > Example\\\\n\\\\n## Example\\\\n\\\\n```python\\\\nresponses = client.send_batch(\\\\n    payloads=[{\\\\\\\"query\\\\\\\": q} for q in queries],\\\\n    concurrency=16,\\\\n    rate_limit_rps=50,\\\\n    fail_fast=False,\\\\n)\\\\n\\\\nfailed = [r for r in responses if r.status_code >= 500]\\\\nprint(f\\\\\\\"{len(failed)} of {len(responses)} need a retry\\\\\\\")\\\\n```\\\"}, {\\\"rank\\\": 5, \\\"chunk_id\\\": \\\"v3/client-send#notes::3\\\", \\\"heading\"}}\n\nTool result 2: check_deprecation with {\"sdk_method\": \"Client.send\", \"api_version\": \"v3\"}\n{\"found\": true, \"operation_id\": \"sendMessageV3\", \"api_version\": \"v3\", \"sdk_method\": \"Client.send\", \"retired\": false, \"retired_in\": null, \"retirement_reason\": null, \"replacement\": null}\n\nTool result 3: get_openapi_spec with {\"sdk_method\": \"Client.send\", \"api_version\": \"v3\"}\n{\"found\": true, \"operation_id\": \"sendMessageV3\", \"method\": \"POST\", \"path\": \"/v3/messages\", \"sdk_method\": \"Client.send\", \"api_version\": \"v3\", \"summary\": \"Client.send() on v3\", \"request_parameters\": [{\"description\": \"The request body, serialised as JSON before sending.\", \"in\": \"body\", \"name\": \"payload\", \"required\": true, \"schema\": {\"type\": \"object\"}}, {\"description\": \"Total budget for the call, including every retry.\", \"in\": \"body\", \"name\": \"timeout_ms\", \"required\": false, \"schema\": {\"default\": \"30000\", \"type\": \"integer\"}}, {\"description\": \"Base delay between retries, before jitter is applied.\", \"in\": \"body\", \"name\": \"retry_backoff_ms\", \"required\": false, \"schema\": {\"default\": \"250\", \"type\": \"integer\"}}, {\"description\": \"Attempts after the first before the call gives up.\", \"in\": \"body\", \"name\": \"max_retries\", \"required\": false, \"schema\": {\"default\": \"3\", \"type\": \"integer\"}}, {\"description\": \"Deduplicates retries server-side within 24 hours.\", \"in\": \"body\", \"name\": \"idempotency_key\", \"required\": false, \"schema\": {\"default\": \"None\", \"type\": \"string\"}}, {\"description\": \"Gzip the request body before transmission.\", \"in\": \"body\", \"name\": \"compress\", \"required\": false, \"schema\": {\"default\": \"False\", \"type\": \"boolean\"}}, {\"description\": \"Extra headers merged over the client defaults.\", \"in\": \"body\", \"name\": \"headers\", \"required\": false, \"schema\": {\"default\": \"None\", \"type\": \"object\"}}, {\"description\": \"Overrides the client base URL for this call only.\", \"in\": \"body\", \"name\": \"base_url\", \"required\": false, \"schema\": {\"default\": \"None\", \"type\": \"string\"}}, {\"description\": \"Return a generator instead of a materialised body.\", \"in\": \"body\", \"name\": \"stream\", \"required\": false, \"schema\": {\"default\": \"False\", \"type\": \"boolean\"}}, {\"description\": \"Validate the server certificate chain.\", \"in\": \"body\", \"name\": \"verify_tls\", \"required\": false, \"schema\": {\"default\": \"True\", \"type\": \"boolean\"}}, {\"description\": \"HTTP proxy URL applied to this call only.\", \"in\": \"body\", \"name\": \"proxy\", \"required\": false, \"schema\": {\"default\": \"None\", \"type\": \"string\"}}, {\"description\": \"Overrides the default SDK user agent string.\", \"in\": \"body\", \"name\": \"user_agent\", \"required\": false, \"schema\": {\"default\": \"None\", \"type\": \"string\"}}, {\"description\": \"Status codes that trigger the automatic retry path.\", \"in\": \"body\", \"name\": \"retry_on\", \"required\": false, \"schema\": {\"default\": \"[500,502]\", \"type\": \"array\"}}, {\"description\": \"Redirects followed before RedirectLoopError is set.\", \"in\": \"body\", \"name\": \"max_redirects\", \"required\": false, \"schema\": {\"default\": \"5\", \"type\": \"integer\"}}, {\"description\": \"Time spent waiting for a free pooled connection.\", \"in\": \"body\", \"name\": \"pool_timeout_ms\", \"required\": false, \"schema\": {\"default\": \"5000\", \"type\": \"integer\"}}, {\"description\": \"Propagated to the server for distributed tracing.\", \"in\": \"body\", \"name\": \"trace_id\", \"required\": false, \"schema\": {\"default\": \"None\", \"type\": \"string\"}}], \"responses\": {\"200\": {\"description\": \"Success.\"}}, \"docs_anchor\": \"v3/client-send#parameters\", \"provenance\": \"parameters derived from docs/v3/client-send.md; path, verb and operationId authored\"}\n"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: In v3, Client.send() does not retry when it receives a 4xx response; those status codes are returned to the caller immediately and are never retried.  \nVERSION: v3  \nCITATIONS: v3/client-send#clientsend::0"
+      }
+    ]
+  },
+  {
+    "arm": "workflow",
+    "question_id": "w7-04",
+    "question": "Did the default heartbeat_ms on Client.stream() change between v2 and v3, and if so what are the two values?",
+    "output": {
+      "answer": "Yes, the default heartbeat_ms changed from 30000 ms in v2 to 15000 ms in v3.",
+      "sdk_version": "both",
+      "citations": [
+        "v2/client-stream#parameters::1",
+        "v3/client-stream#parameters::1"
+      ],
+      "refused": false,
+      "raw": "ANSWER: Yes, the default heartbeat_ms changed from 30000 ms in v2 to 15000 ms in v3.  \nVERSION: both  \nCITATIONS: v2/client-stream#parameters::1, v3/client-stream#parameters::1",
+      "parse_error": ""
+    },
+    "steps": [
+      {
+        "step": "s1_search",
+        "executed": true,
+        "tool": "search_docs x2",
+        "arguments": {
+          "query": "Did the default heartbeat_ms on Client.stream() change between v2 and v3, and if so what are the two values?",
+          "api_version": [
+            "v2",
+            "v3"
+          ]
+        },
+        "depends_on": "",
+        "derived": "query=the question text (no single table key matched)",
+        "ok": true,
+        "note": "10 passages",
+        "latency_ms": 1605.131,
+        "result": {
+          "v2": {
+            "api_version": "v2",
+            "count": 5,
+            "passages": [
+              {
+                "rank": 1,
+                "chunk_id": "v2/client-stream#notes::3",
+                "heading_path": "Client.stream() > Notes",
+                "score": 0.64,
+                "text": "Client.stream() > Notes\n\n## Notes\n\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\nprofiling showed the smaller reads dominating CPU time on large responses.\n\nThere is no context-manager form in v2 — you must call `close()` yourself, and\nforgetting to do so leaks the connection until the process exits."
+              },
+              {
+                "rank": 2,
+                "chunk_id": "v2/client-stream#parameters::1",
+                "heading_path": "Client.stream() > Parameters",
+                "score": 0.632,
+                "text": "Client.stream() > Parameters\n\n## Parameters\n\n| name         | type | default | required | description                                     |\n|--------------|------|---------|----------|--------------------------------------------------|\n| payload      | dict | —       | yes      | The request body.                               |\n| chunk_size   | int  | 512     | no       | Bytes read from the socket per iteration.       |\n| heartbeat_ms | int  | 30000   | no       | Interval between server keep-alive frames.      |"
+              },
+              {
+                "rank": 3,
+                "chunk_id": "v2/client-stream#clientstream::0",
+                "heading_path": "Client.stream()",
+                "score": 0.6071,
+                "text": "Client.stream()\n\n# Client.stream()\n\nOpens a streaming connection and yields events as they arrive. In v2 the\ngenerator does not reconnect: a dropped connection raises `StreamClosed` and the\ncaller must start again from the beginning. Resumable streams arrived in v3."
+              },
+              {
+                "rank": 4,
+                "chunk_id": "v2/client-send#notes::2",
+                "heading_path": "Client.send() > Notes",
+                "score": 0.5484,
+                "text": "Client.send() > Notes\n\n## Notes\n\nThe `retry_backoff_ms` parameter is accepted in v2 but ignored. Automatic\nretries arrived in v3."
+              },
+              {
+                "rank": 5,
+                "chunk_id": "v2/client-configure#notes::3",
+                "heading_path": "Client.configure() > Notes",
+                "score": 0.5369,
+                "text": "Client.configure() > Notes\n\n## Notes\n\nThere is no `retries_enabled` switch in v2 because there is no automatic retry\npath to switch off. There is no connection reaper either: pooled connections\nlive until the client is garbage collected.\n\nThe v2 default `pool_size` is 4, raised to 10 in v3."
+              }
+            ]
+          },
+          "v3": {
+            "api_version": "v3",
+            "count": 5,
+            "passages": [
+              {
+                "rank": 1,
+                "chunk_id": "v3/client-stream#parameters::1",
+                "heading_path": "Client.stream() > Parameters",
+                "score": 0.6579,
+                "text": "Client.stream() > Parameters\n\n## Parameters\n\n| name         | type | default | required |\n|--------------|------|---------|----------|\n| payload      | dict | —       | yes      |\n| chunk_size   | int  | 1024    | no       |\n| heartbeat_ms | int  | 15000   | no       |"
+              },
+              {
+                "rank": 2,
+                "chunk_id": "v3/client-send#parameters::1",
+                "heading_path": "Client.send() > Parameters",
+                "score": 0.5287,
+                "text": "Client.send() > Parameters\n\n## Parameters\n\n| name             | type | default   | required | description                                          |\n|------------------|------|-----------|----------|------------------------------------------------------|\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |"
+              },
+              {
+                "rank": 3,
+                "chunk_id": "v3/client-stream#clientstream::0",
+                "heading_path": "Client.stream()",
+                "score": 0.5262,
+                "text": "Client.stream()\n\n# Client.stream()\n\nOpens a streaming connection and yields events as they arrive. The generator\nholds its connection open for the lifetime of the iteration, so callers must\neither exhaust it or close it explicitly."
+              },
+              {
+                "rank": 4,
+                "chunk_id": "v3/client-configure#clientconfigure::0",
+                "heading_path": "Client.configure()",
+                "score": 0.5147,
+                "text": "Client.configure()\n\n# Client.configure()\n\nSets client-wide defaults that every subsequent call inherits. Options passed\nto an individual `send()` or `stream()` call override these. Calling\n`configure()` does not affect requests already in flight."
+              },
+              {
+                "rank": 5,
+                "chunk_id": "v3/client-batch#notes::3",
+                "heading_path": "Client.send_batch() > Notes",
+                "score": 0.5108,
+                "text": "Client.send_batch() > Notes\n\n## Notes\n\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\n20 requests per second gives you 20 requests per second, not 64. Raising\n`concurrency` alone will not increase throughput past the rate limit.\n\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\n60000 ms gives each request roughly 120 ms of budget on average, which is\nusually too tight — scale the timeout with the batch size."
+              }
+            ]
+          }
+        }
+      },
+      {
+        "step": "s2_lookup_primary",
+        "executed": true,
+        "tool": "check_deprecation",
+        "arguments": {
+          "sdk_method": "Client.stream",
+          "api_version": "v3"
+        },
+        "depends_on": "",
+        "derived": "target read out of the question text",
+        "ok": true,
+        "note": "retired=False",
+        "latency_ms": 0.057,
+        "result": {
+          "found": true,
+          "operation_id": "streamMessageV3",
+          "api_version": "v3",
+          "sdk_method": "Client.stream",
+          "retired": false,
+          "retired_in": null,
+          "retirement_reason": null,
+          "replacement": null
+        }
+      },
+      {
+        "step": "s3_lookup_counterpart",
+        "executed": true,
+        "tool": "get_openapi_spec",
+        "arguments": {
+          "sdk_method": "Client.stream",
+          "api_version": "v3"
+        },
+        "depends_on": "s2_lookup_primary",
+        "derived": "s2 reported streamMessageV3 current; read its own spec",
+        "ok": true,
+        "note": "streamMessageV3",
+        "latency_ms": 0.052,
+        "result": {
+          "found": true,
+          "operation_id": "streamMessageV3",
+          "method": "POST",
+          "path": "/v3/messages:stream",
+          "sdk_method": "Client.stream",
+          "api_version": "v3",
+          "summary": "Client.stream() on v3",
+          "request_parameters": [
+            {
+              "description": "",
+              "in": "body",
+              "name": "payload",
+              "required": true,
+              "schema": {
+                "type": "object"
+              }
+            },
+            {
+              "description": "",
+              "in": "body",
+              "name": "chunk_size",
+              "required": false,
+              "schema": {
+                "default": "1024",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "",
+              "in": "body",
+              "name": "heartbeat_ms",
+              "required": false,
+              "schema": {
+                "default": "15000",
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success."
+            }
+          },
+          "docs_anchor": "v3/client-stream#parameters",
+          "provenance": "parameters derived from docs/v3/client-stream.md; path, verb and operationId authored"
+        }
+      },
+      {
+        "step": "s4_read_best_chunk",
+        "executed": true,
+        "tool": "",
+        "arguments": {},
+        "depends_on": "",
+        "derived": "top-ranked v3 passage; none contained a derived parameter",
+        "ok": true,
+        "note": "v3/client-stream#parameters::1",
+        "latency_ms": 0.0,
+        "result": {
+          "chunk_id": "v3/client-stream#parameters::1",
+          "rank": 1
+        }
+      },
+      {
+        "step": "s5_compose",
+        "executed": true,
+        "tool": "",
+        "arguments": {},
+        "depends_on": "",
+        "derived": "8,060 chars of pre-assembled context",
+        "ok": true,
+        "note": "answered",
+        "latency_ms": 1006.468,
+        "result": {}
+      }
+    ],
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "search_docs",
+        "arguments": {
+          "query": "Did the default heartbeat_ms on Client.stream() change between v2 and v3, and if so what are the two values?",
+          "api_version": "v2"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 1501.782,
+        "result_chunk_ids": [
+          "v2/client-stream#notes::3",
+          "v2/client-stream#parameters::1",
+          "v2/client-stream#clientstream::0",
+          "v2/client-send#notes::2",
+          "v2/client-configure#notes::3"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "search_docs",
+        "arguments": {
+          "query": "Did the default heartbeat_ms on Client.stream() change between v2 and v3, and if so what are the two values?",
+          "api_version": "v3"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 93.916,
+        "result_chunk_ids": [
+          "v3/client-stream#parameters::1",
+          "v3/client-send#parameters::1",
+          "v3/client-stream#clientstream::0",
+          "v3/client-configure#clientconfigure::0",
+          "v3/client-batch#notes::3"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 3,
+        "name": "check_deprecation",
+        "arguments": {
+          "sdk_method": "Client.stream",
+          "api_version": "v3"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 0.039,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      },
+      {
+        "seq": 4,
+        "name": "get_openapi_spec",
+        "arguments": {
+          "sdk_method": "Client.stream",
+          "api_version": "v3"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 0.011,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "search_docs",
+      "search_docs",
+      "check_deprecation",
+      "get_openapi_spec"
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 2528,
+        "completion_tokens": 254,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 1006.343,
+        "cumulative_prompt": 2528,
+        "cumulative_completion": 254,
+        "cumulative_cost_usd": 0.0005316
+      }
+    ],
+    "prompt_tokens": 2528,
+    "completion_tokens": 254,
+    "cached_tokens": 0,
+    "total_tokens": 2782,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.0005315999999999999,
+    "price_verified": true,
+    "latency_ms": 2619.886,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "composed from the pre-assembled context",
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "0311092397a1cc7c",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "derived_parameter": "",
+    "derived_target": {
+      "sdk_method": "Client.stream",
+      "api_version": "v3"
+    },
+    "best_chunk_id": "v3/client-stream#parameters::1",
+    "context_chars": 8060,
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nThe tool results you need have already been gathered for you and appear below. Do not ask for more; answer from what is provided, or refuse if it is not there.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: Did the default heartbeat_ms on Client.stream() change between v2 and v3, and if so what are the two values?\n\nTool results:\n\nMost relevant passage:\n{\"rank\": 1, \"chunk_id\": \"v3/client-stream#parameters::1\", \"heading_path\": \"Client.stream() > Parameters\", \"score\": 0.6579, \"text\": \"Client.stream() > Parameters\\n\\n## Parameters\\n\\n| name         | type | default | required |\\n|--------------|------|---------|----------|\\n| payload      | dict | —       | yes      |\\n| chunk_size   | int  | 1024    | no       |\\n| heartbeat_ms | int  | 15000   | no       |\", \"api_version\": \"v3\"}\n\nTool result 1: search_docs x2 with {\"query\": \"Did the default heartbeat_ms on Client.stream() change between v2 and v3, and if so what are the two values?\", \"api_version\": [\"v2\", \"v3\"]}\n{\"v2\": {\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-stream#notes::3\", \"heading_path\": \"Client.stream() > Notes\", \"score\": 0.64, \"text\": \"Client.stream() > Notes\\n\\n## Notes\\n\\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\\nprofiling showed the smaller reads dominating CPU time on large responses.\\n\\nThere is no context-manager form in v2 — you must call `close()` yourself, and\\nforgetting to do so leaks the connection until the process exits.\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-stream#parameters::1\", \"heading_path\": \"Client.stream() > Parameters\", \"score\": 0.632, \"text\": \"Client.stream() > Parameters\\n\\n## Parameters\\n\\n| name         | type | default | required | description                                     |\\n|--------------|------|---------|----------|--------------------------------------------------|\\n| payload      | dict | —       | yes      | The request body.                               |\\n| chunk_size   | int  | 512     | no       | Bytes read from the socket per iteration.       |\\n| heartbeat_ms | int  | 30000   | no       | Interval between server keep-alive frames.      |\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-stream#clientstream::0\", \"heading_path\": \"Client.stream()\", \"score\": 0.6071, \"text\": \"Client.stream()\\n\\n# Client.stream()\\n\\nOpens a streaming connection and yields events as they arrive. In v2 the\\ngenerator does not reconnect: a dropped connection raises `StreamClosed` and the\\ncaller must start again from the beginning. Resumable streams arrived in v3.\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-send#notes::2\", \"heading_path\": \"Client.send() > Notes\", \"score\": 0.5484, \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` parameter is accepted in v2 but ignored. Automatic\\nretries arrived in v3.\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.5369, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\nThere is no `retries_enabled` switch in v2 because there is no automatic retry\\npath to switch off. There is no connection reaper either: pooled connections\\nlive until the client is garbage collected.\\n\\nThe v2 default `pool_size` is 4, raised to 10 in v3.\"}]}, \"v3\": {\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-stream#parameters::1\", \"heading_path\": \"Client.stream() > Parameters\", \"score\": 0.6579, \"text\": \"Client.stream() > Parameters\\n\\n## Parameters\\n\\n| name         | type | default | required |\\n|--------------|------|---------|----------|\\n| payload      | dict | —       | yes      |\\n| chunk_size   | int  | 1024    | no       |\\n| heartbeat_ms | int  | 15000   | no       |\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-send#parameters::1\", \"heading_path\": \"Client.send() > Parameters\", \"score\": 0.5287, \"text\": \"Client.send() > Parameters\\n\\n## Parameters\\n\\n| name             | type | default   | required | description                                          |\\n|------------------|------|-----------|----------|------------------------------------------------------|\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-stream#clientstream::0\", \"heading_path\": \"Client.stream()\", \"score\": 0.5262, \"text\": \"Client.stream()\\n\\n# Client.stream()\\n\\nOpens a streaming connection and yields events as they arrive. The generator\\nholds its connection open for the lifetime of the iteration, so callers must\\neither exhaust it or close it explicitly.\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-configure#clientconfigure::0\", \"heading_path\": \"Client.configure()\", \"score\": 0.5147, \"text\": \"Client.configure()\\n\\n# Client.configure()\\n\\nSets client-wide defaults that every subsequent call inherits. Options passed\\nto an individual `send()` or `stream()` call override these. Calling\\n`configure()` does not affect requests already in flight.\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-batch#notes::3\", \"heading_path\": \"Client.send_batch() > Notes\", \"score\": 0.5108, \"text\": \"Client.send_batch() > Notes\\n\\n## Notes\\n\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\n20 requests per second gives you 20 requests per second, not 64. Raising\\n`concurrency` alone will not increase throughput past the rate limit.\\n\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\nusually too tight — scale the timeout with the batch size.\"}]}}\n\nTool result 2: check_deprecation with {\"sdk_method\": \"Client.stream\", \"api_version\": \"v3\"}\n{\"found\": true, \"operation_id\": \"streamMessageV3\", \"api_version\": \"v3\", \"sdk_method\": \"Client.stream\", \"retired\": false, \"retired_in\": null, \"retirement_reason\": null, \"replacement\": null}\n\nTool result 3: get_openapi_spec with {\"sdk_method\": \"Client.stream\", \"api_version\": \"v3\"}\n{\"found\": true, \"operation_id\": \"streamMessageV3\", \"method\": \"POST\", \"path\": \"/v3/messages:stream\", \"sdk_method\": \"Client.stream\", \"api_version\": \"v3\", \"summary\": \"Client.stream() on v3\", \"request_parameters\": [{\"description\": \"\", \"in\": \"body\", \"name\": \"payload\", \"required\": true, \"schema\": {\"type\": \"object\"}}, {\"description\": \"\", \"in\": \"body\", \"name\": \"chunk_size\", \"required\": false, \"schema\": {\"default\": \"1024\", \"type\": \"integer\"}}, {\"description\": \"\", \"in\": \"body\", \"name\": \"heartbeat_ms\", \"required\": false, \"schema\": {\"default\": \"15000\", \"type\": \"integer\"}}], \"responses\": {\"200\": {\"description\": \"Success.\"}}, \"docs_anchor\": \"v3/client-stream#parameters\", \"provenance\": \"parameters derived from docs/v3/client-stream.md; path, verb and operationId authored\"}\n"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: Yes, the default heartbeat_ms changed from 30000 ms in v2 to 15000 ms in v3.  \nVERSION: both  \nCITATIONS: v2/client-stream#parameters::1, v3/client-stream#parameters::1"
+      }
+    ]
+  },
+  {
+    "arm": "workflow",
+    "question_id": "w7-06",
+    "question": "Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?",
+    "output": {
+      "answer": "The POST /v2/messages endpoint has been retired and is no longer supported; its v3 replacement (/v3/messages) performs automatic retries with a default of three retry attempts.",
+      "sdk_version": "v3",
+      "citations": [
+        "sendMessageV2",
+        "v3/client-send#parameters::1"
+      ],
+      "refused": false,
+      "raw": "ANSWER: The POST /v2/messages endpoint has been retired and is no longer supported; its v3 replacement (/v3/messages) performs automatic retries with a default of three retry attempts.  \nVERSION: v3  \nCITATIONS: sendMessageV2, v3/client-send#parameters::1",
+      "parse_error": ""
+    },
+    "steps": [
+      {
+        "step": "s1_search",
+        "executed": true,
+        "tool": "search_docs x2",
+        "arguments": {
+          "query": "Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?",
+          "api_version": [
+            "v2",
+            "v3"
+          ]
+        },
+        "depends_on": "",
+        "derived": "query=the question text (no single table key matched)",
+        "ok": true,
+        "note": "5 passages; v3 truncated at 4000 chars",
+        "latency_ms": 13444.321,
+        "result": {
+          "v2": {
+            "api_version": "v2",
+            "count": 5,
+            "passages": [
+              {
+                "rank": 1,
+                "chunk_id": "v2/client-send#notes::2",
+                "heading_path": "Client.send() > Notes",
+                "score": 0.6423,
+                "text": "Client.send() > Notes\n\n## Notes\n\nThe `retry_backoff_ms` parameter is accepted in v2 but ignored. Automatic\nretries arrived in v3."
+              },
+              {
+                "rank": 2,
+                "chunk_id": "v2/client-send#clientsend::0",
+                "heading_path": "Client.send()",
+                "score": 0.6212,
+                "text": "Client.send()\n\n# Client.send()\n\nSends a single request to the configured endpoint and blocks until a response\nis received. Retries are not performed automatically in v2; callers implement\ntheir own retry loop around the call."
+              },
+              {
+                "rank": 3,
+                "chunk_id": "v2/client-configure#notes::3",
+                "heading_path": "Client.configure() > Notes",
+                "score": 0.5963,
+                "text": "Client.configure() > Notes\n\n## Notes\n\nThere is no `retries_enabled` switch in v2 because there is no automatic retry\npath to switch off. There is no connection reaper either: pooled connections\nlive until the client is garbage collected.\n\nThe v2 default `pool_size` is 4, raised to 10 in v3."
+              },
+              {
+                "rank": 4,
+                "chunk_id": "v2/client-close#notes::3",
+                "heading_path": "Client.close() > Notes",
+                "score": 0.5605,
+                "text": "Client.close() > Notes\n\n## Notes\n\n`force` defaults to true in v2 and setting it to false has no effect — the\nparameter exists only so that code written against the v3 preview does not fail\nto import. In v3 the default is false and requests are drained.\n\nThere is no context-manager form in v2."
+              },
+              {
+                "rank": 5,
+                "chunk_id": "v2/client-stream#notes::3",
+                "heading_path": "Client.stream() > Notes",
+                "score": 0.5337,
+                "text": "Client.stream() > Notes\n\n## Notes\n\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\nprofiling showed the smaller reads dominating CPU time on large responses.\n\nThere is no context-manager form in v2 — you must call `close()` yourself, and\nforgetting to do so leaks the connection until the process exits."
+              }
+            ]
+          },
+          "v3": {
+            "truncated": true,
+            "note": "result truncated at 4000 chars",
+            "content": "{\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-send#clientsend::0\", \"heading_path\": \"Client.send()\", \"score\": 0.5662, \"text\": \"Client.send()\\n\\n# Client.send()\\n\\nSends a single request to the configured endpoint and blocks until a response is\\nreceived or the retry budget is exhausted. The method is safe to call from\\nmultiple threads; each call takes its own connection from the pool and returns\\nit on completion. Callers issuing many requests at once should prefer\\n`Client.send_batch()`, which amortises connection setup across the whole batch\\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\\nclient retries automatically according to the backoff parameters below; 4xx\\nstatuses are surfaced to the caller immediately and are never retried, because a\\nmalformed request does not become well-formed by being sent again.\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.5602, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\nreal concurrency costs nothing but does not help either.\\n\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\\nbut ignored, which mirrors how v2 behaved.\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-send#parameters::1\", \"heading_path\": \"Client.send() > Parameters\", \"score\": 0.5198, \"text\": \"Client.send() > Parameters\\n\\n## Parameters\\n\\n| name             | type | default   | required | description                                          |\\n|------------------|------|-----------|----------|------------------------------------------------------|\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-send#notes::3\", \"heading_path\": \"Client.send() > Notes\", \"score\": 0.5028, \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` value is the base delay, not the total delay. The client\\napplies full jitter, so the actual wait before attempt *n* is drawn at random\\nfrom `[0, retry_backoff_ms * 2 ** n)`. A base of 250 with five retries can\\ntherefore wait up to"
+          }
+        }
+      },
+      {
+        "step": "s2_lookup_primary",
+        "executed": true,
+        "tool": "check_deprecation",
+        "arguments": {
+          "path": "/v2/messages",
+          "api_version": "v2"
+        },
+        "depends_on": "",
+        "derived": "target read out of the question text",
+        "ok": true,
+        "note": "retired=True",
+        "latency_ms": 2.832,
+        "result": {
+          "found": true,
+          "operation_id": "sendMessageV2",
+          "api_version": "v2",
+          "sdk_method": "Client.send",
+          "retired": true,
+          "retired_in": "v3",
+          "retirement_reason": "Automatic retries arrived in v3; the v2 operation never retried.",
+          "replacement": {
+            "api_version": "v3",
+            "method": "POST",
+            "operation_id": "sendMessageV3",
+            "path": "/v3/messages",
+            "sdk_method": "Client.send"
+          }
+        }
+      },
+      {
+        "step": "s3_lookup_counterpart",
+        "executed": true,
+        "tool": "get_openapi_spec",
+        "arguments": {
+          "sdk_method": "Client.send",
+          "api_version": "v3"
+        },
+        "depends_on": "s2_lookup_primary",
+        "derived": "s2 reported sendMessageV2 retired in v3, replaced by sendMessageV3",
+        "ok": true,
+        "note": "sendMessageV3",
+        "latency_ms": 1.882,
+        "result": {
+          "found": true,
+          "operation_id": "sendMessageV3",
+          "method": "POST",
+          "path": "/v3/messages",
+          "sdk_method": "Client.send",
+          "api_version": "v3",
+          "summary": "Client.send() on v3",
+          "request_parameters": [
+            {
+              "description": "The request body, serialised as JSON before sending.",
+              "in": "body",
+              "name": "payload",
+              "required": true,
+              "schema": {
+                "type": "object"
+              }
+            },
+            {
+              "description": "Total budget for the call, including every retry.",
+              "in": "body",
+              "name": "timeout_ms",
+              "required": false,
+              "schema": {
+                "default": "30000",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Base delay between retries, before jitter is applied.",
+              "in": "body",
+              "name": "retry_backoff_ms",
+              "required": false,
+              "schema": {
+                "default": "250",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Attempts after the first before the call gives up.",
+              "in": "body",
+              "name": "max_retries",
+              "required": false,
+              "schema": {
+                "default": "3",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Deduplicates retries server-side within 24 hours.",
+              "in": "body",
+              "name": "idempotency_key",
+              "required": false,
+              "schema": {
+                "default": "None",
+                "type": "string"
+              }
+            },
+            {
+              "description": "Gzip the request body before transmission.",
+              "in": "body",
+              "name": "compress",
+              "required": false,
+              "schema": {
+                "default": "False",
+                "type": "boolean"
+              }
+            },
+            {
+              "description": "Extra headers merged over the client defaults.",
+              "in": "body",
+              "name": "headers",
+              "required": false,
+              "schema": {
+                "default": "None",
+                "type": "object"
+              }
+            },
+            {
+              "description": "Overrides the client base URL for this call only.",
+              "in": "body",
+              "name": "base_url",
+              "required": false,
+              "schema": {
+                "default": "None",
+                "type": "string"
+              }
+            },
+            {
+              "description": "Return a generator instead of a materialised body.",
+              "in": "body",
+              "name": "stream",
+              "required": false,
+              "schema": {
+                "default": "False",
+                "type": "boolean"
+              }
+            },
+            {
+              "description": "Validate the server certificate chain.",
+              "in": "body",
+              "name": "verify_tls",
+              "required": false,
+              "schema": {
+                "default": "True",
+                "type": "boolean"
+              }
+            },
+            {
+              "description": "HTTP proxy URL applied to this call only.",
+              "in": "body",
+              "name": "proxy",
+              "required": false,
+              "schema": {
+                "default": "None",
+                "type": "string"
+              }
+            },
+            {
+              "description": "Overrides the default SDK user agent string.",
+              "in": "body",
+              "name": "user_agent",
+              "required": false,
+              "schema": {
+                "default": "None",
+                "type": "string"
+              }
+            },
+            {
+              "description": "Status codes that trigger the automatic retry path.",
+              "in": "body",
+              "name": "retry_on",
+              "required": false,
+              "schema": {
+                "default": "[500,502]",
+                "type": "array"
+              }
+            },
+            {
+              "description": "Redirects followed before RedirectLoopError is set.",
+              "in": "body",
+              "name": "max_redirects",
+              "required": false,
+              "schema": {
+                "default": "5",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Time spent waiting for a free pooled connection.",
+              "in": "body",
+              "name": "pool_timeout_ms",
+              "required": false,
+              "schema": {
+                "default": "5000",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Propagated to the server for distributed tracing.",
+              "in": "body",
+              "name": "trace_id",
+              "required": false,
+              "schema": {
+                "default": "None",
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success."
+            }
+          },
+          "docs_anchor": "v3/client-send#parameters",
+          "provenance": "parameters derived from docs/v3/client-send.md; path, verb and operationId authored"
+        }
+      },
+      {
+        "step": "s4_read_best_chunk",
+        "executed": true,
+        "tool": "",
+        "arguments": {},
+        "depends_on": "",
+        "derived": "top-ranked v2 passage; none contained a derived parameter",
+        "ok": true,
+        "note": "v2/client-send#notes::2",
+        "latency_ms": 0.0,
+        "result": {
+          "chunk_id": "v2/client-send#notes::2",
+          "rank": 1
+        }
+      },
+      {
+        "step": "s5_compose",
+        "executed": true,
+        "tool": "",
+        "arguments": {},
+        "depends_on": "",
+        "derived": "10,407 chars of pre-assembled context",
+        "ok": true,
+        "note": "answered",
+        "latency_ms": 1873.292,
+        "result": {}
+      }
+    ],
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "search_docs",
+        "arguments": {
+          "query": "Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?",
+          "api_version": "v2"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 9172.4,
+        "result_chunk_ids": [
+          "v2/client-send#notes::2",
+          "v2/client-send#clientsend::0",
+          "v2/client-configure#notes::3",
+          "v2/client-close#notes::3",
+          "v2/client-stream#notes::3"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "search_docs",
+        "arguments": {
+          "query": "Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?",
+          "api_version": "v3"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 4195.936,
+        "result_chunk_ids": [
+          "v3/client-send#clientsend::0",
+          "v3/client-configure#notes::3",
+          "v3/client-send#parameters::1",
+          "v3/client-send#notes::3",
+          "v3/client-send#example::2"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 3,
+        "name": "check_deprecation",
+        "arguments": {
+          "path": "/v2/messages",
+          "api_version": "v2"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 1.873,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      },
+      {
+        "seq": 4,
+        "name": "get_openapi_spec",
+        "arguments": {
+          "sdk_method": "Client.send",
+          "api_version": "v3"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 0.362,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "search_docs",
+      "search_docs",
+      "check_deprecation",
+      "get_openapi_spec"
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 3212,
+        "completion_tokens": 365,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 1870.879,
+        "cumulative_prompt": 3212,
+        "cumulative_completion": 365,
+        "cumulative_cost_usd": 0.0007008
+      }
+    ],
+    "prompt_tokens": 3212,
+    "completion_tokens": 365,
+    "cached_tokens": 0,
+    "total_tokens": 3577,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.0007008,
+    "price_verified": true,
+    "latency_ms": 15346.663,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "composed from the pre-assembled context",
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "0311092397a1cc7c",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "derived_parameter": "",
+    "derived_target": {
+      "path": "/v2/messages",
+      "api_version": "v2"
+    },
+    "best_chunk_id": "v2/client-send#notes::2",
+    "context_chars": 10407,
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nThe tool results you need have already been gathered for you and appear below. Do not ask for more; answer from what is provided, or refuse if it is not there.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?\n\nTool results:\n\nMost relevant passage:\n{\"rank\": 1, \"chunk_id\": \"v2/client-send#notes::2\", \"heading_path\": \"Client.send() > Notes\", \"score\": 0.6423, \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` parameter is accepted in v2 but ignored. Automatic\\nretries arrived in v3.\", \"api_version\": \"v2\"}\n\nTool result 1: search_docs x2 with {\"query\": \"Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?\", \"api_version\": [\"v2\", \"v3\"]}\n{\"v2\": {\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-send#notes::2\", \"heading_path\": \"Client.send() > Notes\", \"score\": 0.6423, \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` parameter is accepted in v2 but ignored. Automatic\\nretries arrived in v3.\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-send#clientsend::0\", \"heading_path\": \"Client.send()\", \"score\": 0.6212, \"text\": \"Client.send()\\n\\n# Client.send()\\n\\nSends a single request to the configured endpoint and blocks until a response\\nis received. Retries are not performed automatically in v2; callers implement\\ntheir own retry loop around the call.\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.5963, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\nThere is no `retries_enabled` switch in v2 because there is no automatic retry\\npath to switch off. There is no connection reaper either: pooled connections\\nlive until the client is garbage collected.\\n\\nThe v2 default `pool_size` is 4, raised to 10 in v3.\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.5605, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\n`force` defaults to true in v2 and setting it to false has no effect — the\\nparameter exists only so that code written against the v3 preview does not fail\\nto import. In v3 the default is false and requests are drained.\\n\\nThere is no context-manager form in v2.\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-stream#notes::3\", \"heading_path\": \"Client.stream() > Notes\", \"score\": 0.5337, \"text\": \"Client.stream() > Notes\\n\\n## Notes\\n\\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\\nprofiling showed the smaller reads dominating CPU time on large responses.\\n\\nThere is no context-manager form in v2 — you must call `close()` yourself, and\\nforgetting to do so leaks the connection until the process exits.\"}]}, \"v3\": {\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-send#clientsend::0\\\", \\\"heading_path\\\": \\\"Client.send()\\\", \\\"score\\\": 0.5662, \\\"text\\\": \\\"Client.send()\\\\n\\\\n# Client.send()\\\\n\\\\nSends a single request to the configured endpoint and blocks until a response is\\\\nreceived or the retry budget is exhausted. The method is safe to call from\\\\nmultiple threads; each call takes its own connection from the pool and returns\\\\nit on completion. Callers issuing many requests at once should prefer\\\\n`Client.send_batch()`, which amortises connection setup across the whole batch\\\\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\\\\nclient retries automatically according to the backoff parameters below; 4xx\\\\nstatuses are surfaced to the caller immediately and are never retried, because a\\\\nmalformed request does not become well-formed by being sent again.\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-configure#notes::3\\\", \\\"heading_path\\\": \\\"Client.configure() > Notes\\\", \\\"score\\\": 0.5602, \\\"text\\\": \\\"Client.configure() > Notes\\\\n\\\\n## Notes\\\\n\\\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\\\nreal concurrency costs nothing but does not help either.\\\\n\\\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\\\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\\\\nbut ignored, which mirrors how v2 behaved.\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.5198, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|------------------|------|-----------|----------|------------------------------------------------------|\\\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-send#notes::3\\\", \\\"heading_path\\\": \\\"Client.send() > Notes\\\", \\\"score\\\": 0.5028, \\\"text\\\": \\\"Client.send() > Notes\\\\n\\\\n## Notes\\\\n\\\\nThe `retry_backoff_ms` value is the base delay, not the total delay. The client\\\\napplies full jitter, so the actual wait before attempt *n* is drawn at random\\\\nfrom `[0, retry_backoff_ms * 2 ** n)`. A base of 250 with five retries can\\\\ntherefore wait up to\"}}\n\nTool result 2: check_deprecation with {\"path\": \"/v2/messages\", \"api_version\": \"v2\"}\n{\"found\": true, \"operation_id\": \"sendMessageV2\", \"api_version\": \"v2\", \"sdk_method\": \"Client.send\", \"retired\": true, \"retired_in\": \"v3\", \"retirement_reason\": \"Automatic retries arrived in v3; the v2 operation never retried.\", \"replacement\": {\"api_version\": \"v3\", \"method\": \"POST\", \"operation_id\": \"sendMessageV3\", \"path\": \"/v3/messages\", \"sdk_method\": \"Client.send\"}}\n\nTool result 3: get_openapi_spec with {\"sdk_method\": \"Client.send\", \"api_version\": \"v3\"}\n{\"found\": true, \"operation_id\": \"sendMessageV3\", \"method\": \"POST\", \"path\": \"/v3/messages\", \"sdk_method\": \"Client.send\", \"api_version\": \"v3\", \"summary\": \"Client.send() on v3\", \"request_parameters\": [{\"description\": \"The request body, serialised as JSON before sending.\", \"in\": \"body\", \"name\": \"payload\", \"required\": true, \"schema\": {\"type\": \"object\"}}, {\"description\": \"Total budget for the call, including every retry.\", \"in\": \"body\", \"name\": \"timeout_ms\", \"required\": false, \"schema\": {\"default\": \"30000\", \"type\": \"integer\"}}, {\"description\": \"Base delay between retries, before jitter is applied.\", \"in\": \"body\", \"name\": \"retry_backoff_ms\", \"required\": false, \"schema\": {\"default\": \"250\", \"type\": \"integer\"}}, {\"description\": \"Attempts after the first before the call gives up.\", \"in\": \"body\", \"name\": \"max_retries\", \"required\": false, \"schema\": {\"default\": \"3\", \"type\": \"integer\"}}, {\"description\": \"Deduplicates retries server-side within 24 hours.\", \"in\": \"body\", \"name\": \"idempotency_key\", \"required\": false, \"schema\": {\"default\": \"None\", \"type\": \"string\"}}, {\"description\": \"Gzip the request body before transmission.\", \"in\": \"body\", \"name\": \"compress\", \"required\": false, \"schema\": {\"default\": \"False\", \"type\": \"boolean\"}}, {\"description\": \"Extra headers merged over the client defaults.\", \"in\": \"body\", \"name\": \"headers\", \"required\": false, \"schema\": {\"default\": \"None\", \"type\": \"object\"}}, {\"description\": \"Overrides the client base URL for this call only.\", \"in\": \"body\", \"name\": \"base_url\", \"required\": false, \"schema\": {\"default\": \"None\", \"type\": \"string\"}}, {\"description\": \"Return a generator instead of a materialised body.\", \"in\": \"body\", \"name\": \"stream\", \"required\": false, \"schema\": {\"default\": \"False\", \"type\": \"boolean\"}}, {\"description\": \"Validate the server certificate chain.\", \"in\": \"body\", \"name\": \"verify_tls\", \"required\": false, \"schema\": {\"default\": \"True\", \"type\": \"boolean\"}}, {\"description\": \"HTTP proxy URL applied to this call only.\", \"in\": \"body\", \"name\": \"proxy\", \"required\": false, \"schema\": {\"default\": \"None\", \"type\": \"string\"}}, {\"description\": \"Overrides the default SDK user agent string.\", \"in\": \"body\", \"name\": \"user_agent\", \"required\": false, \"schema\": {\"default\": \"None\", \"type\": \"string\"}}, {\"description\": \"Status codes that trigger the automatic retry path.\", \"in\": \"body\", \"name\": \"retry_on\", \"required\": false, \"schema\": {\"default\": \"[500,502]\", \"type\": \"array\"}}, {\"description\": \"Redirects followed before RedirectLoopError is set.\", \"in\": \"body\", \"name\": \"max_redirects\", \"required\": false, \"schema\": {\"default\": \"5\", \"type\": \"integer\"}}, {\"description\": \"Time spent waiting for a free pooled connection.\", \"in\": \"body\", \"name\": \"pool_timeout_ms\", \"required\": false, \"schema\": {\"default\": \"5000\", \"type\": \"integer\"}}, {\"description\": \"Propagated to the server for distributed tracing.\", \"in\": \"body\", \"name\": \"trace_id\", \"required\": false, \"schema\": {\"default\": \"None\", \"type\": \"string\"}}], \"responses\": {\"200\": {\"description\": \"Success.\"}}, \"docs_anchor\": \"v3/client-send#parameters\", \"provenance\": \"parameters derived from docs/v3/client-send.md; path, verb and operationId authored\"}\n"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: The POST /v2/messages endpoint has been retired and is no longer supported; its v3 replacement (/v3/messages) performs automatic retries with a default of three retry attempts.  \nVERSION: v3  \nCITATIONS: sendMessageV2, v3/client-send#parameters::1"
+      }
+    ]
+  },
+  {
+    "arm": "workflow",
+    "question_id": "w7-07",
+    "question": "Our service posts to POST /v2/messages:multi. Is that endpoint still supported, and what is the default concurrency of whatever replaced it?",
+    "output": {
+      "answer": "The POST /v2/messages:multi endpoint was retired in v3 and is no longer supported; it was superseded by the batch operation (POST /v3/batches) whose default concurrency is 8.",
+      "sdk_version": "v3",
+      "citations": [
+        "sendMultiV2",
+        "sendBatchV3"
+      ],
+      "refused": false,
+      "raw": "ANSWER: The POST /v2/messages:multi endpoint was retired in v3 and is no longer supported; it was superseded by the batch operation (POST /v3/batches) whose default concurrency is 8.  \nVERSION: v3  \nCITATIONS: sendMultiV2, sendBatchV3",
+      "parse_error": ""
+    },
+    "steps": [
+      {
+        "step": "s1_search",
+        "executed": true,
+        "tool": "search_docs x2",
+        "arguments": {
+          "query": "concurrency",
+          "api_version": [
+            "v2",
+            "v3"
+          ]
+        },
+        "depends_on": "",
+        "derived": "query='concurrency' (the one table key this question names)",
+        "ok": true,
+        "note": "10 passages",
+        "latency_ms": 1913.68,
+        "result": {
+          "v2": {
+            "api_version": "v2",
+            "count": 5,
+            "passages": [
+              {
+                "rank": 1,
+                "chunk_id": "v2/client-close#notes::3",
+                "heading_path": "Client.close() > Notes",
+                "score": 0.4179,
+                "text": "Client.close() > Notes\n\n## Notes\n\n`force` defaults to true in v2 and setting it to false has no effect — the\nparameter exists only so that code written against the v3 preview does not fail\nto import. In v3 the default is false and requests are drained.\n\nThere is no context-manager form in v2."
+              },
+              {
+                "rank": 2,
+                "chunk_id": "v2/client-configure#parameters::1",
+                "heading_path": "Client.configure() > Parameters",
+                "score": 0.4064,
+                "text": "Client.configure() > Parameters\n\n## Parameters\n\n| name               | type | default        | required | description                                    |\n|--------------------|------|----------------|----------|-------------------------------------------------|\n| api_key            | str  | —              | yes      | Credential used for every request.             |\n| base_url           | str  | https://api.example.com | no | Endpoint root for all calls.            |\n| pool_size          | int  | 4              | no       | Maximum simultaneous pooled connections.       |\n| default_timeout_ms | int  | 10000          | no       | Timeout applied when a call does not set one.  |\n| log_level          | str  | error          | no       | One of debug, info, warning, error.            |"
+              },
+              {
+                "rank": 3,
+                "chunk_id": "v2/client-configure#example::2",
+                "heading_path": "Client.configure() > Example",
+                "score": 0.3999,
+                "text": "Client.configure() > Example\n\n## Example\n\n```python\nclient = Client()\nclient.configure(api_key=\"sk-...\", pool_size=8, default_timeout_ms=20000)\n```"
+              },
+              {
+                "rank": 4,
+                "chunk_id": "v2/client-stream#notes::3",
+                "heading_path": "Client.stream() > Notes",
+                "score": 0.3912,
+                "text": "Client.stream() > Notes\n\n## Notes\n\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\nprofiling showed the smaller reads dominating CPU time on large responses.\n\nThere is no context-manager form in v2 — you must call `close()` yourself, and\nforgetting to do so leaks the connection until the process exits."
+              },
+              {
+                "rank": 5,
+                "chunk_id": "v2/client-send#notes::2",
+                "heading_path": "Client.send() > Notes",
+                "score": 0.3907,
+                "text": "Client.send() > Notes\n\n## Notes\n\nThe `retry_backoff_ms` parameter is accepted in v2 but ignored. Automatic\nretries arrived in v3."
+              }
+            ]
+          },
+          "v3": {
+            "api_version": "v3",
+            "count": 5,
+            "passages": [
+              {
+                "rank": 1,
+                "chunk_id": "v3/client-batch#notes::3",
+                "heading_path": "Client.send_batch() > Notes",
+                "score": 0.5905,
+                "text": "Client.send_batch() > Notes\n\n## Notes\n\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\n20 requests per second gives you 20 requests per second, not 64. Raising\n`concurrency` alone will not increase throughput past the rate limit.\n\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\n60000 ms gives each request roughly 120 ms of budget on average, which is\nusually too tight — scale the timeout with the batch size."
+              },
+              {
+                "rank": 2,
+                "chunk_id": "v3/client-batch#example::2",
+                "heading_path": "Client.send_batch() > Example",
+                "score": 0.4791,
+                "text": "Client.send_batch() > Example\n\n## Example\n\n```python\nresponses = client.send_batch(\n    payloads=[{\"query\": q} for q in queries],\n    concurrency=16,\n    rate_limit_rps=50,\n    fail_fast=False,\n)\n\nfailed = [r for r in responses if r.status_code >= 500]\nprint(f\"{len(failed)} of {len(responses)} need a retry\")\n```"
+              },
+              {
+                "rank": 3,
+                "chunk_id": "v3/client-configure#notes::3",
+                "heading_path": "Client.configure() > Notes",
+                "score": 0.4718,
+                "text": "Client.configure() > Notes\n\n## Notes\n\n`pool_size` is a ceiling, not a reservation — connections are created lazily\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\nreal concurrency costs nothing but does not help either.\n\nSetting `retries_enabled` to false disables the automatic retry path entirely.\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\nbut ignored, which mirrors how v2 behaved."
+              },
+              {
+                "rank": 4,
+                "chunk_id": "v3/client-batch#parameters::1",
+                "heading_path": "Client.send_batch() > Parameters",
+                "score": 0.441,
+                "text": "Client.send_batch() > Parameters\n\n## Parameters\n\n| name            | type | default | required | description                                          |\n|-----------------|------|---------|----------|------------------------------------------------------|\n| payloads        | list | —       | yes      | Request bodies, sent in the order given.             |\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\n| ordered         | bool | True    | no       | Return responses in submission order.                |\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|"
+              },
+              {
+                "rank": 5,
+                "chunk_id": "v3/client-close#notes::3",
+                "heading_path": "Client.close() > Notes",
+                "score": 0.4176,
+                "text": "Client.close() > Notes\n\n## Notes\n\nWith `force=True` in-flight requests are cancelled rather than drained, and\ntheir futures raise `CancelledError`. Prefer the default unless the process is\nshutting down and latency matters more than completeness.\n\nIf `drain` is true and `timeout_ms` elapses before in-flight requests finish,\nthe remaining connections are closed anyway and a warning is logged. Close is\nnever allowed to block indefinitely."
+              }
+            ]
+          }
+        }
+      },
+      {
+        "step": "s2_lookup_primary",
+        "executed": true,
+        "tool": "check_deprecation",
+        "arguments": {
+          "path": "/v2/messages:multi",
+          "api_version": "v2"
+        },
+        "depends_on": "",
+        "derived": "target read out of the question text",
+        "ok": true,
+        "note": "retired=True",
+        "latency_ms": 0.059,
+        "result": {
+          "found": true,
+          "operation_id": "sendMultiV2",
+          "api_version": "v2",
+          "sdk_method": null,
+          "retired": true,
+          "retired_in": "v3",
+          "retirement_reason": "Superseded by the batch operation behind Client.send_batch().",
+          "replacement": {
+            "api_version": "v3",
+            "method": "POST",
+            "operation_id": "sendBatchV3",
+            "path": "/v3/batches",
+            "sdk_method": "Client.send_batch"
+          }
+        }
+      },
+      {
+        "step": "s3_lookup_counterpart",
+        "executed": true,
+        "tool": "get_openapi_spec",
+        "arguments": {
+          "sdk_method": "Client.send_batch",
+          "api_version": "v3"
+        },
+        "depends_on": "s2_lookup_primary",
+        "derived": "s2 reported sendMultiV2 retired in v3, replaced by sendBatchV3",
+        "ok": true,
+        "note": "sendBatchV3",
+        "latency_ms": 0.685,
+        "result": {
+          "found": true,
+          "operation_id": "sendBatchV3",
+          "method": "POST",
+          "path": "/v3/batches",
+          "sdk_method": "Client.send_batch",
+          "api_version": "v3",
+          "summary": "Client.send_batch() on v3",
+          "request_parameters": [
+            {
+              "description": "Request bodies, sent in the order given.",
+              "in": "body",
+              "name": "payloads",
+              "required": true,
+              "schema": {
+                "type": "array"
+              }
+            },
+            {
+              "description": "Requests in flight at once across the batch.",
+              "in": "body",
+              "name": "concurrency",
+              "required": false,
+              "schema": {
+                "default": "8",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Budget for the whole batch, not per request.",
+              "in": "body",
+              "name": "timeout_ms",
+              "required": false,
+              "schema": {
+                "default": "60000",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Abort remaining requests after the first failure.",
+              "in": "body",
+              "name": "fail_fast",
+              "required": false,
+              "schema": {
+                "default": "False",
+                "type": "boolean"
+              }
+            },
+            {
+              "description": "Return responses in submission order.",
+              "in": "body",
+              "name": "ordered",
+              "required": false,
+              "schema": {
+                "default": "True",
+                "type": "boolean"
+              }
+            },
+            {
+              "description": "Requests per second ceiling for this batch.",
+              "in": "body",
+              "name": "rate_limit_rps",
+              "required": false,
+              "schema": {
+                "default": "20",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Split oversized payload groups at this boundary.",
+              "in": "body",
+              "name": "chunk_bytes",
+              "required": false,
+              "schema": {
+                "default": "1048576",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Emit a progress callback every N responses; 0 is off.",
+              "in": "body",
+              "name": "progress_every",
+              "required": false,
+              "schema": {
+                "default": "0",
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success."
+            }
+          },
+          "docs_anchor": "v3/client-batch#parameters",
+          "provenance": "parameters derived from docs/v3/client-batch.md; path, verb and operationId authored"
+        }
+      },
+      {
+        "step": "s4_read_best_chunk",
+        "executed": true,
+        "tool": "",
+        "arguments": {},
+        "depends_on": "",
+        "derived": "contains 'concurrency' (v3)",
+        "ok": true,
+        "note": "v3/client-batch#notes::3",
+        "latency_ms": 0.0,
+        "result": {
+          "chunk_id": "v3/client-batch#notes::3",
+          "rank": 1
+        }
+      },
+      {
+        "step": "s5_compose",
+        "executed": true,
+        "tool": "",
+        "arguments": {},
+        "depends_on": "",
+        "derived": "9,158 chars of pre-assembled context",
+        "ok": true,
+        "note": "answered",
+        "latency_ms": 1797.137,
+        "result": {}
+      }
+    ],
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "search_docs",
+        "arguments": {
+          "query": "concurrency",
+          "api_version": "v2"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 1761.562,
+        "result_chunk_ids": [
+          "v2/client-close#notes::3",
+          "v2/client-configure#parameters::1",
+          "v2/client-configure#example::2",
+          "v2/client-stream#notes::3",
+          "v2/client-send#notes::2"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "search_docs",
+        "arguments": {
+          "query": "concurrency",
+          "api_version": "v3"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 146.667,
+        "result_chunk_ids": [
+          "v3/client-batch#notes::3",
+          "v3/client-batch#example::2",
+          "v3/client-configure#notes::3",
+          "v3/client-batch#parameters::1",
+          "v3/client-close#notes::3"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 3,
+        "name": "check_deprecation",
+        "arguments": {
+          "path": "/v2/messages:multi",
+          "api_version": "v2"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 0.03,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      },
+      {
+        "seq": 4,
+        "name": "get_openapi_spec",
+        "arguments": {
+          "sdk_method": "Client.send_batch",
+          "api_version": "v3"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 0.011,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "search_docs",
+      "search_docs",
+      "check_deprecation",
+      "get_openapi_spec"
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 2846,
+        "completion_tokens": 373,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 1796.824,
+        "cumulative_prompt": 2846,
+        "cumulative_completion": 373,
+        "cumulative_cost_usd": 0.0006507
+      }
+    ],
+    "prompt_tokens": 2846,
+    "completion_tokens": 373,
+    "cached_tokens": 0,
+    "total_tokens": 3219,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.0006506999999999999,
+    "price_verified": true,
+    "latency_ms": 3715.986,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "composed from the pre-assembled context",
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "0311092397a1cc7c",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "derived_parameter": "concurrency",
+    "derived_target": {
+      "path": "/v2/messages:multi",
+      "api_version": "v2"
+    },
+    "best_chunk_id": "v3/client-batch#notes::3",
+    "context_chars": 9158,
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nThe tool results you need have already been gathered for you and appear below. Do not ask for more; answer from what is provided, or refuse if it is not there.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: Our service posts to POST /v2/messages:multi. Is that endpoint still supported, and what is the default concurrency of whatever replaced it?\n\nTool results:\n\nMost relevant passage:\n{\"rank\": 1, \"chunk_id\": \"v3/client-batch#notes::3\", \"heading_path\": \"Client.send_batch() > Notes\", \"score\": 0.5905, \"text\": \"Client.send_batch() > Notes\\n\\n## Notes\\n\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\n20 requests per second gives you 20 requests per second, not 64. Raising\\n`concurrency` alone will not increase throughput past the rate limit.\\n\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\nusually too tight — scale the timeout with the batch size.\", \"api_version\": \"v3\"}\n\nTool result 1: search_docs x2 with {\"query\": \"concurrency\", \"api_version\": [\"v2\", \"v3\"]}\n{\"v2\": {\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.4179, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\n`force` defaults to true in v2 and setting it to false has no effect — the\\nparameter exists only so that code written against the v3 preview does not fail\\nto import. In v3 the default is false and requests are drained.\\n\\nThere is no context-manager form in v2.\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-configure#parameters::1\", \"heading_path\": \"Client.configure() > Parameters\", \"score\": 0.4064, \"text\": \"Client.configure() > Parameters\\n\\n## Parameters\\n\\n| name               | type | default        | required | description                                    |\\n|--------------------|------|----------------|----------|-------------------------------------------------|\\n| api_key            | str  | —              | yes      | Credential used for every request.             |\\n| base_url           | str  | https://api.example.com | no | Endpoint root for all calls.            |\\n| pool_size          | int  | 4              | no       | Maximum simultaneous pooled connections.       |\\n| default_timeout_ms | int  | 10000          | no       | Timeout applied when a call does not set one.  |\\n| log_level          | str  | error          | no       | One of debug, info, warning, error.            |\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-configure#example::2\", \"heading_path\": \"Client.configure() > Example\", \"score\": 0.3999, \"text\": \"Client.configure() > Example\\n\\n## Example\\n\\n```python\\nclient = Client()\\nclient.configure(api_key=\\\"sk-...\\\", pool_size=8, default_timeout_ms=20000)\\n```\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-stream#notes::3\", \"heading_path\": \"Client.stream() > Notes\", \"score\": 0.3912, \"text\": \"Client.stream() > Notes\\n\\n## Notes\\n\\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\\nprofiling showed the smaller reads dominating CPU time on large responses.\\n\\nThere is no context-manager form in v2 — you must call `close()` yourself, and\\nforgetting to do so leaks the connection until the process exits.\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-send#notes::2\", \"heading_path\": \"Client.send() > Notes\", \"score\": 0.3907, \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` parameter is accepted in v2 but ignored. Automatic\\nretries arrived in v3.\"}]}, \"v3\": {\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-batch#notes::3\", \"heading_path\": \"Client.send_batch() > Notes\", \"score\": 0.5905, \"text\": \"Client.send_batch() > Notes\\n\\n## Notes\\n\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\n20 requests per second gives you 20 requests per second, not 64. Raising\\n`concurrency` alone will not increase throughput past the rate limit.\\n\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\nusually too tight — scale the timeout with the batch size.\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-batch#example::2\", \"heading_path\": \"Client.send_batch() > Example\", \"score\": 0.4791, \"text\": \"Client.send_batch() > Example\\n\\n## Example\\n\\n```python\\nresponses = client.send_batch(\\n    payloads=[{\\\"query\\\": q} for q in queries],\\n    concurrency=16,\\n    rate_limit_rps=50,\\n    fail_fast=False,\\n)\\n\\nfailed = [r for r in responses if r.status_code >= 500]\\nprint(f\\\"{len(failed)} of {len(responses)} need a retry\\\")\\n```\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.4718, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\nreal concurrency costs nothing but does not help either.\\n\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\\nbut ignored, which mirrors how v2 behaved.\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-batch#parameters::1\", \"heading_path\": \"Client.send_batch() > Parameters\", \"score\": 0.441, \"text\": \"Client.send_batch() > Parameters\\n\\n## Parameters\\n\\n| name            | type | default | required | description                                          |\\n|-----------------|------|---------|----------|------------------------------------------------------|\\n| payloads        | list | —       | yes      | Request bodies, sent in the order given.             |\\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\\n| ordered         | bool | True    | no       | Return responses in submission order.                |\\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.4176, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\nWith `force=True` in-flight requests are cancelled rather than drained, and\\ntheir futures raise `CancelledError`. Prefer the default unless the process is\\nshutting down and latency matters more than completeness.\\n\\nIf `drain` is true and `timeout_ms` elapses before in-flight requests finish,\\nthe remaining connections are closed anyway and a warning is logged. Close is\\nnever allowed to block indefinitely.\"}]}}\n\nTool result 2: check_deprecation with {\"path\": \"/v2/messages:multi\", \"api_version\": \"v2\"}\n{\"found\": true, \"operation_id\": \"sendMultiV2\", \"api_version\": \"v2\", \"sdk_method\": null, \"retired\": true, \"retired_in\": \"v3\", \"retirement_reason\": \"Superseded by the batch operation behind Client.send_batch().\", \"replacement\": {\"api_version\": \"v3\", \"method\": \"POST\", \"operation_id\": \"sendBatchV3\", \"path\": \"/v3/batches\", \"sdk_method\": \"Client.send_batch\"}}\n\nTool result 3: get_openapi_spec with {\"sdk_method\": \"Client.send_batch\", \"api_version\": \"v3\"}\n{\"found\": true, \"operation_id\": \"sendBatchV3\", \"method\": \"POST\", \"path\": \"/v3/batches\", \"sdk_method\": \"Client.send_batch\", \"api_version\": \"v3\", \"summary\": \"Client.send_batch() on v3\", \"request_parameters\": [{\"description\": \"Request bodies, sent in the order given.\", \"in\": \"body\", \"name\": \"payloads\", \"required\": true, \"schema\": {\"type\": \"array\"}}, {\"description\": \"Requests in flight at once across the batch.\", \"in\": \"body\", \"name\": \"concurrency\", \"required\": false, \"schema\": {\"default\": \"8\", \"type\": \"integer\"}}, {\"description\": \"Budget for the whole batch, not per request.\", \"in\": \"body\", \"name\": \"timeout_ms\", \"required\": false, \"schema\": {\"default\": \"60000\", \"type\": \"integer\"}}, {\"description\": \"Abort remaining requests after the first failure.\", \"in\": \"body\", \"name\": \"fail_fast\", \"required\": false, \"schema\": {\"default\": \"False\", \"type\": \"boolean\"}}, {\"description\": \"Return responses in submission order.\", \"in\": \"body\", \"name\": \"ordered\", \"required\": false, \"schema\": {\"default\": \"True\", \"type\": \"boolean\"}}, {\"description\": \"Requests per second ceiling for this batch.\", \"in\": \"body\", \"name\": \"rate_limit_rps\", \"required\": false, \"schema\": {\"default\": \"20\", \"type\": \"integer\"}}, {\"description\": \"Split oversized payload groups at this boundary.\", \"in\": \"body\", \"name\": \"chunk_bytes\", \"required\": false, \"schema\": {\"default\": \"1048576\", \"type\": \"integer\"}}, {\"description\": \"Emit a progress callback every N responses; 0 is off.\", \"in\": \"body\", \"name\": \"progress_every\", \"required\": false, \"schema\": {\"default\": \"0\", \"type\": \"integer\"}}], \"responses\": {\"200\": {\"description\": \"Success.\"}}, \"docs_anchor\": \"v3/client-batch#parameters\", \"provenance\": \"parameters derived from docs/v3/client-batch.md; path, verb and operationId authored\"}\n"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: The POST /v2/messages:multi endpoint was retired in v3 and is no longer supported; it was superseded by the batch operation (POST /v3/batches) whose default concurrency is 8.  \nVERSION: v3  \nCITATIONS: sendMultiV2, sendBatchV3"
+      }
+    ]
+  },
+  {
+    "arm": "workflow",
+    "question_id": "w7-10",
+    "question": "What is the rate limit on the /v1/embeddings endpoint?",
+    "output": {
+      "answer": "INSUFFICIENT_CONTEXT",
+      "sdk_version": "none",
+      "citations": [],
+      "refused": true,
+      "raw": "ANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none",
+      "parse_error": ""
+    },
+    "steps": [
+      {
+        "step": "s1_search",
+        "executed": true,
+        "tool": "search_docs x2",
+        "arguments": {
+          "query": "What is the rate limit on the /v1/embeddings endpoint?",
+          "api_version": [
+            "v2",
+            "v3"
+          ]
+        },
+        "depends_on": "",
+        "derived": "query=the question text (no single table key matched)",
+        "ok": true,
+        "note": "5 passages; v3 truncated at 4000 chars",
+        "latency_ms": 1453.993,
+        "result": {
+          "v2": {
+            "api_version": "v2",
+            "count": 5,
+            "passages": [
+              {
+                "rank": 1,
+                "chunk_id": "v2/client-stream#notes::3",
+                "heading_path": "Client.stream() > Notes",
+                "score": 0.5056,
+                "text": "Client.stream() > Notes\n\n## Notes\n\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\nprofiling showed the smaller reads dominating CPU time on large responses.\n\nThere is no context-manager form in v2 — you must call `close()` yourself, and\nforgetting to do so leaks the connection until the process exits."
+              },
+              {
+                "rank": 2,
+                "chunk_id": "v2/client-configure#notes::3",
+                "heading_path": "Client.configure() > Notes",
+                "score": 0.4845,
+                "text": "Client.configure() > Notes\n\n## Notes\n\nThere is no `retries_enabled` switch in v2 because there is no automatic retry\npath to switch off. There is no connection reaper either: pooled connections\nlive until the client is garbage collected.\n\nThe v2 default `pool_size` is 4, raised to 10 in v3."
+              },
+              {
+                "rank": 3,
+                "chunk_id": "v2/client-stream#parameters::1",
+                "heading_path": "Client.stream() > Parameters",
+                "score": 0.4809,
+                "text": "Client.stream() > Parameters\n\n## Parameters\n\n| name         | type | default | required | description                                     |\n|--------------|------|---------|----------|--------------------------------------------------|\n| payload      | dict | —       | yes      | The request body.                               |\n| chunk_size   | int  | 512     | no       | Bytes read from the socket per iteration.       |\n| heartbeat_ms | int  | 30000   | no       | Interval between server keep-alive frames.      |"
+              },
+              {
+                "rank": 4,
+                "chunk_id": "v2/client-configure#parameters::1",
+                "heading_path": "Client.configure() > Parameters",
+                "score": 0.4579,
+                "text": "Client.configure() > Parameters\n\n## Parameters\n\n| name               | type | default        | required | description                                    |\n|--------------------|------|----------------|----------|-------------------------------------------------|\n| api_key            | str  | —              | yes      | Credential used for every request.             |\n| base_url           | str  | https://api.example.com | no | Endpoint root for all calls.            |\n| pool_size          | int  | 4              | no       | Maximum simultaneous pooled connections.       |\n| default_timeout_ms | int  | 10000          | no       | Timeout applied when a call does not set one.  |\n| log_level          | str  | error          | no       | One of debug, info, warning, error.            |"
+              },
+              {
+                "rank": 5,
+                "chunk_id": "v2/client-send#parameters::1",
+                "heading_path": "Client.send() > Parameters",
+                "score": 0.4443,
+                "text": "Client.send() > Parameters\n\n## Parameters\n\n| name             | type | default | required |\n|------------------|------|---------|----------|\n| payload          | dict | —       | yes      |\n| timeout_ms       | int  | 10000   | no       |\n| retry_backoff_ms | int  | 100     | no       |"
+              }
+            ]
+          },
+          "v3": {
+            "truncated": true,
+            "note": "result truncated at 4000 chars",
+            "content": "{\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-batch#notes::3\", \"heading_path\": \"Client.send_batch() > Notes\", \"score\": 0.5286, \"text\": \"Client.send_batch() > Notes\\n\\n## Notes\\n\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\n20 requests per second gives you 20 requests per second, not 64. Raising\\n`concurrency` alone will not increase throughput past the rate limit.\\n\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\nusually too tight — scale the timeout with the batch size.\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-batch#parameters::1\", \"heading_path\": \"Client.send_batch() > Parameters\", \"score\": 0.4978, \"text\": \"Client.send_batch() > Parameters\\n\\n## Parameters\\n\\n| name            | type | default | required | description                                          |\\n|-----------------|------|---------|----------|------------------------------------------------------|\\n| payloads        | list | —       | yes      | Request bodies, sent in the order given.             |\\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\\n| ordered         | bool | True    | no       | Return responses in submission order.                |\\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-stream#parameters::1\", \"heading_path\": \"Client.stream() > Parameters\", \"score\": 0.4969, \"text\": \"Client.stream() > Parameters\\n\\n## Parameters\\n\\n| name         | type | default | required |\\n|--------------|------|---------|----------|\\n| payload      | dict | —       | yes      |\\n| chunk_size   | int  | 1024    | no       |\\n| heartbeat_ms | int  | 15000   | no       |\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-upload#parameters::1\", \"heading_path\": \"Client.upload() > Parameters\", \"score\": 0.4934, \"text\": \"Client.upload() > Parameters\\n\\n## Parameters\\n\\n| name          | type | default  | required | description                                        |\\n|---------------|------|----------|----------|-----------------------------------------------------|\\n| path          | str  | —        | yes      | Local path of the file to upload.                  |\\n| content_type  | str  | None     | no       | Overrides the type guessed from the extension.     |\\n| chunk_bytes   | int  | 8388608  | no       | Multipart threshold and part size, in bytes.       |\\n| retain_hours  | int  | 24       | no       | How long the handle stays valid.                   |\\n| checksum      | bool | True     | no       | Verify a SHA-256 checksum after upload.            |\\n| resume        | bool | True     | no       | Resume an interrupted multipart upload.            |\\n| max_bytes     | int  | 524288000| no       | Reject files larger than this before sending.      |\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.4921, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\nreal concurrency costs nothing but does not help either.\\n\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\nThe per-call `retry_backoff_ms` and `max_retries` parameters ar"
+          }
+        }
+      },
+      {
+        "step": "s2_lookup_primary",
+        "executed": true,
+        "tool": "check_deprecation",
+        "arguments": {
+          "path": "/v1/embeddings",
+          "api_version": "v3"
+        },
+        "depends_on": "",
+        "derived": "target read out of the question text",
+        "ok": true,
+        "note": "no operation for that path in v3",
+        "latency_ms": 0.354,
+        "result": {
+          "found": false,
+          "api_version": "v3",
+          "sdk_method": null,
+          "path": "/v1/embeddings",
+          "reason": "no operation for that path in v3"
+        }
+      },
+      {
+        "step": "s3_lookup_counterpart",
+        "executed": false,
+        "tool": "",
+        "arguments": {},
+        "depends_on": "s2_lookup_primary",
+        "derived": "",
+        "ok": true,
+        "note": "s2 found no operation (no operation for that path in v3)",
+        "latency_ms": 0.0,
+        "result": {}
+      },
+      {
+        "step": "s4_read_best_chunk",
+        "executed": true,
+        "tool": "",
+        "arguments": {},
+        "depends_on": "",
+        "derived": "top-ranked v2 passage; none contained a derived parameter (wanted v3; no v3 passage survived truncation)",
+        "ok": true,
+        "note": "v2/client-stream#notes::3",
+        "latency_ms": 0.0,
+        "result": {
+          "chunk_id": "v2/client-stream#notes::3",
+          "rank": 1
+        }
+      },
+      {
+        "step": "s5_compose",
+        "executed": true,
+        "tool": "",
+        "arguments": {},
+        "depends_on": "",
+        "derived": "8,075 chars of pre-assembled context",
+        "ok": true,
+        "note": "answered",
+        "latency_ms": 1220.578,
+        "result": {}
+      }
+    ],
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "search_docs",
+        "arguments": {
+          "query": "What is the rate limit on the /v1/embeddings endpoint?",
+          "api_version": "v2"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 1324.912,
+        "result_chunk_ids": [
+          "v2/client-stream#notes::3",
+          "v2/client-configure#notes::3",
+          "v2/client-stream#parameters::1",
+          "v2/client-configure#parameters::1",
+          "v2/client-send#parameters::1"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "search_docs",
+        "arguments": {
+          "query": "What is the rate limit on the /v1/embeddings endpoint?",
+          "api_version": "v3"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 126.048,
+        "result_chunk_ids": [
+          "v3/client-batch#notes::3",
+          "v3/client-batch#parameters::1",
+          "v3/client-stream#parameters::1",
+          "v3/client-upload#parameters::1",
+          "v3/client-configure#notes::3"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 3,
+        "name": "check_deprecation",
+        "arguments": {
+          "path": "/v1/embeddings",
+          "api_version": "v3"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 0.139,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "search_docs",
+      "search_docs",
+      "check_deprecation"
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 2482,
+        "completion_tokens": 114,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 1220.377,
+        "cumulative_prompt": 2482,
+        "cumulative_completion": 114,
+        "cumulative_cost_usd": 0.0004407
+      }
+    ],
+    "prompt_tokens": 2482,
+    "completion_tokens": 114,
+    "cached_tokens": 0,
+    "total_tokens": 2596,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.0004406999999999999,
+    "price_verified": true,
+    "latency_ms": 2682.513,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "composed from the pre-assembled context",
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "0311092397a1cc7c",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "derived_parameter": "",
+    "derived_target": {
+      "path": "/v1/embeddings",
+      "api_version": "v3"
+    },
+    "best_chunk_id": "v2/client-stream#notes::3",
+    "context_chars": 8075,
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nThe tool results you need have already been gathered for you and appear below. Do not ask for more; answer from what is provided, or refuse if it is not there.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: What is the rate limit on the /v1/embeddings endpoint?\n\nTool results:\n\nMost relevant passage:\n{\"rank\": 1, \"chunk_id\": \"v2/client-stream#notes::3\", \"heading_path\": \"Client.stream() > Notes\", \"score\": 0.5056, \"text\": \"Client.stream() > Notes\\n\\n## Notes\\n\\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\\nprofiling showed the smaller reads dominating CPU time on large responses.\\n\\nThere is no context-manager form in v2 — you must call `close()` yourself, and\\nforgetting to do so leaks the connection until the process exits.\", \"api_version\": \"v2\"}\n\nTool result 1: search_docs x2 with {\"query\": \"What is the rate limit on the /v1/embeddings endpoint?\", \"api_version\": [\"v2\", \"v3\"]}\n{\"v2\": {\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-stream#notes::3\", \"heading_path\": \"Client.stream() > Notes\", \"score\": 0.5056, \"text\": \"Client.stream() > Notes\\n\\n## Notes\\n\\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\\nprofiling showed the smaller reads dominating CPU time on large responses.\\n\\nThere is no context-manager form in v2 — you must call `close()` yourself, and\\nforgetting to do so leaks the connection until the process exits.\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.4845, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\nThere is no `retries_enabled` switch in v2 because there is no automatic retry\\npath to switch off. There is no connection reaper either: pooled connections\\nlive until the client is garbage collected.\\n\\nThe v2 default `pool_size` is 4, raised to 10 in v3.\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-stream#parameters::1\", \"heading_path\": \"Client.stream() > Parameters\", \"score\": 0.4809, \"text\": \"Client.stream() > Parameters\\n\\n## Parameters\\n\\n| name         | type | default | required | description                                     |\\n|--------------|------|---------|----------|--------------------------------------------------|\\n| payload      | dict | —       | yes      | The request body.                               |\\n| chunk_size   | int  | 512     | no       | Bytes read from the socket per iteration.       |\\n| heartbeat_ms | int  | 30000   | no       | Interval between server keep-alive frames.      |\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-configure#parameters::1\", \"heading_path\": \"Client.configure() > Parameters\", \"score\": 0.4579, \"text\": \"Client.configure() > Parameters\\n\\n## Parameters\\n\\n| name               | type | default        | required | description                                    |\\n|--------------------|------|----------------|----------|-------------------------------------------------|\\n| api_key            | str  | —              | yes      | Credential used for every request.             |\\n| base_url           | str  | https://api.example.com | no | Endpoint root for all calls.            |\\n| pool_size          | int  | 4              | no       | Maximum simultaneous pooled connections.       |\\n| default_timeout_ms | int  | 10000          | no       | Timeout applied when a call does not set one.  |\\n| log_level          | str  | error          | no       | One of debug, info, warning, error.            |\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-send#parameters::1\", \"heading_path\": \"Client.send() > Parameters\", \"score\": 0.4443, \"text\": \"Client.send() > Parameters\\n\\n## Parameters\\n\\n| name             | type | default | required |\\n|------------------|------|---------|----------|\\n| payload          | dict | —       | yes      |\\n| timeout_ms       | int  | 10000   | no       |\\n| retry_backoff_ms | int  | 100     | no       |\"}]}, \"v3\": {\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-batch#notes::3\\\", \\\"heading_path\\\": \\\"Client.send_batch() > Notes\\\", \\\"score\\\": 0.5286, \\\"text\\\": \\\"Client.send_batch() > Notes\\\\n\\\\n## Notes\\\\n\\\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\\\n20 requests per second gives you 20 requests per second, not 64. Raising\\\\n`concurrency` alone will not increase throughput past the rate limit.\\\\n\\\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\\\nusually too tight — scale the timeout with the batch size.\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-batch#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send_batch() > Parameters\\\", \\\"score\\\": 0.4978, \\\"text\\\": \\\"Client.send_batch() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name            | type | default | required | description                                          |\\\\n|-----------------|------|---------|----------|------------------------------------------------------|\\\\n| payloads        | list | —       | yes      | Request bodies, sent in the order given.             |\\\\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\\\\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\\\\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\\\\n| ordered         | bool | True    | no       | Return responses in submission order.                |\\\\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\\\\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\\\\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-stream#parameters::1\\\", \\\"heading_path\\\": \\\"Client.stream() > Parameters\\\", \\\"score\\\": 0.4969, \\\"text\\\": \\\"Client.stream() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name         | type | default | required |\\\\n|--------------|------|---------|----------|\\\\n| payload      | dict | —       | yes      |\\\\n| chunk_size   | int  | 1024    | no       |\\\\n| heartbeat_ms | int  | 15000   | no       |\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-upload#parameters::1\\\", \\\"heading_path\\\": \\\"Client.upload() > Parameters\\\", \\\"score\\\": 0.4934, \\\"text\\\": \\\"Client.upload() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name          | type | default  | required | description                                        |\\\\n|---------------|------|----------|----------|-----------------------------------------------------|\\\\n| path          | str  | —        | yes      | Local path of the file to upload.                  |\\\\n| content_type  | str  | None     | no       | Overrides the type guessed from the extension.     |\\\\n| chunk_bytes   | int  | 8388608  | no       | Multipart threshold and part size, in bytes.       |\\\\n| retain_hours  | int  | 24       | no       | How long the handle stays valid.                   |\\\\n| checksum      | bool | True     | no       | Verify a SHA-256 checksum after upload.            |\\\\n| resume        | bool | True     | no       | Resume an interrupted multipart upload.            |\\\\n| max_bytes     | int  | 524288000| no       | Reject files larger than this before sending.      |\\\"}, {\\\"rank\\\": 5, \\\"chunk_id\\\": \\\"v3/client-configure#notes::3\\\", \\\"heading_path\\\": \\\"Client.configure() > Notes\\\", \\\"score\\\": 0.4921, \\\"text\\\": \\\"Client.configure() > Notes\\\\n\\\\n## Notes\\\\n\\\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\\\nreal concurrency costs nothing but does not help either.\\\\n\\\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\\\nThe per-call `retry_backoff_ms` and `max_retries` parameters ar\"}}\n\nTool result 2: check_deprecation with {\"path\": \"/v1/embeddings\", \"api_version\": \"v3\"}\n{\"found\": false, \"api_version\": \"v3\", \"sdk_method\": null, \"path\": \"/v1/embeddings\", \"reason\": \"no operation for that path in v3\"}\n"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none"
+      }
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+budget self-test — all four budgets, offline
+defaults: {"max_iterations": 8, "max_tokens": 25000, "max_cost_usd": 0.01, "max_wall_clock_s": 120.0}
+
+
+1. max_iterations
+  ok   max_iterations @ pre_call          budget/max_iterations at pre_call — max_iterations tripped at pre_call: observed 3.0000 reached limit 3.0000
+       iterations=3 tokens=630 cost=$0.000108 elapsed=16.211s messages=8 path=['search_docs', 'search_docs', 'search_docs']
+
+2. max_tokens — one lap blows it (post_call)
+  ok   max_tokens @ post_call             budget/max_tokens at post_call — max_tokens tripped at post_call: observed 5,010.0000 exceeded limit 1,000.0000
+       iterations=1 tokens=5,010 cost=$0.000756 elapsed=0.000s messages=2 path=[]
+
+3. max_tokens — projection stops the next lap (pre_call)
+  ok   max_tokens @ pre_call              budget/max_tokens at pre_call — max_tokens tripped at pre_call: projected 810.0000 exceeded limit 700.0000
+       iterations=1 tokens=410 cost=$0.000066 elapsed=0.047s messages=4 path=['search_docs']
+
+4. max_cost_usd
+  ok   max_cost_usd                       budget/max_cost_usd at post_call — max_cost_usd tripped at post_call: observed 0.0300 exceeded limit 0.0010
+       iterations=1 tokens=200,010 cost=$0.030006 elapsed=0.000s messages=2 path=[]
+
+5. max_wall_clock_s
+  ok   max_wall_clock_s                   budget/max_wall_clock_s at post_call — max_wall_clock_s tripped at post_call: observed 0.0537 exceeded limit 0.0200
+       iterations=1 tokens=110 cost=$0.000021 elapsed=0.054s messages=2 path=[]
+
+6. max_wall_clock_s between tool dispatches (mid_lap)
+  ok   max_wall_clock_s @ mid_lap         budget/max_wall_clock_s at mid_lap — max_wall_clock_s tripped at mid_lap: observed 0.0477 exceeded limit 0.0100
+       iterations=1 tokens=110 cost=$0.000021 elapsed=0.048s messages=4 path=['search_docs']
+
+7. coverage
+       max_iterations     checked at ['pre_call']
+       max_tokens         checked at ['pre_call', 'post_call']
+       max_cost_usd       checked at ['pre_call', 'post_call']
+       max_wall_clock_s   checked at ['pre_call', 'post_call', 'mid_lap']
+  ok   every budget read by a check site  4/4
+
+8. cost uses the configured price table
+  ok   price verified                     openai/gpt-oss-120b 0.15/0.075/0.6 per 1M, verified 2026-09-15
+
+9. no network was touched
+  ok   zero real LLM calls                every run above used a scripted chat seam
+
+BUDGET SELF-TEST PASSED — 4/4 budgets proved to terminate a run

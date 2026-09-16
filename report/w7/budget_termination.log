@@ -1,0 +1,43 @@
+model openai/gpt-oss-120b  temperature 0.0  arm sha d31606b9f46ae0df
+budgets {"max_iterations": 2, "max_tokens": 25000, "max_cost_usd": 0.01, "max_wall_clock_s": 120.0}  sha 8bc7e29e9344e685
+
+==============================================================================
+w7-06  [agent]  Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?
+==============================================================================
+  termination   : budget  (max_iterations tripped at pre_call: observed 2.0000 reached limit 2.0000)
+  tool sequence : check_deprecation -> search_docs
+  authored plan : check_deprecation -> search_docs   [same — recorded, never enforced]
+  llm calls     : 2   iterations: 2   tool calls: 2
+  tokens        : prompt 1,994  completion 197  cached 0  total 2,191
+  cost          : $0.000417
+  latency       : 18,039 ms raw   18,039 ms excluding 0.0 s of rate-limit sleep
+  budgets       : iters 2/2   tokens 2,191/25,000   cost $0.000417/$0.0100   clock 18.0/120s
+  BUDGET TRIP   : max_iterations tripped at pre_call: observed 2.0000 reached limit 2.0000
+                  site=pre_call iterations=2 tokens=2,191 cost=$0.000417 elapsed=18.039s messages=6
+                  path=['check_deprecation', 'search_docs']
+
+  ANSWER:
+    (none)
+  VERSION: none
+  CITATIONS: none
+  parse error: budget: max_iterations tripped at pre_call: observed 2.0000 reached limit 2.0000
+
+  per-lap trace
+  lap  msgs in  tools in   prompt   compl  cached     finish  asked for
+  ---------------------------------------------------------------------
+    1        2         0      924      87       0 tool_calls  check_deprecation
+    2        4         1    1,070     110       0 tool_calls  search_docs
+  ---------------------------------------------------------------------
+  sum                       1,994     197       0
+      reading only the last lap would report 1,180 of 2,191; largest single lap is 1,180
+
+  tool calls
+    1. check_deprecation({"api_version": "v2", "path": "/v2/messages"})
+       ok  1 ms  reads ['api/']
+    2. search_docs({"api_version": "v3", "query": "Client.send retry attempts default"})
+       ok  15426 ms  reads ['docs/']  chunks ['v3/client-send#clientsend::0', 'v3/client-send#parameters::1', 'v3/client-configure#clientconfigure::0', 'v3/client-batch#example::2', 'v3/client-send#notes::3']
+
+  tool-result feedback: OK — every lap saw the previous lap's results
+
+  score: FAIL
+    NO  parsed                       budget: max_iterations tripped at pre_call: observed 2.0000 reached limit 2.0000

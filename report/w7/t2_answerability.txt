@@ -1,0 +1,88 @@
+====================================================================================================
+T2 — ANSWERABILITY MATRIX
+====================================================================================================
+
+Computed by calling each tool alone over its whole argument space and
+string-matching required_facts against the real JSON payloads. Nothing below
+is hand-asserted. Best shot per tool:
+  search_docs       question text + each required_fact as a query, both versions
+  get_openapi_spec  6 SDK methods x 2 versions + 9 authored paths x 2 versions
+  check_deprecation same enumeration
+
+id      class          SD   OS   CD   min  expected order
+---------------------------------------------------------
+w7-01   single_hop     YES  NO   NO   1    search_docs
+w7-02   single_hop     NO   YES  NO   1    get_openapi_spec
+w7-03   single_hop     NO   NO   YES  1    check_deprecation
+w7-04   cross_version  YES  YES  NO   1    search_docs -> search_docs
+w7-05   cross_version  YES  NO   NO   1    search_docs -> search_docs
+w7-06   two_hop        NO   NO   NO   2    check_deprecation -> search_docs
+w7-07   two_hop        NO   NO   NO   2    check_deprecation -> search_docs
+w7-08   two_hop        NO   NO   NO   2    check_deprecation -> search_docs
+w7-09   two_hop        NO   NO   NO   2    check_deprecation -> search_docs
+w7-10   refusal        NO   NO   NO   0    (refuse)
+---------------------------------------------------------
+answerable by NO single tool: 4  ['w7-06', 'w7-07', 'w7-08', 'w7-09']
+
+REQUIRED INFORMATION, and what each tool could not supply
+----------------------------------------------------------------------------------------------------
+
+w7-01  [single_hop]  In v3, when Client.send() gets a 4xx response, does it retry it?
+  required facts : ['4xx', 'never retried']
+  YES search_docs          has every required fact
+  NO  get_openapi_spec     cannot supply ['4xx', 'never retried']
+  NO  check_deprecation    cannot supply ['4xx']
+
+w7-02  [single_hop]  Which HTTP verb and path does Client.upload() call in v3?
+  required facts : ['/v3/files', 'POST']
+  NO  search_docs          cannot supply ['/v3/files', 'POST']
+  YES get_openapi_spec     has every required fact
+  NO  check_deprecation    cannot supply ['/v3/files']
+
+w7-03  [single_hop]  Is the v3 batch operation behind Client.send_batch() retired, or is it still current?
+  required facts : ['"retired": false', 'sendBatchV3']
+  NO  search_docs          cannot supply ['"retired": false', 'sendBatchV3']
+  NO  get_openapi_spec     cannot supply ['"retired": false']
+  YES check_deprecation    has every required fact
+
+w7-04  [cross_version]  Did the default heartbeat_ms on Client.stream() change between v2 and v3, and if so what are the two values?
+  required facts : ['heartbeat_ms', '30000', '15000']
+  YES search_docs          has every required fact
+  YES get_openapi_spec     has every required fact
+  NO  check_deprecation    cannot supply ['heartbeat_ms', '30000', '15000']
+
+w7-05  [cross_version]  What does Client.close() do in v2 that it no longer does by default in v3?
+  required facts : ['cancelled rather than drained', 'drain']
+  YES search_docs          has every required fact
+  NO  get_openapi_spec     cannot supply ['cancelled rather than drained']
+  NO  check_deprecation    cannot supply ['cancelled rather than drained']
+
+w7-06  [two_hop]  Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?
+  required facts : ['"retired": true', 'sendMessageV3', 'max_retries', '3']
+  NO  search_docs          cannot supply ['"retired": true', 'sendMessageV3']
+  NO  get_openapi_spec     cannot supply ['"retired": true']
+  NO  check_deprecation    cannot supply ['max_retries']
+
+w7-07  [two_hop]  Our service posts to POST /v2/messages:multi. Is that endpoint still supported, and what is the default concurrency of whatever replaced it?
+  required facts : ['"retired": true', 'sendBatchV3', 'concurrency', '8']
+  NO  search_docs          cannot supply ['"retired": true', 'sendBatchV3']
+  NO  get_openapi_spec     cannot supply ['"retired": true']
+  NO  check_deprecation    cannot supply ['concurrency', '8']
+
+w7-08  [two_hop]  A service calls POST /v2/connections:close on shutdown. Is that still the right call, and what does its replacement do if in-flight requests have not finished when the timeout elapses?
+  required facts : ['"retired": true', 'drainConnectionsV3', 'closed anyway']
+  NO  search_docs          cannot supply ['"retired": true', 'drainConnectionsV3']
+  NO  get_openapi_spec     cannot supply ['"retired": true', 'closed anyway']
+  NO  check_deprecation    cannot supply ['closed anyway']
+
+w7-09  [two_hop]  Is the v2 streaming endpoint retired? If so, how often does its replacement send keep-alive frames?
+  required facts : ['"retired": true', 'streamMessageV3', 'heartbeat_ms', '15000']
+  NO  search_docs          cannot supply ['"retired": true', 'streamMessageV3']
+  NO  get_openapi_spec     cannot supply ['"retired": true']
+  NO  check_deprecation    cannot supply ['heartbeat_ms', '15000']
+
+w7-10  [refusal]  What is the rate limit on the /v1/embeddings endpoint?
+  required facts : []
+  NO  search_docs          nothing to supply (refusal control)
+  NO  get_openapi_spec     nothing to supply (refusal control)
+  NO  check_deprecation    nothing to supply (refusal control)
