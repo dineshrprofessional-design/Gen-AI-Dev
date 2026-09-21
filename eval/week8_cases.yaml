@@ -1,0 +1,285 @@
+# Week 8 trajectory cases — one per Week 7 documentation query.
+#
+#     python -m app.rag.trajectory_eval --validate    # spec vs corpus, offline
+#     python -m app.rag.trajectory_eval --replay report/w8/baseline_runs.json
+#
+# Week 7 asked whether the final ANSWER was right. Week 8 asks whether the
+# agent got there for the right reasons. The two can disagree, and where they
+# do is the interesting part (see report/w8/gap_analysis.txt).
+#
+# ## Why paths are constraints, not a fixed sequence
+#
+# An expected-sequence check would fail an agent that reached the same place by
+# an equally valid route, and would make "tool choice accuracy" a measure of
+# conformity rather than correctness. So a trajectory passes when it satisfies
+# a CONJUNCTION of constraints:
+#
+#   required_tools     must all appear (the hop that cannot be skipped)
+#   allowed_tools      nothing outside this set was called
+#   forbidden_tools    a tool whose use proves a wrong plan
+#   max_steps          an upper bound, from T2's minimum plus slack
+#   ordering           only where a data dependency makes it real
+#
+# `ordering` is a list of [before, after] pairs and is enforced ONLY on the
+# two-hop cases, where step 2's arguments genuinely cannot exist until step 1
+# returns. Everywhere else order is free.
+#
+# ## Commutative version checks
+#
+# w8-04 and w8-05 compare a default across v2 and v3. Which version is read
+# first is arbitrary — both calls are independent, neither informs the other.
+# `commutative: true` marks that, so an agent reading v3 before v2 is not
+# penalised for a choice with no semantic content.
+#
+# ## Argument constraints
+#
+# Two separate things, kept separate because they fail differently:
+#
+#   required    the argument must be present at all (a schema violation)
+#   vocabulary  its value must come from the corpus (a hallucination)
+#
+# `api_version` lists the version(s) a correct call would use for THIS case.
+# Enum membership alone is checked for every call by the engine; this narrows
+# it where the question fixes the answer.
+
+version: 1
+
+cases:
+
+  - id: w8-01
+    question_id: w7-01
+    query: "In v3, when Client.send() gets a 4xx response, does it retry it?"
+    class: single_hop
+    min_steps: 1
+    max_steps: 2
+    required_tools: [search_docs]
+    allowed_tools: [search_docs]
+    forbidden_tools: [check_deprecation]
+    ordering: []
+    commutative: false
+    arguments:
+      search_docs:
+        required: [query, api_version]
+        api_version: [v3]
+    rationale: >-
+      The answer is prose in the page intro. T2 measured get_openapi_spec and
+      check_deprecation as unable to supply it, so calling either is a planning
+      error, not a stylistic difference. check_deprecation is forbidden rather
+      than merely disallowed because reaching for retirement vocabulary on a
+      plain behaviour question is Week 5 mode 2's signature.
+
+  - id: w8-02
+    question_id: w7-02
+    query: "Which HTTP verb and path does Client.upload() call in v3?"
+    class: single_hop
+    min_steps: 1
+    max_steps: 2
+    required_tools: [get_openapi_spec]
+    allowed_tools: [get_openapi_spec]
+    forbidden_tools: []
+    ordering: []
+    commutative: false
+    arguments:
+      get_openapi_spec:
+        required: [api_version]
+        api_version: [v3]
+        sdk_method: [Client.upload]
+    rationale: >-
+      No HTTP path exists anywhere in docs/, so search_docs provably cannot
+      answer this. Restricting allowed_tools to the spec tool makes a
+      search_docs call count against tool-choice accuracy.
+
+  - id: w8-03
+    question_id: w7-03
+    query: "Is the v3 batch operation behind Client.send_batch() retired, or is it still current?"
+    class: single_hop
+    min_steps: 1
+    max_steps: 2
+    required_tools: [check_deprecation]
+    allowed_tools: [check_deprecation]
+    forbidden_tools: []
+    ordering: []
+    commutative: false
+    arguments:
+      check_deprecation:
+        required: [api_version]
+        api_version: [v3]
+        sdk_method: [Client.send_batch]
+    rationale: >-
+      A NEGATIVE retirement case. Only check_deprecation reports retirement
+      status; the other two cannot, which T2 confirms.
+
+  - id: w8-04
+    question_id: w7-04
+    query: "Did the default heartbeat_ms on Client.stream() change between v2 and v3, and if so what are the two values?"
+    class: cross_version
+    min_steps: 2
+    max_steps: 3
+    required_tools: [search_docs]
+    allowed_tools: [search_docs, get_openapi_spec]
+    forbidden_tools: [check_deprecation]
+    ordering: []
+    commutative: true
+    arguments:
+      search_docs:
+        required: [query, api_version]
+        api_version: [v2, v3]
+      get_openapi_spec:
+        required: [api_version]
+        api_version: [v2, v3]
+    rationale: >-
+      Both versions must be read, in either order — the calls are independent,
+      so ordering carries no meaning and is not scored. T2 measured
+      get_openapi_spec as also able to answer this (its request_parameters come
+      from the same table), so it is allowed rather than forbidden: penalising
+      a tool the matrix says works would be scoring conformity.
+
+  - id: w8-05
+    question_id: w7-05
+    query: "What does Client.close() do in v2 that it no longer does by default in v3?"
+    class: cross_version
+    min_steps: 2
+    max_steps: 3
+    required_tools: [search_docs]
+    allowed_tools: [search_docs]
+    forbidden_tools: [check_deprecation]
+    ordering: []
+    commutative: true
+    arguments:
+      search_docs:
+        required: [query, api_version]
+        api_version: [v2, v3]
+    rationale: >-
+      Client.close() is NOT retired in either version — only the wire operation
+      behind it is. check_deprecation is forbidden because using it here means
+      the agent has confused a behavioural difference with a retirement.
+
+  - id: w8-06
+    question_id: w7-06
+    query: "Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?"
+    class: two_hop
+    min_steps: 2
+    max_steps: 4
+    required_tools: [check_deprecation, search_docs]
+    allowed_tools: [check_deprecation, search_docs, get_openapi_spec]
+    forbidden_tools: []
+    ordering: [[check_deprecation, search_docs]]
+    commutative: false
+    arguments:
+      check_deprecation:
+        required: [api_version]
+        api_version: [v2]
+        path: ["/v2/messages"]
+      search_docs:
+        required: [query, api_version]
+        api_version: [v3]
+    rationale: >-
+      A real dependency, so ordering IS enforced: the v3 that search_docs must
+      be given is knowable only from check_deprecation's replacement pointer.
+      Searching before checking means the version was guessed.
+
+  - id: w8-07
+    question_id: w7-07
+    query: "Our service posts to POST /v2/messages:multi. Is that endpoint still supported, and what is the default concurrency of whatever replaced it?"
+    class: two_hop
+    min_steps: 2
+    max_steps: 4
+    required_tools: [check_deprecation, search_docs]
+    allowed_tools: [check_deprecation, search_docs, get_openapi_spec]
+    forbidden_tools: []
+    ordering: [[check_deprecation, search_docs]]
+    commutative: false
+    arguments:
+      check_deprecation:
+        required: [api_version]
+        api_version: [v2]
+        path: ["/v2/messages:multi"]
+      search_docs:
+        required: [query, api_version]
+        api_version: [v3]
+    rationale: >-
+      The strongest dependency in the set: step 1 determines step 2's target
+      PAGE, not merely its version, and Client.send_batch does not exist in v2
+      at all, so there is no v2-shaped fallback.
+
+  - id: w8-08
+    question_id: w7-08
+    query: "A service calls POST /v2/connections:close on shutdown. Is that still the right call, and what does its replacement do if in-flight requests have not finished when the timeout elapses?"
+    class: two_hop
+    min_steps: 2
+    max_steps: 4
+    required_tools: [check_deprecation, search_docs]
+    allowed_tools: [check_deprecation, search_docs, get_openapi_spec]
+    forbidden_tools: []
+    ordering: [[check_deprecation, search_docs]]
+    commutative: false
+    arguments:
+      check_deprecation:
+        required: [api_version]
+        api_version: [v2]
+        path: ["/v2/connections:close"]
+      search_docs:
+        required: [query, api_version]
+        api_version: [v3]
+    rationale: >-
+      The answer is prose in a `## Notes` section, which api/openapi.json
+      provably cannot contain, so search_docs is required and a spec-only
+      trajectory is incomplete however good the final answer reads.
+
+  - id: w8-09
+    question_id: w7-09
+    query: "Is the v2 streaming endpoint retired? If so, how often does its replacement send keep-alive frames?"
+    class: two_hop
+    min_steps: 2
+    max_steps: 4
+    required_tools: [check_deprecation, search_docs]
+    allowed_tools: [check_deprecation, search_docs, get_openapi_spec]
+    forbidden_tools: []
+    ordering: [[check_deprecation, search_docs]]
+    commutative: false
+    arguments:
+      check_deprecation:
+        required: [api_version]
+        api_version: [v2]
+      search_docs:
+        required: [query, api_version]
+        api_version: [v3]
+    rationale: >-
+      The question names no path and no Client method, only "the v2 streaming
+      endpoint". No path constraint is set because the agent must legitimately
+      resolve the target itself; what is scored is that it checked retirement
+      before searching v3.
+
+  - id: w8-10
+    question_id: w7-10
+    query: "What is the rate limit on the /v1/embeddings endpoint?"
+    class: refusal
+    min_steps: 1
+    max_steps: 3
+    required_tools: []
+    allowed_tools: [search_docs, get_openapi_spec, check_deprecation]
+    forbidden_tools: []
+    ordering: []
+    commutative: false
+    arguments:
+      search_docs:
+        required: [query, api_version]
+      get_openapi_spec:
+        required: [api_version]
+      check_deprecation:
+        required: [api_version]
+    rationale: >-
+      Week 6 case w6-031 verbatim. Nothing in the corpus answers it, so the
+      correct trajectory is to establish absence in ONE call and stop.
+      min_steps is 1, not 0, and that is the load-bearing choice here.
+      ANSWER_CONTRACT rule 2 says "If the tools do not contain the answer,
+      reply INSUFFICIENT_CONTEXT" — which presupposes having looked. A refusal
+      with zero tool calls is the model declining from its own prior knowledge
+      that this SDK has no /v1/embeddings, not from evidence; it happens to be
+      right here and would be wrong on any question the corpus does answer.
+      That is failure mode 4, parametric guessing with verification bypassed,
+      and a min_steps of 0 would make mode 4 unmeasurable by construction.
+      max_steps is 3 because probing forever is the opposite failure, which
+      the Week 7 race recorded here: 6 LLM calls and 5 consecutive
+      search_docs. /v1/embeddings is allowed as an argument value — the
+      question supplies it — so probing it is not scored as hallucination.

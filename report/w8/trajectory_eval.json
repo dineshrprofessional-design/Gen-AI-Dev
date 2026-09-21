@@ -1,0 +1,1056 @@
+{
+  "generated_by": "python -m app.rag.trajectory_eval --replay <runs> --json report/w8/trajectory_eval.json",
+  "reproducible": "replay of saved AgentRun dumps; no model, no network",
+  "cases_spec": "eval/week8_cases.yaml",
+  "arms": {
+    "baseline_agent": {
+      "source": "report/w8/baseline_runs.json",
+      "metrics": {
+        "label": "baseline_agent",
+        "cases": 10,
+        "total_calls": 21,
+        "tool_choice_accuracy": 1.0,
+        "correct_tool_calls": 21,
+        "argument_validity": 1.0,
+        "valid_arg_calls": 21,
+        "step_efficiency_p50": 1.0,
+        "step_efficiency_mean": 0.8866666666666667,
+        "cost_p50_usd": 0.0008102999999999999,
+        "cost_max_usd": 0.00324555,
+        "latency_p50_ms": 9616.6585,
+        "latency_max_ms": 127040.738,
+        "tokens_total": 61217,
+        "tokens_max": 21481,
+        "llm_calls_total": 31,
+        "trajectory_pass_rate": 0.8,
+        "outcome_pass_rate": 0.5,
+        "gap_points": -30.000000000000004,
+        "mode_counts": {
+          "redundant_thrashing": 1,
+          "argument_violation": 0,
+          "step_inefficiency": 1,
+          "false_positive_bypass": 1,
+          "premature_refusal": 0,
+          "budget_overrun": 1
+        },
+        "false_positives": [],
+        "false_negatives": [
+          "w8-03",
+          "w8-05",
+          "w8-06"
+        ]
+      },
+      "per_case": [
+        {
+          "case_id": "w8-01",
+          "question_id": "w7-01",
+          "cls": "single_hop",
+          "steps": 1,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "Client.send retry 4xx"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": true,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 2,
+          "total_tokens": 3276,
+          "cost_usd": 0.0006129,
+          "latency_ms": 22224.273,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-02",
+          "question_id": "w7-02",
+          "cls": "single_hop",
+          "steps": 1,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "get_openapi_spec",
+              "arguments": {
+                "api_version": "v3",
+                "sdk_method": "Client.upload"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": true,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 2,
+          "total_tokens": 2485,
+          "cost_usd": 0.00046814999999999997,
+          "latency_ms": 1303.437,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-03",
+          "question_id": "w7-03",
+          "cls": "single_hop",
+          "steps": 1,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "check_deprecation",
+              "arguments": {
+                "api_version": "v3",
+                "sdk_method": "Client.send_batch"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": false,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 2,
+          "total_tokens": 2081,
+          "cost_usd": 0.00038685,
+          "latency_ms": 1420.952,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-04",
+          "question_id": "w7-04",
+          "cls": "cross_version",
+          "steps": 2,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v2",
+                "query": "Client.stream heartbeat_ms default"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "Client.stream heartbeat_ms default"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": true,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 3,
+          "total_tokens": 5662,
+          "cost_usd": 0.0009280499999999999,
+          "latency_ms": 3210.51,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-05",
+          "question_id": "w7-05",
+          "cls": "cross_version",
+          "steps": 2,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v2",
+                "query": "Client.close"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "Client.close"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": false,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 3,
+          "total_tokens": 5187,
+          "cost_usd": 0.0009441,
+          "latency_ms": 7265.612,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-06",
+          "question_id": "w7-06",
+          "cls": "two_hop",
+          "steps": 2,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "check_deprecation",
+              "arguments": {
+                "api_version": "v2",
+                "path": "/v2/messages"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "retry attempts"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": false,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 3,
+          "total_tokens": 4595,
+          "cost_usd": 0.0007932,
+          "latency_ms": 23867.156,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-07",
+          "question_id": "w7-07",
+          "cls": "two_hop",
+          "steps": 2,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "check_deprecation",
+              "arguments": {
+                "api_version": "v2",
+                "path": "/v2/messages:multi"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "concurrency"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": true,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 3,
+          "total_tokens": 4476,
+          "cost_usd": 0.0008185499999999999,
+          "latency_ms": 9818.104,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-08",
+          "question_id": "w7-08",
+          "cls": "two_hop",
+          "steps": 2,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "check_deprecation",
+              "arguments": {
+                "api_version": "v2",
+                "path": "/v2/connections:close"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "drainConnections"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": true,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 3,
+          "total_tokens": 4441,
+          "cost_usd": 0.00080205,
+          "latency_ms": 9415.213,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-09",
+          "question_id": "w7-09",
+          "cls": "two_hop",
+          "steps": 3,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v2",
+                "query": "stream"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "check_deprecation",
+              "arguments": {
+                "api_version": "v2",
+                "sdk_method": "Client.stream"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 3,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "stream"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": false,
+          "failures": [
+            "search_docs was called before check_deprecation; step 2's arguments cannot have come from step 1"
+          ],
+          "modes": [
+            "false_positive_bypass"
+          ],
+          "outcome_pass": false,
+          "step_efficiency": 0.6666666666666666,
+          "redundant_calls": 0,
+          "llm_calls": 4,
+          "total_tokens": 7533,
+          "cost_usd": 0.0012429,
+          "latency_ms": 39460.42,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-10",
+          "question_id": "w7-10",
+          "cls": "refusal",
+          "steps": 5,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "embeddings rate limit"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "embeddings endpoint rate limit"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 3,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "embeddings"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 4,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "embeddings endpoint"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 5,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "embeddings"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": true
+            }
+          ],
+          "trajectory_pass": false,
+          "failures": [
+            "5 steps exceeds max_steps 3",
+            "1 redundant call(s) repeating an earlier query",
+            "terminated on budget: max_wall_clock_s"
+          ],
+          "modes": [
+            "budget_overrun",
+            "redundant_thrashing",
+            "step_inefficiency"
+          ],
+          "outcome_pass": false,
+          "step_efficiency": 0.2,
+          "redundant_calls": 1,
+          "llm_calls": 6,
+          "total_tokens": 21481,
+          "cost_usd": 0.00324555,
+          "latency_ms": 127040.738,
+          "termination": "budget",
+          "budget_type": "max_wall_clock_s"
+        }
+      ]
+    },
+    "mitigated_agent": {
+      "source": "report/w8/mitigated_runs.json",
+      "metrics": {
+        "label": "mitigated_agent",
+        "cases": 10,
+        "total_calls": 18,
+        "tool_choice_accuracy": 1.0,
+        "correct_tool_calls": 18,
+        "argument_validity": 1.0,
+        "valid_arg_calls": 18,
+        "step_efficiency_p50": 1.0,
+        "step_efficiency_mean": 0.9166666666666666,
+        "cost_p50_usd": 0.0007966499999999999,
+        "cost_max_usd": 0.0011930999999999999,
+        "latency_p50_ms": 7878.8075,
+        "latency_max_ms": 16889.763,
+        "tokens_total": 46037,
+        "tokens_max": 7546,
+        "llm_calls_total": 28,
+        "trajectory_pass_rate": 0.9,
+        "outcome_pass_rate": 0.5,
+        "gap_points": -40.0,
+        "mode_counts": {
+          "redundant_thrashing": 0,
+          "argument_violation": 0,
+          "step_inefficiency": 0,
+          "false_positive_bypass": 1,
+          "premature_refusal": 0,
+          "budget_overrun": 0
+        },
+        "false_positives": [],
+        "false_negatives": [
+          "w8-03",
+          "w8-05",
+          "w8-06",
+          "w8-08"
+        ]
+      },
+      "per_case": [
+        {
+          "case_id": "w8-01",
+          "question_id": "w7-01",
+          "cls": "single_hop",
+          "steps": 1,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "Client.send retry 4xx"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": true,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 2,
+          "total_tokens": 3280,
+          "cost_usd": 0.0005577,
+          "latency_ms": 16889.763,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-02",
+          "question_id": "w7-02",
+          "cls": "single_hop",
+          "steps": 1,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "get_openapi_spec",
+              "arguments": {
+                "api_version": "v3",
+                "sdk_method": "Client.upload"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": true,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 2,
+          "total_tokens": 2485,
+          "cost_usd": 0.00041055,
+          "latency_ms": 1263.764,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-03",
+          "question_id": "w7-03",
+          "cls": "single_hop",
+          "steps": 1,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "check_deprecation",
+              "arguments": {
+                "api_version": "v3",
+                "sdk_method": "Client.send_batch"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": false,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 2,
+          "total_tokens": 2078,
+          "cost_usd": 0.00026984999999999997,
+          "latency_ms": 1301.554,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-04",
+          "question_id": "w7-04",
+          "cls": "cross_version",
+          "steps": 2,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v2",
+                "query": "Client.stream heartbeat_ms default"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "Client.stream heartbeat_ms default"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": true,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 3,
+          "total_tokens": 5659,
+          "cost_usd": 0.0008686499999999999,
+          "latency_ms": 3482.863,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-05",
+          "question_id": "w7-05",
+          "cls": "cross_version",
+          "steps": 2,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v2",
+                "query": "Client.close"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "Client.close"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": false,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 3,
+          "total_tokens": 5126,
+          "cost_usd": 0.0009075000000000001,
+          "latency_ms": 15737.513,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-06",
+          "question_id": "w7-06",
+          "cls": "two_hop",
+          "steps": 2,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "check_deprecation",
+              "arguments": {
+                "api_version": "v2",
+                "path": "/v2/messages"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "retry attempts default"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": false,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 3,
+          "total_tokens": 4664,
+          "cost_usd": 0.0006997500000000001,
+          "latency_ms": 8595.888,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-07",
+          "question_id": "w7-07",
+          "cls": "two_hop",
+          "steps": 2,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "check_deprecation",
+              "arguments": {
+                "api_version": "v2",
+                "path": "/v2/messages:multi"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "sendBatch"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": true,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 3,
+          "total_tokens": 4716,
+          "cost_usd": 0.0008410500000000001,
+          "latency_ms": 7314.714,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-08",
+          "question_id": "w7-08",
+          "cls": "two_hop",
+          "steps": 2,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "check_deprecation",
+              "arguments": {
+                "api_version": "v2",
+                "path": "/v2/connections:close"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "drainConnections"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": false,
+          "step_efficiency": 1.0,
+          "redundant_calls": 0,
+          "llm_calls": 3,
+          "total_tokens": 4502,
+          "cost_usd": 0.0007618499999999999,
+          "latency_ms": 10876.52,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-09",
+          "question_id": "w7-09",
+          "cls": "two_hop",
+          "steps": 3,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v2",
+                "query": "stream"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "check_deprecation",
+              "arguments": {
+                "api_version": "v2",
+                "sdk_method": "Client.stream"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 3,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "stream"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": false,
+          "failures": [
+            "search_docs was called before check_deprecation; step 2's arguments cannot have come from step 1"
+          ],
+          "modes": [
+            "false_positive_bypass"
+          ],
+          "outcome_pass": false,
+          "step_efficiency": 0.6666666666666666,
+          "redundant_calls": 0,
+          "llm_calls": 4,
+          "total_tokens": 7546,
+          "cost_usd": 0.0011930999999999999,
+          "latency_ms": 8442.901,
+          "termination": "final_answer",
+          "budget_type": ""
+        },
+        {
+          "case_id": "w8-10",
+          "question_id": "w7-10",
+          "cls": "refusal",
+          "steps": 2,
+          "calls": [
+            {
+              "seq": 1,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "embeddings rate limit"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            },
+            {
+              "seq": 2,
+              "tool": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "embeddings endpoint rate limit"
+              },
+              "tool_ok": true,
+              "tool_reason": "",
+              "args_ok": true,
+              "args_reason": "",
+              "redundant": false
+            }
+          ],
+          "trajectory_pass": true,
+          "failures": [],
+          "modes": [],
+          "outcome_pass": true,
+          "step_efficiency": 0.5,
+          "redundant_calls": 0,
+          "llm_calls": 3,
+          "total_tokens": 5981,
+          "cost_usd": 0.00083145,
+          "latency_ms": 6123.241,
+          "termination": "final_answer",
+          "budget_type": ""
+        }
+      ]
+    },
+    "fixed_workflow": {
+      "source": "report/w7/race.csv (Week 7, reps=1)",
+      "note": "The workflow has no agent trajectory to evaluate: its path is fixed at import time (4 dispatch + 1 chat call sites, statically proved), so tool-choice accuracy and step efficiency are not meaningful for it. Outcome and cost are included for comparison.",
+      "metrics": {
+        "cases": 10,
+        "outcome_pass_rate": 0.5,
+        "cost_p50_usd": 0.00055905,
+        "cost_max_usd": 0.0006696,
+        "latency_p50_ms": 20424.063000000002,
+        "latency_max_ms": 25211.222,
+        "tokens_total": 29720,
+        "llm_calls_total": 10,
+        "tool_calls_total": 39,
+        "distinct_paths": 2
+      }
+    }
+  },
+  "mitigation": {
+    "id": "consecutive-search-and-nonexistence-circuit-breaker",
+    "module": "app/rag/week8_mitigation.py",
+    "targets": "redundant_thrashing",
+    "config": {
+      "max_consecutive_searches": 2,
+      "max_repeats_per_signature": 1
+    },
+    "vetoes": [
+      {
+        "tool": "search_docs",
+        "arguments": {
+          "api_version": "v3",
+          "query": "embeddings"
+        },
+        "reason": "2 consecutive documentation searches have returned no passage not already seen. The documentation does not contain this. Answer from what you have, or refuse."
+      }
+    ],
+    "veto_count": 1,
+    "cpu_overhead_ms_total": 33.26146,
+    "cpu_overhead_ms_per_llm_call": 1.1879092857142857
+  },
+  "defense": {
+    "module": "app/rag/week8_defense.py",
+    "sanitisation_ms_per_call": 0.4,
+    "payload_chars": 4205,
+    "false_positives_on_real_corpus": 0,
+    "chunks_scanned": 38
+  }
+}
