@@ -1,0 +1,2388 @@
+[
+  {
+    "arm": "agent",
+    "question_id": "w7-01",
+    "question": "In v3, when Client.send() gets a 4xx response, does it retry it?",
+    "output": {
+      "answer": "In v3, Client.send() does not retry when it receives a 4xx response; such statuses are returned to the caller immediately and are never retried.",
+      "sdk_version": "v3",
+      "citations": [
+        "v3/client-send#clientsend::0"
+      ],
+      "refused": false,
+      "raw": "ANSWER: In v3, Client.send() does not retry when it receives a 4xx response; such statuses are returned to the caller immediately and are never retried.  \nVERSION: v3  \nCITATIONS: v3/client-send#clientsend::0",
+      "parse_error": ""
+    },
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v3",
+          "query": "Client.send retry 4xx"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 19525.513,
+        "result_chunk_ids": [
+          "v3/client-send#clientsend::0",
+          "v3/client-send#example::2",
+          "v3/client-send#parameters::1",
+          "v3/client-batch#example::2",
+          "v3/client-send#notes::3"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "search_docs"
+    ],
+    "laps": [
+      {
+        "lap": 1,
+        "messages_in": 2,
+        "tool_messages_in": 0,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 912,
+        "completion_tokens": 90,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 1552.03,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 2,
+        "messages_in": 4,
+        "tool_messages_in": 1,
+        "tool_calls_out": 0,
+        "tools_called": [],
+        "content_chars": 208,
+        "finish": "content",
+        "prompt_tokens": 2094,
+        "completion_tokens": 180,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 1141.994,
+        "rate_limit_wait_s": 0.0
+      }
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 912,
+        "completion_tokens": 90,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 1552.03,
+        "cumulative_prompt": 912,
+        "cumulative_completion": 90,
+        "cumulative_cost_usd": 0.0001908
+      },
+      {
+        "lap": 2,
+        "prompt_tokens": 2094,
+        "completion_tokens": 180,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 1141.994,
+        "cumulative_prompt": 3006,
+        "cumulative_completion": 270,
+        "cumulative_cost_usd": 0.0006129
+      }
+    ],
+    "prompt_tokens": 3006,
+    "completion_tokens": 270,
+    "cached_tokens": 0,
+    "total_tokens": 3276,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.0006129,
+    "price_verified": true,
+    "latency_ms": 22224.273,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "model answered without requesting more tools",
+    "budgets": {
+      "max_iterations": 8,
+      "max_tokens": 25000,
+      "max_cost_usd": 0.01,
+      "max_wall_clock_s": 120.0
+    },
+    "budget_trip": null,
+    "elapsed_s": 22.227,
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "8d2be3987aaf2061",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou have tools available. Call them as needed to gather what you need before answering. Some questions cannot be answered from a single tool call: if a result points you at something else — a replacement operation, another version — look that up too before you answer.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: In v3, when Client.send() gets a 4xx response, does it retry it?\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_f15bdd7e-84ec-44e3-a1ea-30ae940d12a9",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v3\",\"query\":\"Client.send retry 4xx\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_f15bdd7e-84ec-44e3-a1ea-30ae940d12a9",
+        "name": "search_docs",
+        "content": "{\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-send#clientsend::0\\\", \\\"heading_path\\\": \\\"Client.send()\\\", \\\"score\\\": 0.6927, \\\"text\\\": \\\"Client.send()\\\\n\\\\n# Client.send()\\\\n\\\\nSends a single request to the configured endpoint and blocks until a response is\\\\nreceived or the retry budget is exhausted. The method is safe to call from\\\\nmultiple threads; each call takes its own connection from the pool and returns\\\\nit on completion. Callers issuing many requests at once should prefer\\\\n`Client.send_batch()`, which amortises connection setup across the whole batch\\\\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\\\\nclient retries automatically according to the backoff parameters below; 4xx\\\\nstatuses are surfaced to the caller immediately and are never retried, because a\\\\nmalformed request does not become well-formed by being sent again.\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-send#example::2\\\", \\\"heading_path\\\": \\\"Client.send() > Example\\\", \\\"score\\\": 0.6332, \\\"text\\\": \\\"Client.send() > Example\\\\n\\\\n## Example\\\\n\\\\n```python\\\\nfrom sdk import Client\\\\n\\\\nclient = Client(api_key=\\\\\\\"sk-...\\\\\\\")\\\\n\\\\nresponse = client.send(\\\\n    payload={\\\\\\\"query\\\\\\\": \\\\\\\"hello\\\\\\\"},\\\\n    retry_backoff_ms=500,\\\\n    max_retries=5,\\\\n    idempotency_key=\\\\\\\"req-0001\\\\\\\",\\\\n    retry_on=[500, 502, 503],\\\\n)\\\\n\\\\nprint(response.status_code)\\\\nprint(response.json())\\\\n```\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.6272, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|------------------|------|-----------|----------|------------------------------------------------------|\\\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-batch#example::2\\\", \\\"heading_path\\\": \\\"Client.send_batch() > Example\\\", \\\"score\\\": 0.6007, \\\"text\\\": \\\"Client.send_batch() > Example\\\\n\\\\n## Example\\\\n\\\\n```python\\\\nresponses = client.send_batch(\\\\n    payloads=[{\\\\\\\"query\\\\\\\": q} for q in queries],\\\\n    concurrency=16,\\\\n    rate_limit_rps=50,\\\\n    fail_fast=False,\\\\n)\\\\n\\\\nfailed = [r for r in responses if r.status_code >= 500]\\\\nprint(f\\\\\\\"{len(failed)} of {len(responses)} need a retry\\\\\\\")\\\\n```\\\"}, {\\\"rank\\\": 5, \\\"chunk_id\\\": \\\"v3/client-send#notes::3\\\", \\\"heading\"}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: In v3, Client.send() does not retry when it receives a 4xx response; such statuses are returned to the caller immediately and are never retried.  \nVERSION: v3  \nCITATIONS: v3/client-send#clientsend::0"
+      }
+    ]
+  },
+  {
+    "arm": "agent",
+    "question_id": "w7-02",
+    "question": "Which HTTP verb and path does Client.upload() call in v3?",
+    "output": {
+      "answer": "In v3, Client.upload() uses the POST verb and calls the /v3/files path.",
+      "sdk_version": "v3",
+      "citations": [
+        "uploadFileV3"
+      ],
+      "refused": false,
+      "raw": "ANSWER: In v3, Client.upload() uses the POST verb and calls the /v3/files path.  \nVERSION: v3  \nCITATIONS: uploadFileV3",
+      "parse_error": ""
+    },
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "get_openapi_spec",
+        "arguments": {
+          "api_version": "v3",
+          "sdk_method": "Client.upload"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 1.125,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "get_openapi_spec"
+    ],
+    "laps": [
+      {
+        "lap": 1,
+        "messages_in": 2,
+        "tool_messages_in": 0,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "get_openapi_spec"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 906,
+        "completion_tokens": 74,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 487.905,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 2,
+        "messages_in": 4,
+        "tool_messages_in": 1,
+        "tool_calls_out": 0,
+        "tools_called": [],
+        "content_chars": 119,
+        "finish": "content",
+        "prompt_tokens": 1367,
+        "completion_tokens": 138,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 813.546,
+        "rate_limit_wait_s": 0.0
+      }
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 906,
+        "completion_tokens": 74,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 487.905,
+        "cumulative_prompt": 906,
+        "cumulative_completion": 74,
+        "cumulative_cost_usd": 0.0001803
+      },
+      {
+        "lap": 2,
+        "prompt_tokens": 1367,
+        "completion_tokens": 138,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 813.546,
+        "cumulative_prompt": 2273,
+        "cumulative_completion": 212,
+        "cumulative_cost_usd": 0.00046815
+      }
+    ],
+    "prompt_tokens": 2273,
+    "completion_tokens": 212,
+    "cached_tokens": 0,
+    "total_tokens": 2485,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.00046814999999999997,
+    "price_verified": true,
+    "latency_ms": 1303.437,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "model answered without requesting more tools",
+    "budgets": {
+      "max_iterations": 8,
+      "max_tokens": 25000,
+      "max_cost_usd": 0.01,
+      "max_wall_clock_s": 120.0
+    },
+    "budget_trip": null,
+    "elapsed_s": 1.307,
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "8d2be3987aaf2061",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou have tools available. Call them as needed to gather what you need before answering. Some questions cannot be answered from a single tool call: if a result points you at something else — a replacement operation, another version — look that up too before you answer.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: Which HTTP verb and path does Client.upload() call in v3?\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_6045f4a4-40f4-45e8-af33-4a2369d6fd98",
+            "type": "function",
+            "function": {
+              "name": "get_openapi_spec",
+              "arguments": "{\"api_version\":\"v3\",\"sdk_method\":\"Client.upload\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_6045f4a4-40f4-45e8-af33-4a2369d6fd98",
+        "name": "get_openapi_spec",
+        "content": "{\"found\": true, \"operation_id\": \"uploadFileV3\", \"method\": \"POST\", \"path\": \"/v3/files\", \"sdk_method\": \"Client.upload\", \"api_version\": \"v3\", \"summary\": \"Client.upload() on v3\", \"request_parameters\": [{\"description\": \"Local path of the file to upload.\", \"in\": \"body\", \"name\": \"path\", \"required\": true, \"schema\": {\"type\": \"string\"}}, {\"description\": \"Overrides the type guessed from the extension.\", \"in\": \"body\", \"name\": \"content_type\", \"required\": false, \"schema\": {\"default\": \"None\", \"type\": \"string\"}}, {\"description\": \"Multipart threshold and part size, in bytes.\", \"in\": \"body\", \"name\": \"chunk_bytes\", \"required\": false, \"schema\": {\"default\": \"8388608\", \"type\": \"integer\"}}, {\"description\": \"How long the handle stays valid.\", \"in\": \"body\", \"name\": \"retain_hours\", \"required\": false, \"schema\": {\"default\": \"24\", \"type\": \"integer\"}}, {\"description\": \"Verify a SHA-256 checksum after upload.\", \"in\": \"body\", \"name\": \"checksum\", \"required\": false, \"schema\": {\"default\": \"True\", \"type\": \"boolean\"}}, {\"description\": \"Resume an interrupted multipart upload.\", \"in\": \"body\", \"name\": \"resume\", \"required\": false, \"schema\": {\"default\": \"True\", \"type\": \"boolean\"}}, {\"description\": \"Reject files larger than this before sending.\", \"in\": \"body\", \"name\": \"max_bytes\", \"required\": false, \"schema\": {\"default\": \"524288000\", \"type\": \"integer\"}}], \"responses\": {\"200\": {\"description\": \"Success.\"}}, \"docs_anchor\": \"v3/client-upload#parameters\", \"provenance\": \"parameters derived from docs/v3/client-upload.md; path, verb and operationId authored\"}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: In v3, Client.upload() uses the POST verb and calls the /v3/files path.  \nVERSION: v3  \nCITATIONS: uploadFileV3"
+      }
+    ]
+  },
+  {
+    "arm": "agent",
+    "question_id": "w7-03",
+    "question": "Is the v3 batch operation behind Client.send_batch() retired, or is it still current?",
+    "output": {
+      "answer": "The v3 batch operation behind Client.send_batch() is still current and not retired.",
+      "sdk_version": "v3",
+      "citations": [
+        "sendBatchV3"
+      ],
+      "refused": false,
+      "raw": "ANSWER: The v3 batch operation behind Client.send_batch() is still current and not retired.  \nVERSION: v3  \nCITATIONS: sendBatchV3",
+      "parse_error": ""
+    },
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "check_deprecation",
+        "arguments": {
+          "api_version": "v3",
+          "sdk_method": "Client.send_batch"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 0.828,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "check_deprecation"
+    ],
+    "laps": [
+      {
+        "lap": 1,
+        "messages_in": 2,
+        "tool_messages_in": 0,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "check_deprecation"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 911,
+        "completion_tokens": 75,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 719.635,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 2,
+        "messages_in": 4,
+        "tool_messages_in": 1,
+        "tool_calls_out": 0,
+        "tools_called": [],
+        "content_chars": 130,
+        "finish": "content",
+        "prompt_tokens": 1004,
+        "completion_tokens": 91,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 699.328,
+        "rate_limit_wait_s": 0.0
+      }
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 911,
+        "completion_tokens": 75,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 719.635,
+        "cumulative_prompt": 911,
+        "cumulative_completion": 75,
+        "cumulative_cost_usd": 0.00018165
+      },
+      {
+        "lap": 2,
+        "prompt_tokens": 1004,
+        "completion_tokens": 91,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 699.328,
+        "cumulative_prompt": 1915,
+        "cumulative_completion": 166,
+        "cumulative_cost_usd": 0.00038685
+      }
+    ],
+    "prompt_tokens": 1915,
+    "completion_tokens": 166,
+    "cached_tokens": 0,
+    "total_tokens": 2081,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.00038685,
+    "price_verified": true,
+    "latency_ms": 1420.952,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "model answered without requesting more tools",
+    "budgets": {
+      "max_iterations": 8,
+      "max_tokens": 25000,
+      "max_cost_usd": 0.01,
+      "max_wall_clock_s": 120.0
+    },
+    "budget_trip": null,
+    "elapsed_s": 1.425,
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "8d2be3987aaf2061",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou have tools available. Call them as needed to gather what you need before answering. Some questions cannot be answered from a single tool call: if a result points you at something else — a replacement operation, another version — look that up too before you answer.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: Is the v3 batch operation behind Client.send_batch() retired, or is it still current?\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_408dad6e-cfd3-4a08-86a6-5b3b7e3b9411",
+            "type": "function",
+            "function": {
+              "name": "check_deprecation",
+              "arguments": "{\"api_version\":\"v3\",\"sdk_method\":\"Client.send_batch\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_408dad6e-cfd3-4a08-86a6-5b3b7e3b9411",
+        "name": "check_deprecation",
+        "content": "{\"found\": true, \"operation_id\": \"sendBatchV3\", \"api_version\": \"v3\", \"sdk_method\": \"Client.send_batch\", \"retired\": false, \"retired_in\": null, \"retirement_reason\": null, \"replacement\": null}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: The v3 batch operation behind Client.send_batch() is still current and not retired.  \nVERSION: v3  \nCITATIONS: sendBatchV3"
+      }
+    ]
+  },
+  {
+    "arm": "agent",
+    "question_id": "w7-04",
+    "question": "Did the default heartbeat_ms on Client.stream() change between v2 and v3, and if so what are the two values?",
+    "output": {
+      "answer": "Yes, the default heartbeat_ms for Client.stream() changed; it is 30000 ms in v2 and 15000 ms in v3.",
+      "sdk_version": "both",
+      "citations": [
+        "v2/client-stream#parameters::1",
+        "v3/client-stream#parameters::1"
+      ],
+      "refused": false,
+      "raw": "ANSWER: Yes, the default heartbeat_ms for Client.stream() changed; it is 30000 ms in v2 and 15000 ms in v3.  \nVERSION: both  \nCITATIONS: v2/client-stream#parameters::1, v3/client-stream#parameters::1",
+      "parse_error": ""
+    },
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v2",
+          "query": "Client.stream heartbeat_ms default"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 1095.187,
+        "result_chunk_ids": [
+          "v2/client-stream#parameters::1",
+          "v2/client-stream#notes::3",
+          "v2/client-send#parameters::1",
+          "v2/client-configure#parameters::1",
+          "v2/client-configure#example::2"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v3",
+          "query": "Client.stream heartbeat_ms default"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 96.518,
+        "result_chunk_ids": [
+          "v3/client-stream#parameters::1",
+          "v3/client-configure#clientconfigure::0",
+          "v3/client-send#parameters::1",
+          "v3/client-configure#parameters::1",
+          "v3/client-stream#clientstream::0"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "search_docs",
+      "search_docs"
+    ],
+    "laps": [
+      {
+        "lap": 1,
+        "messages_in": 2,
+        "tool_messages_in": 0,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 918,
+        "completion_tokens": 66,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 567.349,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 2,
+        "messages_in": 4,
+        "tool_messages_in": 1,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 1679,
+        "completion_tokens": 54,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 578.725,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 3,
+        "messages_in": 6,
+        "tool_messages_in": 2,
+        "tool_calls_out": 0,
+        "tools_called": [],
+        "content_chars": 199,
+        "finish": "content",
+        "prompt_tokens": 2762,
+        "completion_tokens": 183,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 864.703,
+        "rate_limit_wait_s": 0.0
+      }
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 918,
+        "completion_tokens": 66,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 567.349,
+        "cumulative_prompt": 918,
+        "cumulative_completion": 66,
+        "cumulative_cost_usd": 0.0001773
+      },
+      {
+        "lap": 2,
+        "prompt_tokens": 1679,
+        "completion_tokens": 54,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 578.725,
+        "cumulative_prompt": 2597,
+        "cumulative_completion": 120,
+        "cumulative_cost_usd": 0.00046155
+      },
+      {
+        "lap": 3,
+        "prompt_tokens": 2762,
+        "completion_tokens": 183,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 864.703,
+        "cumulative_prompt": 5359,
+        "cumulative_completion": 303,
+        "cumulative_cost_usd": 0.00092805
+      }
+    ],
+    "prompt_tokens": 5359,
+    "completion_tokens": 303,
+    "cached_tokens": 768,
+    "total_tokens": 5662,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.0009280499999999999,
+    "price_verified": true,
+    "latency_ms": 3210.51,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "model answered without requesting more tools",
+    "budgets": {
+      "max_iterations": 8,
+      "max_tokens": 25000,
+      "max_cost_usd": 0.01,
+      "max_wall_clock_s": 120.0
+    },
+    "budget_trip": null,
+    "elapsed_s": 3.218,
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "8d2be3987aaf2061",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou have tools available. Call them as needed to gather what you need before answering. Some questions cannot be answered from a single tool call: if a result points you at something else — a replacement operation, another version — look that up too before you answer.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: Did the default heartbeat_ms on Client.stream() change between v2 and v3, and if so what are the two values?\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_ee0ae946-09eb-48d9-b760-ea27cc0b9c18",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v2\",\"query\":\"Client.stream heartbeat_ms default\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_ee0ae946-09eb-48d9-b760-ea27cc0b9c18",
+        "name": "search_docs",
+        "content": "{\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-stream#parameters::1\", \"heading_path\": \"Client.stream() > Parameters\", \"score\": 0.6272, \"text\": \"Client.stream() > Parameters\\n\\n## Parameters\\n\\n| name         | type | default | required | description                                     |\\n|--------------|------|---------|----------|--------------------------------------------------|\\n| payload      | dict | —       | yes      | The request body.                               |\\n| chunk_size   | int  | 512     | no       | Bytes read from the socket per iteration.       |\\n| heartbeat_ms | int  | 30000   | no       | Interval between server keep-alive frames.      |\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-stream#notes::3\", \"heading_path\": \"Client.stream() > Notes\", \"score\": 0.5399, \"text\": \"Client.stream() > Notes\\n\\n## Notes\\n\\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\\nprofiling showed the smaller reads dominating CPU time on large responses.\\n\\nThere is no context-manager form in v2 — you must call `close()` yourself, and\\nforgetting to do so leaks the connection until the process exits.\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-send#parameters::1\", \"heading_path\": \"Client.send() > Parameters\", \"score\": 0.5297, \"text\": \"Client.send() > Parameters\\n\\n## Parameters\\n\\n| name             | type | default | required |\\n|------------------|------|---------|----------|\\n| payload          | dict | —       | yes      |\\n| timeout_ms       | int  | 10000   | no       |\\n| retry_backoff_ms | int  | 100     | no       |\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-configure#parameters::1\", \"heading_path\": \"Client.configure() > Parameters\", \"score\": 0.5205, \"text\": \"Client.configure() > Parameters\\n\\n## Parameters\\n\\n| name               | type | default        | required | description                                    |\\n|--------------------|------|----------------|----------|-------------------------------------------------|\\n| api_key            | str  | —              | yes      | Credential used for every request.             |\\n| base_url           | str  | https://api.example.com | no | Endpoint root for all calls.            |\\n| pool_size          | int  | 4              | no       | Maximum simultaneous pooled connections.       |\\n| default_timeout_ms | int  | 10000          | no       | Timeout applied when a call does not set one.  |\\n| log_level          | str  | error          | no       | One of debug, info, warning, error.            |\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-configure#example::2\", \"heading_path\": \"Client.configure() > Example\", \"score\": 0.5147, \"text\": \"Client.configure() > Example\\n\\n## Example\\n\\n```python\\nclient = Client()\\nclient.configure(api_key=\\\"sk-...\\\", pool_size=8, default_timeout_ms=20000)\\n```\"}]}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_5bfb73d2-c5fd-4b09-a4fe-cf6891f70cca",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v3\",\"query\":\"Client.stream heartbeat_ms default\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_5bfb73d2-c5fd-4b09-a4fe-cf6891f70cca",
+        "name": "search_docs",
+        "content": "{\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-stream#parameters::1\\\", \\\"heading_path\\\": \\\"Client.stream() > Parameters\\\", \\\"score\\\": 0.6746, \\\"text\\\": \\\"Client.stream() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name         | type | default | required |\\\\n|--------------|------|---------|----------|\\\\n| payload      | dict | —       | yes      |\\\\n| chunk_size   | int  | 1024    | no       |\\\\n| heartbeat_ms | int  | 15000   | no       |\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-configure#clientconfigure::0\\\", \\\"heading_path\\\": \\\"Client.configure()\\\", \\\"score\\\": 0.5448, \\\"text\\\": \\\"Client.configure()\\\\n\\\\n# Client.configure()\\\\n\\\\nSets client-wide defaults that every subsequent call inherits. Options passed\\\\nto an individual `send()` or `stream()` call override these. Calling\\\\n`configure()` does not affect requests already in flight.\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.5356, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|------------------|------|-----------|----------|------------------------------------------------------|\\\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-configure#parameters::1\\\", \\\"heading_path\\\": \\\"Client.configure() > Parameters\\\", \\\"score\\\": 0.5183, \\\"text\\\": \\\"Client.configure() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name              | type | default        | required | description                                        |\\\\n|-------------------|------|----------------|----------|-----------------------------------------------------|\\\\n| api_key           | str  | —              | yes      | Credential used for every request.                 |\\\\n| base_url          | str  | https://api.example.com | no | Endpoint root for all calls.                |\\\\n| pool_size         | int  | 10             | no       | Maximum simultaneous pooled connections.           |\\\\n| pool_reap_seconds | int  | 90             | no       | Idle time before a pooled connection is collected. |\\\\n| default_timeout_ms| int  | 30000          | no       | Timeout applied when a call does not set one.      |\\\\n| retries_enabled   | bool | True           | no       | Master switch for the automati\"}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: Yes, the default heartbeat_ms for Client.stream() changed; it is 30000 ms in v2 and 15000 ms in v3.  \nVERSION: both  \nCITATIONS: v2/client-stream#parameters::1, v3/client-stream#parameters::1"
+      }
+    ]
+  },
+  {
+    "arm": "agent",
+    "question_id": "w7-05",
+    "question": "What does Client.close() do in v2 that it no longer does by default in v3?",
+    "output": {
+      "answer": "In v2, Client.close() unconditionally cancels any in‑flight requests and immediately closes every pooled connection with no timeout or graceful draining; the force parameter defaults to true and setting it to false has no effect. In v3 the default changes to a graceful drain (force false) with a timeout, so that in‑flight requests are allowed to finish unless explicitly forced to cancel.",
+      "sdk_version": "v2",
+      "citations": [
+        "v2/client-close#clientclose::0",
+        "v2/client-close#notes::3"
+      ],
+      "refused": false,
+      "raw": "ANSWER: In v2, Client.close() unconditionally cancels any in‑flight requests and immediately closes every pooled connection with no timeout or graceful draining; the force parameter defaults to true and setting it to false has no effect. In v3 the default changes to a graceful drain (force false) with a timeout, so that in‑flight requests are allowed to finish unless explicitly forced to cancel.  \nVERSION: v2  \nCITATIONS: v2/client-close#clientclose::0, v2/client-close#notes::3",
+      "parse_error": ""
+    },
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v2",
+          "query": "Client.close"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 1193.746,
+        "result_chunk_ids": [
+          "v2/client-close#example::2",
+          "v2/client-close#clientclose::0",
+          "v2/client-close#parameters::1",
+          "v2/client-close#notes::3",
+          "v2/client-stream#clientstream::0"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v3",
+          "query": "Client.close"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 694.19,
+        "result_chunk_ids": [
+          "v3/client-close#clientclose::0",
+          "v3/client-close#example::2",
+          "v3/client-close#parameters::1",
+          "v3/client-close#notes::3",
+          "v3/client-send#clientsend::0"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "search_docs",
+      "search_docs"
+    ],
+    "laps": [
+      {
+        "lap": 1,
+        "messages_in": 2,
+        "tool_messages_in": 0,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 912,
+        "completion_tokens": 111,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 771.2,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 2,
+        "messages_in": 4,
+        "tool_messages_in": 1,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 1477,
+        "completion_tokens": 67,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 627.266,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 3,
+        "messages_in": 6,
+        "tool_messages_in": 2,
+        "tool_calls_out": 0,
+        "tools_called": [],
+        "content_chars": 482,
+        "finish": "content",
+        "prompt_tokens": 2301,
+        "completion_tokens": 319,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 3972.578,
+        "rate_limit_wait_s": 0.0
+      }
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 912,
+        "completion_tokens": 111,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 771.2,
+        "cumulative_prompt": 912,
+        "cumulative_completion": 111,
+        "cumulative_cost_usd": 0.0002034
+      },
+      {
+        "lap": 2,
+        "prompt_tokens": 1477,
+        "completion_tokens": 67,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 627.266,
+        "cumulative_prompt": 2389,
+        "cumulative_completion": 178,
+        "cumulative_cost_usd": 0.00040755
+      },
+      {
+        "lap": 3,
+        "prompt_tokens": 2301,
+        "completion_tokens": 319,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 3972.578,
+        "cumulative_prompt": 4690,
+        "cumulative_completion": 497,
+        "cumulative_cost_usd": 0.0009441
+      }
+    ],
+    "prompt_tokens": 4690,
+    "completion_tokens": 497,
+    "cached_tokens": 768,
+    "total_tokens": 5187,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.0009441,
+    "price_verified": true,
+    "latency_ms": 7265.612,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "model answered without requesting more tools",
+    "budgets": {
+      "max_iterations": 8,
+      "max_tokens": 25000,
+      "max_cost_usd": 0.01,
+      "max_wall_clock_s": 120.0
+    },
+    "budget_trip": null,
+    "elapsed_s": 7.273,
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "8d2be3987aaf2061",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou have tools available. Call them as needed to gather what you need before answering. Some questions cannot be answered from a single tool call: if a result points you at something else — a replacement operation, another version — look that up too before you answer.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: What does Client.close() do in v2 that it no longer does by default in v3?\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_3f9210b8-7ab5-4cc5-bccd-f9d21ee2baca",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v2\",\"query\":\"Client.close\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_3f9210b8-7ab5-4cc5-bccd-f9d21ee2baca",
+        "name": "search_docs",
+        "content": "{\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-close#example::2\", \"heading_path\": \"Client.close() > Example\", \"score\": 0.7128, \"text\": \"Client.close() > Example\\n\\n## Example\\n\\n```python\\nclient = Client(api_key=\\\"sk-...\\\")\\nclient.send(payload={\\\"query\\\": \\\"hello\\\"})\\nclient.close()\\n```\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-close#clientclose::0\", \"heading_path\": \"Client.close()\", \"score\": 0.7095, \"text\": \"Client.close()\\n\\n# Client.close()\\n\\nCloses every pooled connection. In v2 this is unconditional: in-flight requests\\nare cancelled rather than drained, and there is no timeout to wait on. Graceful\\ndraining arrived in v3.\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-close#parameters::1\", \"heading_path\": \"Client.close() > Parameters\", \"score\": 0.5992, \"text\": \"Client.close() > Parameters\\n\\n## Parameters\\n\\n| name  | type | default | required | description                              |\\n|-------|------|---------|----------|-------------------------------------------|\\n| force | bool | True    | no       | Cancel in-flight requests. Always true.  |\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.5946, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\n`force` defaults to true in v2 and setting it to false has no effect — the\\nparameter exists only so that code written against the v3 preview does not fail\\nto import. In v3 the default is false and requests are drained.\\n\\nThere is no context-manager form in v2.\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-stream#clientstream::0\", \"heading_path\": \"Client.stream()\", \"score\": 0.5908, \"text\": \"Client.stream()\\n\\n# Client.stream()\\n\\nOpens a streaming connection and yields events as they arrive. In v2 the\\ngenerator does not reconnect: a dropped connection raises `StreamClosed` and the\\ncaller must start again from the beginning. Resumable streams arrived in v3.\"}]}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_d5c42218-fba1-4e54-beea-1843791bde26",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v3\",\"query\":\"Client.close\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_d5c42218-fba1-4e54-beea-1843791bde26",
+        "name": "search_docs",
+        "content": "{\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-close#clientclose::0\", \"heading_path\": \"Client.close()\", \"score\": 0.6924, \"text\": \"Client.close()\\n\\n# Client.close()\\n\\nReleases every pooled connection and stops the background reaper thread. Safe\\nto call more than once; subsequent calls are no-ops. A client that is not\\nclosed leaks its pool until the interpreter exits, which matters in long-lived\\nprocesses and in tests that construct many clients.\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-close#example::2\", \"heading_path\": \"Client.close() > Example\", \"score\": 0.6913, \"text\": \"Client.close() > Example\\n\\n## Example\\n\\n```python\\nclient = Client(api_key=\\\"sk-...\\\")\\ntry:\\n    client.send(payload={\\\"query\\\": \\\"hello\\\"})\\nfinally:\\n    client.close(timeout_ms=2000)\\n\\n# Or as a context manager, which closes on exit:\\nwith Client(api_key=\\\"sk-...\\\") as client:\\n    client.send(payload={\\\"query\\\": \\\"hello\\\"})\\n```\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-close#parameters::1\", \"heading_path\": \"Client.close() > Parameters\", \"score\": 0.6326, \"text\": \"Client.close() > Parameters\\n\\n## Parameters\\n\\n| name           | type | default | required | description                                       |\\n|----------------|------|---------|----------|---------------------------------------------------|\\n| timeout_ms     | int  | 5000    | no       | Time allowed for in-flight requests to finish.    |\\n| force          | bool | False   | no       | Cancel in-flight requests instead of draining.    |\\n| drain          | bool | True    | no       | Wait for in-flight requests before closing.       |\\n| close_sessions | bool | True    | no       | Also close sessions created by this client.       |\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.5903, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\nWith `force=True` in-flight requests are cancelled rather than drained, and\\ntheir futures raise `CancelledError`. Prefer the default unless the process is\\nshutting down and latency matters more than completeness.\\n\\nIf `drain` is true and `timeout_ms` elapses before in-flight requests finish,\\nthe remaining connections are closed anyway and a warning is logged. Close is\\nnever allowed to block indefinitely.\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-send#clientsend::0\", \"heading_path\": \"Client.send()\", \"score\": 0.5712, \"text\": \"Client.send()\\n\\n# Client.send()\\n\\nSends a single request to the configured endpoint and blocks until a response is\\nreceived or the retry budget is exhausted. The method is safe to call from\\nmultiple threads; each call takes its own connection from the pool and returns\\nit on completion. Callers issuing many requests at once should prefer\\n`Client.send_batch()`, which amortises connection setup across the whole batch\\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\\nclient retries automatically according to the backoff parameters below; 4xx\\nstatuses are surfaced to the caller immediately and are never retried, because a\\nmalformed request does not become well-formed by being sent again.\"}]}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: In v2, Client.close() unconditionally cancels any in‑flight requests and immediately closes every pooled connection with no timeout or graceful draining; the force parameter defaults to true and setting it to false has no effect. In v3 the default changes to a graceful drain (force false) with a timeout, so that in‑flight requests are allowed to finish unless explicitly forced to cancel.  \nVERSION: v2  \nCITATIONS: v2/client-close#clientclose::0, v2/client-close#notes::3"
+      }
+    ]
+  },
+  {
+    "arm": "agent",
+    "question_id": "w7-06",
+    "question": "Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?",
+    "output": {
+      "answer": "The POST /v2/messages endpoint is retired (no longer supported) and was replaced by the v3 sendMessage operation, which by default performs three retry attempts.",
+      "sdk_version": "v3",
+      "citations": [
+        "sendMessageV2",
+        "v3/client-send#parameters::1"
+      ],
+      "refused": false,
+      "raw": "ANSWER: The POST /v2/messages endpoint is retired (no longer supported) and was replaced by the v3 sendMessage operation, which by default performs three retry attempts.  \nVERSION: v3  \nCITATIONS: sendMessageV2, v3/client-send#parameters::1",
+      "parse_error": ""
+    },
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "check_deprecation",
+        "arguments": {
+          "api_version": "v2",
+          "path": "/v2/messages"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 0.054,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v3",
+          "query": "retry attempts"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 1063.332,
+        "result_chunk_ids": [
+          "v3/client-send#notes::3",
+          "v3/client-configure#notes::3",
+          "v3/client-batch#example::2",
+          "v3/client-send#parameters::1",
+          "v3/client-upload#notes::3"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "check_deprecation",
+      "search_docs"
+    ],
+    "laps": [
+      {
+        "lap": 1,
+        "messages_in": 2,
+        "tool_messages_in": 0,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "check_deprecation"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 924,
+        "completion_tokens": 92,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 1912.872,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 2,
+        "messages_in": 4,
+        "tool_messages_in": 1,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 1070,
+        "completion_tokens": 100,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 3754.976,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 3,
+        "messages_in": 6,
+        "tool_messages_in": 2,
+        "tool_calls_out": 0,
+        "tools_called": [],
+        "content_chars": 240,
+        "finish": "content",
+        "prompt_tokens": 2242,
+        "completion_tokens": 167,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 17127.07,
+        "rate_limit_wait_s": 0.0
+      }
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 924,
+        "completion_tokens": 92,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 1912.872,
+        "cumulative_prompt": 924,
+        "cumulative_completion": 92,
+        "cumulative_cost_usd": 0.0001938
+      },
+      {
+        "lap": 2,
+        "prompt_tokens": 1070,
+        "completion_tokens": 100,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 3754.976,
+        "cumulative_prompt": 1994,
+        "cumulative_completion": 192,
+        "cumulative_cost_usd": 0.0004143
+      },
+      {
+        "lap": 3,
+        "prompt_tokens": 2242,
+        "completion_tokens": 167,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 17127.07,
+        "cumulative_prompt": 4236,
+        "cumulative_completion": 359,
+        "cumulative_cost_usd": 0.0007932
+      }
+    ],
+    "prompt_tokens": 4236,
+    "completion_tokens": 359,
+    "cached_tokens": 768,
+    "total_tokens": 4595,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.0007932,
+    "price_verified": true,
+    "latency_ms": 23867.156,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "model answered without requesting more tools",
+    "budgets": {
+      "max_iterations": 8,
+      "max_tokens": 25000,
+      "max_cost_usd": 0.01,
+      "max_wall_clock_s": 120.0
+    },
+    "budget_trip": null,
+    "elapsed_s": 23.872,
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "8d2be3987aaf2061",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou have tools available. Call them as needed to gather what you need before answering. Some questions cannot be answered from a single tool call: if a result points you at something else — a replacement operation, another version — look that up too before you answer.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: Our service posts directly to POST /v2/messages. Is that endpoint still supported, and if not, how many retry attempts does its replacement make by default?\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_884ddcd0-94db-4ff5-bb9d-f8dc51e1240f",
+            "type": "function",
+            "function": {
+              "name": "check_deprecation",
+              "arguments": "{\"api_version\":\"v2\",\"path\":\"/v2/messages\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_884ddcd0-94db-4ff5-bb9d-f8dc51e1240f",
+        "name": "check_deprecation",
+        "content": "{\"found\": true, \"operation_id\": \"sendMessageV2\", \"api_version\": \"v2\", \"sdk_method\": \"Client.send\", \"retired\": true, \"retired_in\": \"v3\", \"retirement_reason\": \"Automatic retries arrived in v3; the v2 operation never retried.\", \"replacement\": {\"api_version\": \"v3\", \"method\": \"POST\", \"operation_id\": \"sendMessageV3\", \"path\": \"/v3/messages\", \"sdk_method\": \"Client.send\"}}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_68693484-edda-4a2c-98a8-e35e7bdac4ff",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v3\",\"query\":\"retry attempts\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_68693484-edda-4a2c-98a8-e35e7bdac4ff",
+        "name": "search_docs",
+        "content": "{\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-send#notes::3\\\", \\\"heading_path\\\": \\\"Client.send() > Notes\\\", \\\"score\\\": 0.6117, \\\"text\\\": \\\"Client.send() > Notes\\\\n\\\\n## Notes\\\\n\\\\nThe `retry_backoff_ms` value is the base delay, not the total delay. The client\\\\napplies full jitter, so the actual wait before attempt *n* is drawn at random\\\\nfrom `[0, retry_backoff_ms * 2 ** n)`. A base of 250 with five retries can\\\\ntherefore wait up to eight seconds in the worst case. Set `timeout_ms` with that\\\\nceiling in mind, since the timeout covers the entire call including every retry\\\\nattempt rather than each attempt individually.\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-configure#notes::3\\\", \\\"heading_path\\\": \\\"Client.configure() > Notes\\\", \\\"score\\\": 0.5641, \\\"text\\\": \\\"Client.configure() > Notes\\\\n\\\\n## Notes\\\\n\\\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\\\nreal concurrency costs nothing but does not help either.\\\\n\\\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\\\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\\\\nbut ignored, which mirrors how v2 behaved.\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-batch#example::2\\\", \\\"heading_path\\\": \\\"Client.send_batch() > Example\\\", \\\"score\\\": 0.5543, \\\"text\\\": \\\"Client.send_batch() > Example\\\\n\\\\n## Example\\\\n\\\\n```python\\\\nresponses = client.send_batch(\\\\n    payloads=[{\\\\\\\"query\\\\\\\": q} for q in queries],\\\\n    concurrency=16,\\\\n    rate_limit_rps=50,\\\\n    fail_fast=False,\\\\n)\\\\n\\\\nfailed = [r for r in responses if r.status_code >= 500]\\\\nprint(f\\\\\\\"{len(failed)} of {len(responses)} need a retry\\\\\\\")\\\\n```\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.5309, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|------------------|------|-----------|----------|------------------------------------------------------|\\\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\\\"}, {\\\"rank\\\": 5, \\\"chunk_id\\\": \\\"v3/client-upload#notes::3\\\", \\\"heading_path\\\": \\\"Client.upload() > Notes\\\", \\\"score\\\": 0.5209, \\\"text\\\": \\\"Client.upload() > Notes\\\\n\\\\n## Notes\\\\n\\\\nWhen `resume` is true the clie\"}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: The POST /v2/messages endpoint is retired (no longer supported) and was replaced by the v3 sendMessage operation, which by default performs three retry attempts.  \nVERSION: v3  \nCITATIONS: sendMessageV2, v3/client-send#parameters::1"
+      }
+    ]
+  },
+  {
+    "arm": "agent",
+    "question_id": "w7-07",
+    "question": "Our service posts to POST /v2/messages:multi. Is that endpoint still supported, and what is the default concurrency of whatever replaced it?",
+    "output": {
+      "answer": "The POST /v2/messages:multi endpoint was retired in v3 and is no longer supported; it was superseded by the batch operation (Client.send_batch) at POST /v3/batches, which defaults to a concurrency of 8.",
+      "sdk_version": "v3",
+      "citations": [
+        "sendMultiV2",
+        "v3/client-batch#parameters::1"
+      ],
+      "refused": false,
+      "raw": "ANSWER: The POST /v2/messages:multi endpoint was retired in v3 and is no longer supported; it was superseded by the batch operation (Client.send_batch) at POST /v3/batches, which defaults to a concurrency of 8.  \nVERSION: v3  \nCITATIONS: sendMultiV2, v3/client-batch#parameters::1",
+      "parse_error": ""
+    },
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "check_deprecation",
+        "arguments": {
+          "api_version": "v2",
+          "path": "/v2/messages:multi"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 0.084,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v3",
+          "query": "concurrency"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 940.825,
+        "result_chunk_ids": [
+          "v3/client-batch#notes::3",
+          "v3/client-batch#example::2",
+          "v3/client-configure#notes::3",
+          "v3/client-batch#parameters::1",
+          "v3/client-close#notes::3"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "check_deprecation",
+      "search_docs"
+    ],
+    "laps": [
+      {
+        "lap": 1,
+        "messages_in": 2,
+        "tool_messages_in": 0,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "check_deprecation"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 921,
+        "completion_tokens": 95,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 647.467,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 2,
+        "messages_in": 4,
+        "tool_messages_in": 1,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 1067,
+        "completion_tokens": 100,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 613.758,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 3,
+        "messages_in": 6,
+        "tool_messages_in": 2,
+        "tool_calls_out": 0,
+        "tools_called": [],
+        "content_chars": 280,
+        "finish": "content",
+        "prompt_tokens": 2033,
+        "completion_tokens": 260,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 7613.717,
+        "rate_limit_wait_s": 0.0
+      }
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 921,
+        "completion_tokens": 95,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 647.467,
+        "cumulative_prompt": 921,
+        "cumulative_completion": 95,
+        "cumulative_cost_usd": 0.00019515
+      },
+      {
+        "lap": 2,
+        "prompt_tokens": 1067,
+        "completion_tokens": 100,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 613.758,
+        "cumulative_prompt": 1988,
+        "cumulative_completion": 195,
+        "cumulative_cost_usd": 0.0003576
+      },
+      {
+        "lap": 3,
+        "prompt_tokens": 2033,
+        "completion_tokens": 260,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 7613.717,
+        "cumulative_prompt": 4021,
+        "cumulative_completion": 455,
+        "cumulative_cost_usd": 0.00081855
+      }
+    ],
+    "prompt_tokens": 4021,
+    "completion_tokens": 455,
+    "cached_tokens": 768,
+    "total_tokens": 4476,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.0008185499999999999,
+    "price_verified": true,
+    "latency_ms": 9818.104,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "model answered without requesting more tools",
+    "budgets": {
+      "max_iterations": 8,
+      "max_tokens": 25000,
+      "max_cost_usd": 0.01,
+      "max_wall_clock_s": 120.0
+    },
+    "budget_trip": null,
+    "elapsed_s": 9.822,
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "8d2be3987aaf2061",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou have tools available. Call them as needed to gather what you need before answering. Some questions cannot be answered from a single tool call: if a result points you at something else — a replacement operation, another version — look that up too before you answer.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: Our service posts to POST /v2/messages:multi. Is that endpoint still supported, and what is the default concurrency of whatever replaced it?\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_535f4296-d40c-49d4-bcb8-3b1f16ecbcef",
+            "type": "function",
+            "function": {
+              "name": "check_deprecation",
+              "arguments": "{\"api_version\":\"v2\",\"path\":\"/v2/messages:multi\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_535f4296-d40c-49d4-bcb8-3b1f16ecbcef",
+        "name": "check_deprecation",
+        "content": "{\"found\": true, \"operation_id\": \"sendMultiV2\", \"api_version\": \"v2\", \"sdk_method\": null, \"retired\": true, \"retired_in\": \"v3\", \"retirement_reason\": \"Superseded by the batch operation behind Client.send_batch().\", \"replacement\": {\"api_version\": \"v3\", \"method\": \"POST\", \"operation_id\": \"sendBatchV3\", \"path\": \"/v3/batches\", \"sdk_method\": \"Client.send_batch\"}}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_84638d8e-b8a2-4409-8461-931ae82d1ce1",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v3\",\"query\":\"concurrency\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_84638d8e-b8a2-4409-8461-931ae82d1ce1",
+        "name": "search_docs",
+        "content": "{\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-batch#notes::3\", \"heading_path\": \"Client.send_batch() > Notes\", \"score\": 0.5905, \"text\": \"Client.send_batch() > Notes\\n\\n## Notes\\n\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\n20 requests per second gives you 20 requests per second, not 64. Raising\\n`concurrency` alone will not increase throughput past the rate limit.\\n\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\nusually too tight — scale the timeout with the batch size.\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-batch#example::2\", \"heading_path\": \"Client.send_batch() > Example\", \"score\": 0.4791, \"text\": \"Client.send_batch() > Example\\n\\n## Example\\n\\n```python\\nresponses = client.send_batch(\\n    payloads=[{\\\"query\\\": q} for q in queries],\\n    concurrency=16,\\n    rate_limit_rps=50,\\n    fail_fast=False,\\n)\\n\\nfailed = [r for r in responses if r.status_code >= 500]\\nprint(f\\\"{len(failed)} of {len(responses)} need a retry\\\")\\n```\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.4718, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\nreal concurrency costs nothing but does not help either.\\n\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\\nbut ignored, which mirrors how v2 behaved.\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-batch#parameters::1\", \"heading_path\": \"Client.send_batch() > Parameters\", \"score\": 0.441, \"text\": \"Client.send_batch() > Parameters\\n\\n## Parameters\\n\\n| name            | type | default | required | description                                          |\\n|-----------------|------|---------|----------|------------------------------------------------------|\\n| payloads        | list | —       | yes      | Request bodies, sent in the order given.             |\\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\\n| ordered         | bool | True    | no       | Return responses in submission order.                |\\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.4176, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\nWith `force=True` in-flight requests are cancelled rather than drained, and\\ntheir futures raise `CancelledError`. Prefer the default unless the process is\\nshutting down and latency matters more than completeness.\\n\\nIf `drain` is true and `timeout_ms` elapses before in-flight requests finish,\\nthe remaining connections are closed anyway and a warning is logged. Close is\\nnever allowed to block indefinitely.\"}]}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: The POST /v2/messages:multi endpoint was retired in v3 and is no longer supported; it was superseded by the batch operation (Client.send_batch) at POST /v3/batches, which defaults to a concurrency of 8.  \nVERSION: v3  \nCITATIONS: sendMultiV2, v3/client-batch#parameters::1"
+      }
+    ]
+  },
+  {
+    "arm": "agent",
+    "question_id": "w7-08",
+    "question": "A service calls POST /v2/connections:close on shutdown. Is that still the right call, and what does its replacement do if in-flight requests have not finished when the timeout elapses?",
+    "output": {
+      "answer": "The v2 POST /v2/connections:close call is retired; you should now use the v3 POST /v3/connections:drain operation (exposed as Client.close). In v3 the default behavior is to drain in‑flight requests, but if a `timeout_ms` expires before they finish, the remaining connections are closed anyway and a warning is logged (the call never blocks indefinitely).",
+      "sdk_version": "v3",
+      "citations": [
+        "check_deprecation",
+        "v3/client-close#notes::3"
+      ],
+      "refused": false,
+      "raw": "ANSWER: The v2 POST /v2/connections:close call is retired; you should now use the v3 POST /v3/connections:drain operation (exposed as Client.close). In v3 the default behavior is to drain in‑flight requests, but if a `timeout_ms` expires before they finish, the remaining connections are closed anyway and a warning is logged (the call never blocks indefinitely).  \nVERSION: v3  \nCITATIONS: check_deprecation, v3/client-close#notes::3",
+      "parse_error": ""
+    },
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "check_deprecation",
+        "arguments": {
+          "api_version": "v2",
+          "path": "/v2/connections:close"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 0.337,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v3",
+          "query": "drainConnections"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 6637.633,
+        "result_chunk_ids": [
+          "v3/client-close#notes::3",
+          "v3/client-stream#clientstream::0",
+          "v3/client-configure#parameters::1",
+          "v3/client-stream#example::2",
+          "v3/client-close#clientclose::0"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "check_deprecation",
+      "search_docs"
+    ],
+    "laps": [
+      {
+        "lap": 1,
+        "messages_in": 2,
+        "tool_messages_in": 0,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "check_deprecation"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 932,
+        "completion_tokens": 105,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 782.303,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 2,
+        "messages_in": 4,
+        "tool_messages_in": 1,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 1086,
+        "completion_tokens": 84,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 641.534,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 3,
+        "messages_in": 6,
+        "tool_messages_in": 2,
+        "tool_calls_out": 0,
+        "tools_called": [],
+        "content_chars": 434,
+        "finish": "content",
+        "prompt_tokens": 1865,
+        "completion_tokens": 369,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 1349.287,
+        "rate_limit_wait_s": 0.0
+      }
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 932,
+        "completion_tokens": 105,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 782.303,
+        "cumulative_prompt": 932,
+        "cumulative_completion": 105,
+        "cumulative_cost_usd": 0.0001452
+      },
+      {
+        "lap": 2,
+        "prompt_tokens": 1086,
+        "completion_tokens": 84,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 641.534,
+        "cumulative_prompt": 2018,
+        "cumulative_completion": 189,
+        "cumulative_cost_usd": 0.0003009
+      },
+      {
+        "lap": 3,
+        "prompt_tokens": 1865,
+        "completion_tokens": 369,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 1349.287,
+        "cumulative_prompt": 3883,
+        "cumulative_completion": 558,
+        "cumulative_cost_usd": 0.00080205
+      }
+    ],
+    "prompt_tokens": 3883,
+    "completion_tokens": 558,
+    "cached_tokens": 1536,
+    "total_tokens": 4441,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.00080205,
+    "price_verified": true,
+    "latency_ms": 9415.213,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "model answered without requesting more tools",
+    "budgets": {
+      "max_iterations": 8,
+      "max_tokens": 25000,
+      "max_cost_usd": 0.01,
+      "max_wall_clock_s": 120.0
+    },
+    "budget_trip": null,
+    "elapsed_s": 9.418,
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "8d2be3987aaf2061",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou have tools available. Call them as needed to gather what you need before answering. Some questions cannot be answered from a single tool call: if a result points you at something else — a replacement operation, another version — look that up too before you answer.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: A service calls POST /v2/connections:close on shutdown. Is that still the right call, and what does its replacement do if in-flight requests have not finished when the timeout elapses?\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_30162939-235f-4da0-ae18-cd6e01d4c719",
+            "type": "function",
+            "function": {
+              "name": "check_deprecation",
+              "arguments": "{\"api_version\":\"v2\",\"path\":\"/v2/connections:close\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_30162939-235f-4da0-ae18-cd6e01d4c719",
+        "name": "check_deprecation",
+        "content": "{\"found\": true, \"operation_id\": \"closeConnectionsV2\", \"api_version\": \"v2\", \"sdk_method\": \"Client.close\", \"retired\": true, \"retired_in\": \"v3\", \"retirement_reason\": \"The v2 close cancels in-flight requests; v3 drains them.\", \"replacement\": {\"api_version\": \"v3\", \"method\": \"POST\", \"operation_id\": \"drainConnectionsV3\", \"path\": \"/v3/connections:drain\", \"sdk_method\": \"Client.close\"}}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_918e6259-dcf5-4cd4-ba50-033246ec3b19",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v3\",\"query\":\"drainConnections\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_918e6259-dcf5-4cd4-ba50-033246ec3b19",
+        "name": "search_docs",
+        "content": "{\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.492, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\nWith `force=True` in-flight requests are cancelled rather than drained, and\\ntheir futures raise `CancelledError`. Prefer the default unless the process is\\nshutting down and latency matters more than completeness.\\n\\nIf `drain` is true and `timeout_ms` elapses before in-flight requests finish,\\nthe remaining connections are closed anyway and a warning is logged. Close is\\nnever allowed to block indefinitely.\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-stream#clientstream::0\", \"heading_path\": \"Client.stream()\", \"score\": 0.4862, \"text\": \"Client.stream()\\n\\n# Client.stream()\\n\\nOpens a streaming connection and yields events as they arrive. The generator\\nholds its connection open for the lifetime of the iteration, so callers must\\neither exhaust it or close it explicitly.\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-configure#parameters::1\", \"heading_path\": \"Client.configure() > Parameters\", \"score\": 0.4559, \"text\": \"Client.configure() > Parameters\\n\\n## Parameters\\n\\n| name              | type | default        | required | description                                        |\\n|-------------------|------|----------------|----------|-----------------------------------------------------|\\n| api_key           | str  | —              | yes      | Credential used for every request.                 |\\n| base_url          | str  | https://api.example.com | no | Endpoint root for all calls.                |\\n| pool_size         | int  | 10             | no       | Maximum simultaneous pooled connections.           |\\n| pool_reap_seconds | int  | 90             | no       | Idle time before a pooled connection is collected. |\\n| default_timeout_ms| int  | 30000          | no       | Timeout applied when a call does not set one.      |\\n| retries_enabled   | bool | True           | no       | Master switch for the automatic retry path.        |\\n| log_level         | str  | warning        | no       | One of debug, info, warning, error.                |\\n| telemetry         | bool | True           | no       | Send anonymous usage counters to the vendor.       |\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-stream#example::2\", \"heading_path\": \"Client.stream() > Example\", \"score\": 0.45, \"text\": \"Client.stream() > Example\\n\\n## Example\\n\\n```python\\nwith client.stream(payload={\\\"query\\\": \\\"hello\\\"}) as events:\\n    for event in events:\\n        print(event.text, end=\\\"\\\")\\n```\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-close#clientclose::0\", \"heading_path\": \"Client.close()\", \"score\": 0.4488, \"text\": \"Client.close()\\n\\n# Client.close()\\n\\nReleases every pooled connection and stops the background reaper thread. Safe\\nto call more than once; subsequent calls are no-ops. A client that is not\\nclosed leaks its pool until the interpreter exits, which matters in long-lived\\nprocesses and in tests that construct many clients.\"}]}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: The v2 POST /v2/connections:close call is retired; you should now use the v3 POST /v3/connections:drain operation (exposed as Client.close). In v3 the default behavior is to drain in‑flight requests, but if a `timeout_ms` expires before they finish, the remaining connections are closed anyway and a warning is logged (the call never blocks indefinitely).  \nVERSION: v3  \nCITATIONS: check_deprecation, v3/client-close#notes::3"
+      }
+    ]
+  },
+  {
+    "arm": "agent",
+    "question_id": "w7-09",
+    "question": "Is the v2 streaming endpoint retired? If so, how often does its replacement send keep-alive frames?",
+    "output": {
+      "answer": "The v2 streaming endpoint is retired (retired in v3) and its v3 replacement sends server keep‑alive frames every 15000 ms (15 seconds) by default.",
+      "sdk_version": "v3",
+      "citations": [
+        "check_deprecation",
+        "v3/client-stream#parameters::1"
+      ],
+      "refused": false,
+      "raw": "ANSWER: The v2 streaming endpoint is retired (retired in v3) and its v3 replacement sends server keep‑alive frames every 15000 ms (15 seconds) by default.  \nVERSION: v3  \nCITATIONS: check_deprecation, v3/client-stream#parameters::1",
+      "parse_error": ""
+    },
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v2",
+          "query": "stream"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 943.039,
+        "result_chunk_ids": [
+          "v2/client-stream#clientstream::0",
+          "v2/client-stream#parameters::1",
+          "v2/client-stream#example::2",
+          "v2/client-stream#notes::3",
+          "v2/client-send#parameters::1"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "check_deprecation",
+        "arguments": {
+          "api_version": "v2",
+          "sdk_method": "Client.stream"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 0.128,
+        "result_chunk_ids": [],
+        "files_read": [
+          "api/"
+        ]
+      },
+      {
+        "seq": 3,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v3",
+          "query": "stream"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 652.498,
+        "result_chunk_ids": [
+          "v3/client-stream#clientstream::0",
+          "v3/client-stream#parameters::1",
+          "v3/client-stream#example::2",
+          "v3/client-send#parameters::1",
+          "v3/client-configure#parameters::1"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "search_docs",
+      "check_deprecation",
+      "search_docs"
+    ],
+    "laps": [
+      {
+        "lap": 1,
+        "messages_in": 2,
+        "tool_messages_in": 0,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 914,
+        "completion_tokens": 93,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 531.857,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 2,
+        "messages_in": 4,
+        "tool_messages_in": 1,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "check_deprecation"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 1570,
+        "completion_tokens": 86,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 7784.756,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 3,
+        "messages_in": 6,
+        "tool_messages_in": 2,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 1716,
+        "completion_tokens": 109,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 7868.65,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 4,
+        "messages_in": 8,
+        "tool_messages_in": 3,
+        "tool_calls_out": 0,
+        "tools_called": [],
+        "content_chars": 231,
+        "finish": "content",
+        "prompt_tokens": 2826,
+        "completion_tokens": 219,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 21676.193,
+        "rate_limit_wait_s": 0.0
+      }
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 914,
+        "completion_tokens": 93,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 531.857,
+        "cumulative_prompt": 914,
+        "cumulative_completion": 93,
+        "cumulative_cost_usd": 0.0001929
+      },
+      {
+        "lap": 2,
+        "prompt_tokens": 1570,
+        "completion_tokens": 86,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 7784.756,
+        "cumulative_prompt": 2484,
+        "cumulative_completion": 179,
+        "cumulative_cost_usd": 0.0004224
+      },
+      {
+        "lap": 3,
+        "prompt_tokens": 1716,
+        "completion_tokens": 109,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 7868.65,
+        "cumulative_prompt": 4200,
+        "cumulative_completion": 288,
+        "cumulative_cost_usd": 0.0007452
+      },
+      {
+        "lap": 4,
+        "prompt_tokens": 2826,
+        "completion_tokens": 219,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 21676.193,
+        "cumulative_prompt": 7026,
+        "cumulative_completion": 507,
+        "cumulative_cost_usd": 0.0012429
+      }
+    ],
+    "prompt_tokens": 7026,
+    "completion_tokens": 507,
+    "cached_tokens": 1536,
+    "total_tokens": 7533,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.0012429,
+    "price_verified": true,
+    "latency_ms": 39460.42,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "model answered without requesting more tools",
+    "budgets": {
+      "max_iterations": 8,
+      "max_tokens": 25000,
+      "max_cost_usd": 0.01,
+      "max_wall_clock_s": 120.0
+    },
+    "budget_trip": null,
+    "elapsed_s": 39.465,
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "8d2be3987aaf2061",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou have tools available. Call them as needed to gather what you need before answering. Some questions cannot be answered from a single tool call: if a result points you at something else — a replacement operation, another version — look that up too before you answer.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: Is the v2 streaming endpoint retired? If so, how often does its replacement send keep-alive frames?\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_2f687a3d-6ba4-4f88-b57a-2d2dbc782a85",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v2\",\"query\":\"stream\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_2f687a3d-6ba4-4f88-b57a-2d2dbc782a85",
+        "name": "search_docs",
+        "content": "{\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-stream#clientstream::0\", \"heading_path\": \"Client.stream()\", \"score\": 0.593, \"text\": \"Client.stream()\\n\\n# Client.stream()\\n\\nOpens a streaming connection and yields events as they arrive. In v2 the\\ngenerator does not reconnect: a dropped connection raises `StreamClosed` and the\\ncaller must start again from the beginning. Resumable streams arrived in v3.\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-stream#parameters::1\", \"heading_path\": \"Client.stream() > Parameters\", \"score\": 0.5669, \"text\": \"Client.stream() > Parameters\\n\\n## Parameters\\n\\n| name         | type | default | required | description                                     |\\n|--------------|------|---------|----------|--------------------------------------------------|\\n| payload      | dict | —       | yes      | The request body.                               |\\n| chunk_size   | int  | 512     | no       | Bytes read from the socket per iteration.       |\\n| heartbeat_ms | int  | 30000   | no       | Interval between server keep-alive frames.      |\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-stream#example::2\", \"heading_path\": \"Client.stream() > Example\", \"score\": 0.543, \"text\": \"Client.stream() > Example\\n\\n## Example\\n\\n```python\\nevents = client.stream(payload={\\\"query\\\": \\\"hello\\\"})\\nfor event in events:\\n    print(event.text, end=\\\"\\\")\\nevents.close()\\n```\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-stream#notes::3\", \"heading_path\": \"Client.stream() > Notes\", \"score\": 0.5029, \"text\": \"Client.stream() > Notes\\n\\n## Notes\\n\\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\\nprofiling showed the smaller reads dominating CPU time on large responses.\\n\\nThere is no context-manager form in v2 — you must call `close()` yourself, and\\nforgetting to do so leaks the connection until the process exits.\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-send#parameters::1\", \"heading_path\": \"Client.send() > Parameters\", \"score\": 0.4555, \"text\": \"Client.send() > Parameters\\n\\n## Parameters\\n\\n| name             | type | default | required |\\n|------------------|------|---------|----------|\\n| payload          | dict | —       | yes      |\\n| timeout_ms       | int  | 10000   | no       |\\n| retry_backoff_ms | int  | 100     | no       |\"}]}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_170471c6-c23e-4155-a980-f88c455a23cd",
+            "type": "function",
+            "function": {
+              "name": "check_deprecation",
+              "arguments": "{\"api_version\":\"v2\",\"sdk_method\":\"Client.stream\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_170471c6-c23e-4155-a980-f88c455a23cd",
+        "name": "check_deprecation",
+        "content": "{\"found\": true, \"operation_id\": \"streamMessageV2\", \"api_version\": \"v2\", \"sdk_method\": \"Client.stream\", \"retired\": true, \"retired_in\": \"v3\", \"retirement_reason\": \"The v2 stream cannot resume a dropped connection; v3 can.\", \"replacement\": {\"api_version\": \"v3\", \"method\": \"POST\", \"operation_id\": \"streamMessageV3\", \"path\": \"/v3/messages:stream\", \"sdk_method\": \"Client.stream\"}}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_e563ac44-40ae-4672-8296-66496add649e",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v3\",\"query\":\"stream\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_e563ac44-40ae-4672-8296-66496add649e",
+        "name": "search_docs",
+        "content": "{\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-stream#clientstream::0\\\", \\\"heading_path\\\": \\\"Client.stream()\\\", \\\"score\\\": 0.6177, \\\"text\\\": \\\"Client.stream()\\\\n\\\\n# Client.stream()\\\\n\\\\nOpens a streaming connection and yields events as they arrive. The generator\\\\nholds its connection open for the lifetime of the iteration, so callers must\\\\neither exhaust it or close it explicitly.\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-stream#parameters::1\\\", \\\"heading_path\\\": \\\"Client.stream() > Parameters\\\", \\\"score\\\": 0.567, \\\"text\\\": \\\"Client.stream() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name         | type | default | required |\\\\n|--------------|------|---------|----------|\\\\n| payload      | dict | —       | yes      |\\\\n| chunk_size   | int  | 1024    | no       |\\\\n| heartbeat_ms | int  | 15000   | no       |\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-stream#example::2\\\", \\\"heading_path\\\": \\\"Client.stream() > Example\\\", \\\"score\\\": 0.5574, \\\"text\\\": \\\"Client.stream() > Example\\\\n\\\\n## Example\\\\n\\\\n```python\\\\nwith client.stream(payload={\\\\\\\"query\\\\\\\": \\\\\\\"hello\\\\\\\"}) as events:\\\\n    for event in events:\\\\n        print(event.text, end=\\\\\\\"\\\\\\\")\\\\n```\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.4907, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|------------------|------|-----------|----------|------------------------------------------------------|\\\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\\\"}, {\\\"rank\\\": 5, \\\"chunk_id\\\": \\\"v3/client-configure#parameters::1\\\", \\\"heading_path\\\": \\\"Client.configure() > Parameters\\\", \\\"score\\\": 0.469, \\\"text\\\": \\\"Client.configure() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name              | type | default        | required | description                                        |\\\\n|-------------------|------|----------------|----------|-----------------------------------------------------|\\\\n| api_key           | str  | —              | yes      | Credential used for every request.                 |\\\\n| base_url          | str  | https://api.example.com | no | Endpoint root for all calls.                |\\\\n| pool_size         | int  | 10             | no       | Maximum simultaneous pooled connections.           |\\\\n| pool_reap_seconds | \"}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: The v2 streaming endpoint is retired (retired in v3) and its v3 replacement sends server keep‑alive frames every 15000 ms (15 seconds) by default.  \nVERSION: v3  \nCITATIONS: check_deprecation, v3/client-stream#parameters::1"
+      }
+    ]
+  },
+  {
+    "arm": "agent",
+    "question_id": "w7-10",
+    "question": "What is the rate limit on the /v1/embeddings endpoint?",
+    "output": {
+      "answer": "",
+      "sdk_version": "none",
+      "citations": [],
+      "refused": false,
+      "raw": "",
+      "parse_error": "budget: max_wall_clock_s tripped at post_call: observed 127.0385 exceeded limit 120.0000"
+    },
+    "tool_calls": [
+      {
+        "seq": 1,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v3",
+          "query": "embeddings rate limit"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 913.645,
+        "result_chunk_ids": [
+          "v3/client-batch#notes::3",
+          "v3/client-batch#parameters::1",
+          "v3/client-configure#notes::3",
+          "v3/client-stream#parameters::1",
+          "v3/client-send#notes::3"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v3",
+          "query": "embeddings endpoint rate limit"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 66.1,
+        "result_chunk_ids": [
+          "v3/client-batch#notes::3",
+          "v3/client-batch#parameters::1",
+          "v3/client-configure#parameters::1",
+          "v3/client-stream#parameters::1",
+          "v3/client-upload#parameters::1"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 3,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v3",
+          "query": "embeddings"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 876.107,
+        "result_chunk_ids": [
+          "v3/client-configure#clientconfigure::0",
+          "v3/client-configure#parameters::1",
+          "v3/client-stream#parameters::1",
+          "v3/client-send#parameters::1",
+          "v3/client-batch#parameters::1"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 4,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v3",
+          "query": "embeddings endpoint"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 841.726,
+        "result_chunk_ids": [
+          "v3/client-configure#parameters::1",
+          "v3/client-send#clientsend::0",
+          "v3/client-upload#parameters::1",
+          "v3/client-stream#parameters::1",
+          "v3/client-send#parameters::1"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      },
+      {
+        "seq": 5,
+        "name": "search_docs",
+        "arguments": {
+          "api_version": "v3",
+          "query": "embeddings"
+        },
+        "ok": true,
+        "error": "",
+        "latency_ms": 967.443,
+        "result_chunk_ids": [
+          "v3/client-configure#clientconfigure::0",
+          "v3/client-configure#parameters::1",
+          "v3/client-stream#parameters::1",
+          "v3/client-send#parameters::1",
+          "v3/client-batch#parameters::1"
+        ],
+        "files_read": [
+          "docs/"
+        ]
+      }
+    ],
+    "tool_sequence": [
+      "search_docs",
+      "search_docs",
+      "search_docs",
+      "search_docs",
+      "search_docs"
+    ],
+    "laps": [
+      {
+        "lap": 1,
+        "messages_in": 2,
+        "tool_messages_in": 0,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 907,
+        "completion_tokens": 122,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 543.982,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 2,
+        "messages_in": 4,
+        "tool_messages_in": 1,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 1872,
+        "completion_tokens": 61,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 607.355,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 3,
+        "messages_in": 6,
+        "tool_messages_in": 2,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 2964,
+        "completion_tokens": 56,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 19862.281,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 4,
+        "messages_in": 8,
+        "tool_messages_in": 3,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 4035,
+        "completion_tokens": 82,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 24081.357,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 5,
+        "messages_in": 10,
+        "tool_messages_in": 4,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 5098,
+        "completion_tokens": 56,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 38277.654,
+        "rate_limit_wait_s": 0.0
+      },
+      {
+        "lap": 6,
+        "messages_in": 12,
+        "tool_messages_in": 5,
+        "tool_calls_out": 1,
+        "tools_called": [
+          "search_docs"
+        ],
+        "content_chars": 0,
+        "finish": "tool_calls",
+        "prompt_tokens": 6169,
+        "completion_tokens": 59,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 39996.096,
+        "rate_limit_wait_s": 0.0
+      }
+    ],
+    "usage": [
+      {
+        "lap": 1,
+        "prompt_tokens": 907,
+        "completion_tokens": 122,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 543.982,
+        "cumulative_prompt": 907,
+        "cumulative_completion": 122,
+        "cumulative_cost_usd": 0.00015165
+      },
+      {
+        "lap": 2,
+        "prompt_tokens": 1872,
+        "completion_tokens": 61,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 607.355,
+        "cumulative_prompt": 2779,
+        "cumulative_completion": 183,
+        "cumulative_cost_usd": 0.00046905
+      },
+      {
+        "lap": 3,
+        "prompt_tokens": 2964,
+        "completion_tokens": 56,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 19862.281,
+        "cumulative_prompt": 5743,
+        "cumulative_completion": 239,
+        "cumulative_cost_usd": 0.00088965
+      },
+      {
+        "lap": 4,
+        "prompt_tokens": 4035,
+        "completion_tokens": 82,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 24081.357,
+        "cumulative_prompt": 9778,
+        "cumulative_completion": 321,
+        "cumulative_cost_usd": 0.0015441
+      },
+      {
+        "lap": 5,
+        "prompt_tokens": 5098,
+        "completion_tokens": 56,
+        "cached_tokens": 768,
+        "usage_missing": false,
+        "latency_ms": 38277.654,
+        "cumulative_prompt": 14876,
+        "cumulative_completion": 377,
+        "cumulative_cost_usd": 0.0022848
+      },
+      {
+        "lap": 6,
+        "prompt_tokens": 6169,
+        "completion_tokens": 59,
+        "cached_tokens": 0,
+        "usage_missing": false,
+        "latency_ms": 39996.096,
+        "cumulative_prompt": 21045,
+        "cumulative_completion": 436,
+        "cumulative_cost_usd": 0.00324555
+      }
+    ],
+    "prompt_tokens": 21045,
+    "completion_tokens": 436,
+    "cached_tokens": 2304,
+    "total_tokens": 21481,
+    "usage_missing_calls": 0,
+    "cost_usd": 0.00324555,
+    "price_verified": true,
+    "latency_ms": 127040.738,
+    "rate_limit_wait_s": 0.0,
+    "termination": "budget",
+    "termination_detail": "max_wall_clock_s tripped at post_call: observed 127.0385 exceeded limit 120.0000",
+    "budgets": {
+      "max_iterations": 8,
+      "max_tokens": 25000,
+      "max_cost_usd": 0.01,
+      "max_wall_clock_s": 120.0
+    },
+    "budget_trip": {
+      "budget": "max_wall_clock_s",
+      "check_site": "post_call",
+      "limit": 120.0,
+      "observed": 127.03854129199999,
+      "projected": false,
+      "iterations": 6,
+      "tokens": 21481,
+      "cost_usd": 0.00324555,
+      "elapsed_s": 127.04,
+      "raw_elapsed_s": 127.04,
+      "rate_limit_wait_s": 0.0,
+      "messages_len": 12,
+      "path": [
+        "search_docs",
+        "search_docs",
+        "search_docs",
+        "search_docs",
+        "search_docs"
+      ]
+    },
+    "elapsed_s": 127.045,
+    "arm_config_sha": "d31606b9f46ae0df",
+    "tool_config_sha": "9bdb0b3bc2a873c5",
+    "shas": {
+      "answer_contract": "2d8a20ec36cec716",
+      "agent_preamble": "f2d94d2cb32e7ca3",
+      "workflow_preamble": "85f0bc4384346597",
+      "parser": "475400dd2c6cfb11",
+      "scorer": "e2556ff3670a4f7f",
+      "chat": "8d2be3987aaf2061",
+      "tool_schemas": "b18a0c8eca9a5eae"
+    },
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou have tools available. Call them as needed to gather what you need before answering. Some questions cannot be answered from a single tool call: if a result points you at something else — a replacement operation, another version — look that up too before you answer.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: What is the rate limit on the /v1/embeddings endpoint?\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_eb3dba32-2e6a-4eae-ab3d-8a2dbe3ddac3",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v3\",\"query\":\"embeddings rate limit\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_eb3dba32-2e6a-4eae-ab3d-8a2dbe3ddac3",
+        "name": "search_docs",
+        "content": "{\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-batch#notes::3\", \"heading_path\": \"Client.send_batch() > Notes\", \"score\": 0.5248, \"text\": \"Client.send_batch() > Notes\\n\\n## Notes\\n\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\n20 requests per second gives you 20 requests per second, not 64. Raising\\n`concurrency` alone will not increase throughput past the rate limit.\\n\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\nusually too tight — scale the timeout with the batch size.\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-batch#parameters::1\", \"heading_path\": \"Client.send_batch() > Parameters\", \"score\": 0.4642, \"text\": \"Client.send_batch() > Parameters\\n\\n## Parameters\\n\\n| name            | type | default | required | description                                          |\\n|-----------------|------|---------|----------|------------------------------------------------------|\\n| payloads        | list | —       | yes      | Request bodies, sent in the order given.             |\\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\\n| ordered         | bool | True    | no       | Return responses in submission order.                |\\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.4343, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\nreal concurrency costs nothing but does not help either.\\n\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\\nbut ignored, which mirrors how v2 behaved.\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-stream#parameters::1\", \"heading_path\": \"Client.stream() > Parameters\", \"score\": 0.4259, \"text\": \"Client.stream() > Parameters\\n\\n## Parameters\\n\\n| name         | type | default | required |\\n|--------------|------|---------|----------|\\n| payload      | dict | —       | yes      |\\n| chunk_size   | int  | 1024    | no       |\\n| heartbeat_ms | int  | 15000   | no       |\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-send#notes::3\", \"heading_path\": \"Client.send() > Notes\", \"score\": 0.4227, \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` value is the base delay, not the total delay. The client\\napplies full jitter, so the actual wait before attempt *n* is drawn at random\\nfrom `[0, retry_backoff_ms * 2 ** n)`. A base of 250 with five retries can\\ntherefore wait up to eight seconds in the worst case. Set `timeout_ms` with that\\nceiling in mind, since the timeout covers the entire call including every retry\\nattempt rather than each attempt individually.\"}]}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_b3b2dfed-331b-4288-bddb-86e8654a9f28",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v3\",\"query\":\"embeddings endpoint rate limit\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_b3b2dfed-331b-4288-bddb-86e8654a9f28",
+        "name": "search_docs",
+        "content": "{\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-batch#notes::3\\\", \\\"heading_path\\\": \\\"Client.send_batch() > Notes\\\", \\\"score\\\": 0.5025, \\\"text\\\": \\\"Client.send_batch() > Notes\\\\n\\\\n## Notes\\\\n\\\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\\\n20 requests per second gives you 20 requests per second, not 64. Raising\\\\n`concurrency` alone will not increase throughput past the rate limit.\\\\n\\\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\\\nusually too tight — scale the timeout with the batch size.\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-batch#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send_batch() > Parameters\\\", \\\"score\\\": 0.4783, \\\"text\\\": \\\"Client.send_batch() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name            | type | default | required | description                                          |\\\\n|-----------------|------|---------|----------|------------------------------------------------------|\\\\n| payloads        | list | —       | yes      | Request bodies, sent in the order given.             |\\\\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\\\\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\\\\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\\\\n| ordered         | bool | True    | no       | Return responses in submission order.                |\\\\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\\\\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\\\\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-configure#parameters::1\\\", \\\"heading_path\\\": \\\"Client.configure() > Parameters\\\", \\\"score\\\": 0.4568, \\\"text\\\": \\\"Client.configure() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name              | type | default        | required | description                                        |\\\\n|-------------------|------|----------------|----------|-----------------------------------------------------|\\\\n| api_key           | str  | —              | yes      | Credential used for every request.                 |\\\\n| base_url          | str  | https://api.example.com | no | Endpoint root for all calls.                |\\\\n| pool_size         | int  | 10             | no       | Maximum simultaneous pooled connections.           |\\\\n| pool_reap_seconds | int  | 90             | no       | Idle time before a pooled connection is collected. |\\\\n| default_timeout_ms| int  | 30000          | no       | Timeout applied when a call does not set one.      |\\\\n| retries_enabled   | bool | True           | no       | Master switch for the automatic retry path.        |\\\\n| log_level         | str  | warning        | no       | One of debug, info, warning, error.                |\\\\n| telemetry         | bool | True           | no       | Send anonymous usage counters to the vendor.       |\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-stream#parameters::1\\\", \\\"heading_path\\\": \\\"Client.stream() > Parameters\\\", \\\"score\\\": 0.4468, \\\"text\\\": \\\"Client.stream() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name         | type | default | required |\\\\n|--------------|------|---------|----------|\\\\n| payload      | dict | —       | yes      |\\\\n| chunk_size   | int  | 1024    | no       |\\\\n| heartbeat_ms | int  | 15000   | no       |\\\"}, {\\\"rank\\\": 5, \\\"chunk_id\\\": \\\"v3/client-upload#parameters::1\\\", \\\"heading_path\\\": \\\"Client.upload() > Parameters\\\", \\\"score\\\": 0.4413, \\\"text\\\": \\\"Client.upload() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name          | type | default  | required | description                                        |\\\\n|---------------|------|----------|-----\"}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_97fb7839-d4a0-4234-89f8-23c0cf5b892b",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v3\",\"query\":\"embeddings\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_97fb7839-d4a0-4234-89f8-23c0cf5b892b",
+        "name": "search_docs",
+        "content": "{\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-configure#clientconfigure::0\\\", \\\"heading_path\\\": \\\"Client.configure()\\\", \\\"score\\\": 0.4069, \\\"text\\\": \\\"Client.configure()\\\\n\\\\n# Client.configure()\\\\n\\\\nSets client-wide defaults that every subsequent call inherits. Options passed\\\\nto an individual `send()` or `stream()` call override these. Calling\\\\n`configure()` does not affect requests already in flight.\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-configure#parameters::1\\\", \\\"heading_path\\\": \\\"Client.configure() > Parameters\\\", \\\"score\\\": 0.4029, \\\"text\\\": \\\"Client.configure() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name              | type | default        | required | description                                        |\\\\n|-------------------|------|----------------|----------|-----------------------------------------------------|\\\\n| api_key           | str  | —              | yes      | Credential used for every request.                 |\\\\n| base_url          | str  | https://api.example.com | no | Endpoint root for all calls.                |\\\\n| pool_size         | int  | 10             | no       | Maximum simultaneous pooled connections.           |\\\\n| pool_reap_seconds | int  | 90             | no       | Idle time before a pooled connection is collected. |\\\\n| default_timeout_ms| int  | 30000          | no       | Timeout applied when a call does not set one.      |\\\\n| retries_enabled   | bool | True           | no       | Master switch for the automatic retry path.        |\\\\n| log_level         | str  | warning        | no       | One of debug, info, warning, error.                |\\\\n| telemetry         | bool | True           | no       | Send anonymous usage counters to the vendor.       |\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-stream#parameters::1\\\", \\\"heading_path\\\": \\\"Client.stream() > Parameters\\\", \\\"score\\\": 0.4019, \\\"text\\\": \\\"Client.stream() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name         | type | default | required |\\\\n|--------------|------|---------|----------|\\\\n| payload      | dict | —       | yes      |\\\\n| chunk_size   | int  | 1024    | no       |\\\\n| heartbeat_ms | int  | 15000   | no       |\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.4006, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|------------------|------|-----------|----------|------------------------------------------------------|\\\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\\\n| max_redirects    | int  | 5         | no       | Redirects followed befor\"}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_f4b4839b-657d-45d9-996e-1817452025d7",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v3\",\"query\":\"embeddings endpoint\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_f4b4839b-657d-45d9-996e-1817452025d7",
+        "name": "search_docs",
+        "content": "{\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-configure#parameters::1\\\", \\\"heading_path\\\": \\\"Client.configure() > Parameters\\\", \\\"score\\\": 0.4514, \\\"text\\\": \\\"Client.configure() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name              | type | default        | required | description                                        |\\\\n|-------------------|------|----------------|----------|-----------------------------------------------------|\\\\n| api_key           | str  | —              | yes      | Credential used for every request.                 |\\\\n| base_url          | str  | https://api.example.com | no | Endpoint root for all calls.                |\\\\n| pool_size         | int  | 10             | no       | Maximum simultaneous pooled connections.           |\\\\n| pool_reap_seconds | int  | 90             | no       | Idle time before a pooled connection is collected. |\\\\n| default_timeout_ms| int  | 30000          | no       | Timeout applied when a call does not set one.      |\\\\n| retries_enabled   | bool | True           | no       | Master switch for the automatic retry path.        |\\\\n| log_level         | str  | warning        | no       | One of debug, info, warning, error.                |\\\\n| telemetry         | bool | True           | no       | Send anonymous usage counters to the vendor.       |\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-send#clientsend::0\\\", \\\"heading_path\\\": \\\"Client.send()\\\", \\\"score\\\": 0.4454, \\\"text\\\": \\\"Client.send()\\\\n\\\\n# Client.send()\\\\n\\\\nSends a single request to the configured endpoint and blocks until a response is\\\\nreceived or the retry budget is exhausted. The method is safe to call from\\\\nmultiple threads; each call takes its own connection from the pool and returns\\\\nit on completion. Callers issuing many requests at once should prefer\\\\n`Client.send_batch()`, which amortises connection setup across the whole batch\\\\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\\\\nclient retries automatically according to the backoff parameters below; 4xx\\\\nstatuses are surfaced to the caller immediately and are never retried, because a\\\\nmalformed request does not become well-formed by being sent again.\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-upload#parameters::1\\\", \\\"heading_path\\\": \\\"Client.upload() > Parameters\\\", \\\"score\\\": 0.4311, \\\"text\\\": \\\"Client.upload() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name          | type | default  | required | description                                        |\\\\n|---------------|------|----------|----------|-----------------------------------------------------|\\\\n| path          | str  | —        | yes      | Local path of the file to upload.                  |\\\\n| content_type  | str  | None     | no       | Overrides the type guessed from the extension.     |\\\\n| chunk_bytes   | int  | 8388608  | no       | Multipart threshold and part size, in bytes.       |\\\\n| retain_hours  | int  | 24       | no       | How long the handle stays valid.                   |\\\\n| checksum      | bool | True     | no       | Verify a SHA-256 checksum after upload.            |\\\\n| resume        | bool | True     | no       | Resume an interrupted multipart upload.            |\\\\n| max_bytes     | int  | 524288000| no       | Reject files larger than this before sending.      |\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-stream#parameters::1\\\", \\\"heading_path\\\": \\\"Client.stream() > Parameters\\\", \\\"score\\\": 0.4302, \\\"text\\\": \\\"Client.stream() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name         | type | default | required |\\\\n|--------------|------|---------|----------|\\\\n| payload      | dict | —       | yes      |\\\\n| chunk_size   | int  | 1024    | no       |\\\\n| heartbeat_ms | int  | 15000   | no       |\\\"}, {\\\"rank\\\": 5, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.4286, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|-----------------\"}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_610da1fb-dc04-4eb5-b9fb-a9d898a69267",
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "arguments": "{\"api_version\":\"v3\",\"query\":\"embeddings\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_610da1fb-dc04-4eb5-b9fb-a9d898a69267",
+        "name": "search_docs",
+        "content": "{\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-configure#clientconfigure::0\\\", \\\"heading_path\\\": \\\"Client.configure()\\\", \\\"score\\\": 0.4069, \\\"text\\\": \\\"Client.configure()\\\\n\\\\n# Client.configure()\\\\n\\\\nSets client-wide defaults that every subsequent call inherits. Options passed\\\\nto an individual `send()` or `stream()` call override these. Calling\\\\n`configure()` does not affect requests already in flight.\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-configure#parameters::1\\\", \\\"heading_path\\\": \\\"Client.configure() > Parameters\\\", \\\"score\\\": 0.4029, \\\"text\\\": \\\"Client.configure() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name              | type | default        | required | description                                        |\\\\n|-------------------|------|----------------|----------|-----------------------------------------------------|\\\\n| api_key           | str  | —              | yes      | Credential used for every request.                 |\\\\n| base_url          | str  | https://api.example.com | no | Endpoint root for all calls.                |\\\\n| pool_size         | int  | 10             | no       | Maximum simultaneous pooled connections.           |\\\\n| pool_reap_seconds | int  | 90             | no       | Idle time before a pooled connection is collected. |\\\\n| default_timeout_ms| int  | 30000          | no       | Timeout applied when a call does not set one.      |\\\\n| retries_enabled   | bool | True           | no       | Master switch for the automatic retry path.        |\\\\n| log_level         | str  | warning        | no       | One of debug, info, warning, error.                |\\\\n| telemetry         | bool | True           | no       | Send anonymous usage counters to the vendor.       |\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-stream#parameters::1\\\", \\\"heading_path\\\": \\\"Client.stream() > Parameters\\\", \\\"score\\\": 0.4019, \\\"text\\\": \\\"Client.stream() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name         | type | default | required |\\\\n|--------------|------|---------|----------|\\\\n| payload      | dict | —       | yes      |\\\\n| chunk_size   | int  | 1024    | no       |\\\\n| heartbeat_ms | int  | 15000   | no       |\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.4006, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|------------------|------|-----------|----------|------------------------------------------------------|\\\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\\\n| max_redirects    | int  | 5         | no       | Redirects followed befor\"}"
+      }
+    ]
+  }
+]
