@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "docs-search": {
+      "command": ".venv/bin/python",
+      "args": ["-m", "app.mcp.servers.docs_server"],
+      "cwd": "."
+    },
+    "package-registry": {
+      "command": ".venv/bin/python",
+      "args": ["-m", "app.mcp.servers.package_server"],
+      "cwd": "."
+    }
+  }
+}

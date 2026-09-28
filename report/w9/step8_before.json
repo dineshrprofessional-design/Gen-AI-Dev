@@ -1,0 +1,1767 @@
+{
+  "phase": "before",
+  "probe": [
+    {
+      "why": "version that is not documented",
+      "request": {
+        "name": "search_docs",
+        "arguments": {
+          "query": "default timeout_ms of Client.send",
+          "api_version": "v4"
+        }
+      },
+      "isError": true,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Input validation error: 'v4' is not one of ['v2', 'v3']"
+          }
+        ],
+        "isError": true
+      },
+      "payload_shown_to_model": {
+        "error": "Input validation error: 'v4' is not one of ['v2', 'v3']"
+      }
+    },
+    {
+      "why": "package release number instead of a documentation version",
+      "request": {
+        "name": "search_docs",
+        "arguments": {
+          "query": "default timeout_ms of Client.send",
+          "api_version": "3.2.0"
+        }
+      },
+      "isError": true,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Input validation error: '3.2.0' is not one of ['v2', 'v3']"
+          }
+        ],
+        "isError": true
+      },
+      "payload_shown_to_model": {
+        "error": "Input validation error: '3.2.0' is not one of ['v2', 'v3']"
+      }
+    },
+    {
+      "why": "not a version at all",
+      "request": {
+        "name": "search_docs",
+        "arguments": {
+          "query": "default timeout_ms of Client.send",
+          "api_version": "latest"
+        }
+      },
+      "isError": true,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Input validation error: 'latest' is not one of ['v2', 'v3']"
+          }
+        ],
+        "isError": true
+      },
+      "payload_shown_to_model": {
+        "error": "Input validation error: 'latest' is not one of ['v2', 'v3']"
+      }
+    },
+    {
+      "why": "valid request (the correction all three point to)",
+      "request": {
+        "name": "search_docs",
+        "arguments": {
+          "query": "default timeout_ms of Client.send",
+          "api_version": "v3"
+        }
+      },
+      "isError": false,
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"api_version\": \"v3\",\n  \"count\": 5,\n  \"passages\": [\n    {\n      \"rank\": 1,\n      \"chunk_id\": \"v3/client-send#parameters::1\",\n      \"heading_path\": \"Client.send() > Parameters\",\n      \"score\": 0.6786,\n      \"text\": \"Client.send() > Parameters\\n\\n## Parameters\\n\\n| name             | type | default   | required | description                                          |\\n|------------------|------|-----------|----------|------------------------------------------------------|\\n| payload          | dict | \\u2014         | yes      | The request body, serialised as JSON before sending. |\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\"\n    },\n    {\n      \"rank\": 2,\n      \"chunk_id\": \"v3/client-send#notes::3\",\n      \"heading_path\": \"Client.send() > Notes\",\n      \"score\": 0.6403,\n      \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` value is the base delay, not the total delay. The client\\napplies full jitter, so the actual wait before attempt *n* is drawn at random\\nfrom `[0, retry_backoff_ms * 2 ** n)`. A base of 250 with five retries can\\ntherefore wait up to eight seconds in the worst case. Set `timeout_ms` with that\\nceiling in mind, since the timeout covers the entire call including every retry\\nattempt rather than each attempt individually.\"\n    },\n    {\n      \"rank\": 3,\n      \"chunk_id\": \"v3/client-batch#parameters::1\",\n      \"heading_path\": \"Client.send_batch() > Parameters\",\n      \"score\": 0.6078,\n      \"text\": \"Client.send_batch() > Parameters\\n\\n## Parameters\\n\\n| name            | type | default | required | description                                          |\\n|-----------------|------|---------|----------|------------------------------------------------------|\\n| payloads        | list | \\u2014       | yes      | Request bodies, sent in the order given.             |\\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\\n| ordered         | bool | True    | no       | Return responses in submission order.                |\\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|\"\n    },\n    {\n      \"rank\": 4,\n      \"chunk_id\": \"v3/client-send#clientsend::0\",\n      \"heading_path\": \"Client.send()\",\n      \"score\": 0.6041,\n      \"text\": \"Client.send()\\n\\n# Client.send()\\n\\nSends a single request to the configured endpoint and blocks until a response is\\nreceived or the retry budget is exhausted. The method is safe to call from\\nmultiple threads; each call takes its own connection from the pool and returns\\nit on completion. Callers issuing many requests at once should prefer\\n`Client.send_batch()`, which amortises connection setup across the whole batch\\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\\nclient retries automatically according to the backoff parameters below; 4xx\\nstatuses are surfaced to the caller immediately and are never retried, because a\\nmalformed request does not become well-formed by being sent again.\"\n    },\n    {\n      \"rank\": 5,\n      \"chunk_id\": \"v3/client-batch#notes::3\",\n      \"heading_path\": \"Client.send_batch() > Notes\",\n      \"score\": 0.6019,\n      \"text\": \"Client.send_batch() > Notes\\n\\n## Notes\\n\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\n20 requests per second gives you 20 requests per second, not 64. Raising\\n`concurrency` alone will not increase throughput past the rate limit.\\n\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\nusually too tight \\u2014 scale the timeout with the batch size.\"\n    }\n  ]\n}"
+          }
+        ],
+        "structuredContent": {
+          "api_version": "v3",
+          "count": 5,
+          "passages": [
+            {
+              "rank": 1,
+              "chunk_id": "v3/client-send#parameters::1",
+              "heading_path": "Client.send() > Parameters",
+              "score": 0.6786,
+              "text": "Client.send() > Parameters\n\n## Parameters\n\n| name             | type | default   | required | description                                          |\n|------------------|------|-----------|----------|------------------------------------------------------|\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |"
+            },
+            {
+              "rank": 2,
+              "chunk_id": "v3/client-send#notes::3",
+              "heading_path": "Client.send() > Notes",
+              "score": 0.6403,
+              "text": "Client.send() > Notes\n\n## Notes\n\nThe `retry_backoff_ms` value is the base delay, not the total delay. The client\napplies full jitter, so the actual wait before attempt *n* is drawn at random\nfrom `[0, retry_backoff_ms * 2 ** n)`. A base of 250 with five retries can\ntherefore wait up to eight seconds in the worst case. Set `timeout_ms` with that\nceiling in mind, since the timeout covers the entire call including every retry\nattempt rather than each attempt individually."
+            },
+            {
+              "rank": 3,
+              "chunk_id": "v3/client-batch#parameters::1",
+              "heading_path": "Client.send_batch() > Parameters",
+              "score": 0.6078,
+              "text": "Client.send_batch() > Parameters\n\n## Parameters\n\n| name            | type | default | required | description                                          |\n|-----------------|------|---------|----------|------------------------------------------------------|\n| payloads        | list | —       | yes      | Request bodies, sent in the order given.             |\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\n| ordered         | bool | True    | no       | Return responses in submission order.                |\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|"
+            },
+            {
+              "rank": 4,
+              "chunk_id": "v3/client-send#clientsend::0",
+              "heading_path": "Client.send()",
+              "score": 0.6041,
+              "text": "Client.send()\n\n# Client.send()\n\nSends a single request to the configured endpoint and blocks until a response is\nreceived or the retry budget is exhausted. The method is safe to call from\nmultiple threads; each call takes its own connection from the pool and returns\nit on completion. Callers issuing many requests at once should prefer\n`Client.send_batch()`, which amortises connection setup across the whole batch\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\nclient retries automatically according to the backoff parameters below; 4xx\nstatuses are surfaced to the caller immediately and are never retried, because a\nmalformed request does not become well-formed by being sent again."
+            },
+            {
+              "rank": 5,
+              "chunk_id": "v3/client-batch#notes::3",
+              "heading_path": "Client.send_batch() > Notes",
+              "score": 0.6019,
+              "text": "Client.send_batch() > Notes\n\n## Notes\n\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\n20 requests per second gives you 20 requests per second, not 64. Raising\n`concurrency` alone will not increase throughput past the rate limit.\n\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\n60000 ms gives each request roughly 120 ms of budget on average, which is\nusually too tight — scale the timeout with the batch size."
+            }
+          ]
+        },
+        "isError": false
+      },
+      "payload_shown_to_model": {
+        "api_version": "v3",
+        "count": 5,
+        "passages": [
+          {
+            "rank": 1,
+            "chunk_id": "v3/client-send#parameters::1",
+            "heading_path": "Client.send() > Parameters",
+            "score": 0.6786,
+            "text": "Client.send() > Parameters\n\n## Parameters\n\n| name             | type | default   | required | description                                          |\n|------------------|------|-----------|----------|------------------------------------------------------|\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |"
+          },
+          {
+            "rank": 2,
+            "chunk_id": "v3/client-send#notes::3",
+            "heading_path": "Client.send() > Notes",
+            "score": 0.6403,
+            "text": "Client.send() > Notes\n\n## Notes\n\nThe `retry_backoff_ms` value is the base delay, not the total delay. The client\napplies full jitter, so the actual wait before attempt *n* is drawn at random\nfrom `[0, retry_backoff_ms * 2 ** n)`. A base of 250 with five retries can\ntherefore wait up to eight seconds in the worst case. Set `timeout_ms` with that\nceiling in mind, since the timeout covers the entire call including every retry\nattempt rather than each attempt individually."
+          },
+          {
+            "rank": 3,
+            "chunk_id": "v3/client-batch#parameters::1",
+            "heading_path": "Client.send_batch() > Parameters",
+            "score": 0.6078,
+            "text": "Client.send_batch() > Parameters\n\n## Parameters\n\n| name            | type | default | required | description                                          |\n|-----------------|------|---------|----------|------------------------------------------------------|\n| payloads        | list | —       | yes      | Request bodies, sent in the order given.             |\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\n| ordered         | bool | True    | no       | Return responses in submission order.                |\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|"
+          },
+          {
+            "rank": 4,
+            "chunk_id": "v3/client-send#clientsend::0",
+            "heading_path": "Client.send()",
+            "score": 0.6041,
+            "text": "Client.send()\n\n# Client.send()\n\nSends a single request to the configured endpoint and blocks until a response is\nreceived or the retry budget is exhausted. The method is safe to call from\nmultiple threads; each call takes its own connection from the pool and returns\nit on completion. Callers issuing many requests at once should prefer\n`Client.send_batch()`, which amortises connection setup across the whole batch\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\nclient retries automatically according to the backoff parameters below; 4xx\nstatuses are surfaced to the caller immediately and are never retried, because a\nmalformed request does not become well-formed by being sent again."
+          },
+          {
+            "rank": 5,
+            "chunk_id": "v3/client-batch#notes::3",
+            "heading_path": "Client.send_batch() > Notes",
+            "score": 0.6019,
+            "text": "Client.send_batch() > Notes\n\n## Notes\n\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\n20 requests per second gives you 20 requests per second, not 64. Raising\n`concurrency` alone will not increase throughput past the rate limit.\n\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\n60000 ms gives each request roughly 120 ms of budget on average, which is\nusually too tight — scale the timeout with the batch size."
+          }
+        ]
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "question": {
+        "id": "w9-err-v4",
+        "question": "Search the documentation with api_version \"v4\" and tell me the default timeout_ms of Client.send() in v4.",
+        "question_class": "error_recovery",
+        "sdk_version": "none",
+        "expect_refusal": true,
+        "required_facts": [],
+        "must_contain": [],
+        "must_not_contain": [],
+        "expected_tools": [],
+        "expected_order": [],
+        "dependency": "",
+        "rationale": ""
+      },
+      "run": {
+        "arm": "week9_agent",
+        "question_id": "w9-err-v4",
+        "question": "Search the documentation with api_version \"v4\" and tell me the default timeout_ms of Client.send() in v4.",
+        "servers": {
+          "docs-search": {
+            "protocolVersion": "2025-06-18",
+            "serverInfo": {
+              "name": "docs-search",
+              "version": "1.12.4"
+            },
+            "capabilities": {
+              "experimental": {},
+              "tools": {
+                "listChanged": false
+              }
+            }
+          },
+          "package-registry": {
+            "protocolVersion": "2025-06-18",
+            "serverInfo": {
+              "name": "package-registry",
+              "version": "0.1.0"
+            },
+            "capabilities": {
+              "experimental": {},
+              "resources": {
+                "subscribe": false,
+                "listChanged": false
+              },
+              "tools": {
+                "listChanged": false
+              }
+            }
+          }
+        },
+        "discovered_tools": [
+          {
+            "name": "search_docs",
+            "server": "docs-search"
+          },
+          {
+            "name": "get_package_versions",
+            "server": "package-registry"
+          },
+          {
+            "name": "get_package_deprecation",
+            "server": "package-registry"
+          }
+        ],
+        "tools_offered": [
+          {
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "description": "Search the SDK reference documentation for prose describing what a Client method does: its behaviour, its parameter names, types and defaults, whether a parameter is required, and the caveats written in the Notes sections.\n\nUse it when the question is about how a Client method behaves, or what one of its parameters means, defaults to, or requires.\n\napi_version selects which version's reference pages are searched: \"v2\" or \"v3\". Only that version is searched, never both. The two versions document different defaults for the same parameter, and some methods and parameters exist only in v3. If the question names a version, pass it. If it asks to compare versions, or does not say and the answer could differ, call once per version.\n\nquery is what to look for, in words: the method and the parameter or behaviour, or just a parameter name. Leave the version out of the query; api_version already filters by it.\n\nReturns JSON: api_version, count, and passages, best match first, each with rank, chunk_id, heading_path, score and text. Passages are ranked by similarity, not filtered for relevance, so the top one can still be off-topic: read the text before relying on it, and cite the chunk_id of any passage you use.\n\nThis tool knows nothing about HTTP paths, operation ids, or whether anything is retired, and it has no changelog or release numbers. If no passage states the answer, the documentation does not state it.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "What to look for, in words or as a parameter name."
+                  },
+                  "api_version": {
+                    "type": "string",
+                    "enum": [
+                      "v2",
+                      "v3"
+                    ],
+                    "description": "Which SDK version's pages to search. Required: the two versions document different defaults."
+                  }
+                },
+                "required": [
+                  "query",
+                  "api_version"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          {
+            "type": "function",
+            "function": {
+              "name": "get_package_versions",
+              "description": "List every published release of one package in the package registry, with the date each release was published, and name the latest release.\n\nUse it for questions about a package as something you install: which versions exist, which is the newest, when a release came out, or which release to pin.\n\npackage is the package's registry name, the name you would install it by, not an SDK class or method name. Case and the separators - _ . do not matter.\n\nReturns JSON: package, found, summary, latest, and releases oldest first, each with version and released (YYYY-MM-DD). An unknown package comes back as found: false, with a reason naming the packages the registry holds.\n\nA release number such as 1.4.2 is a package version: one published build. It is not an API or documentation version such as v3, though a package's major number may track one. This tool does not say whether a release is deprecated; get_package_deprecation answers that for one release. It says nothing about what SDK methods do, their parameters or defaults, or HTTP operations and endpoints, and it has no changelog or release notes.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "package": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Registry name of the package: the name it is installed by."
+                  }
+                },
+                "required": [
+                  "package"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          {
+            "type": "function",
+            "function": {
+              "name": "get_package_deprecation",
+              "description": "Report whether one published release of a package has been deprecated on the package registry by its maintainers, meaning that build should no longer be installed. If it has, also return the maintainers' notice, the date, and the newest release that is not deprecated.\n\nUse it for questions like \"is release 1.4.2 of this package deprecated?\" or \"should we still pin that release?\". This is package deprecation: it is about which build of a package to install.\n\npackage is the registry name, as for get_package_versions. version is one exact release such as 1.4.2; a leading v is accepted. A release line such as 1.x or v1 is not a release: it comes back as found: false, listing the releases in that line. A release that was never published comes back as found: false, naming the latest published release. In both cases the registry answered; the release simply does not exist.\n\nReturns JSON: package, version, found, deprecated, and when deprecated also deprecated_on, notice and replacement.\n\nIt does not answer whether an SDK method, a parameter, or an HTTP API operation or endpoint is deprecated or retired. A deprecated release says nothing about any one operation. It has no changelog or release notes.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "package": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Registry name of the package: the name it is installed by."
+                  },
+                  "version": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "One exact published release, e.g. 1.4.2. Not a release line such as 1.x, and not an API version such as v3."
+                  }
+                },
+                "required": [
+                  "package",
+                  "version"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        ],
+        "output": {
+          "answer": "INSUFFICIENT_CONTEXT",
+          "sdk_version": "none",
+          "citations": [],
+          "refused": true,
+          "raw": "ANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none",
+          "parse_error": ""
+        },
+        "tool_calls": [],
+        "tool_sequence": [],
+        "laps": [
+          {
+            "lap": 1,
+            "messages_in": 2,
+            "tool_messages_in": 0,
+            "tool_calls_out": 0,
+            "tools_called": [],
+            "content_chars": 58,
+            "finish": "content",
+            "prompt_tokens": 1443,
+            "completion_tokens": 101,
+            "cached_tokens": 0,
+            "usage_missing": false,
+            "latency_ms": 1437.18,
+            "rate_limit_wait_s": 0.0
+          }
+        ],
+        "usage": [
+          {
+            "lap": 1,
+            "prompt_tokens": 1443,
+            "completion_tokens": 101,
+            "cached_tokens": 0,
+            "usage_missing": false,
+            "latency_ms": 1437.18,
+            "cumulative_prompt": 1443,
+            "cumulative_completion": 101,
+            "cumulative_cost_usd": 0.00027705
+          }
+        ],
+        "prompt_tokens": 1443,
+        "completion_tokens": 101,
+        "cached_tokens": 0,
+        "total_tokens": 1544,
+        "usage_missing_calls": 0,
+        "cost_usd": 0.00027705,
+        "price_verified": true,
+        "latency_ms": 1437.688,
+        "rate_limit_wait_s": 0.0,
+        "elapsed_s": 1.438,
+        "termination": "final_answer",
+        "termination_detail": "model answered without requesting more tools",
+        "budgets": {
+          "max_iterations": 8,
+          "max_tokens": 25000,
+          "max_cost_usd": 0.01,
+          "max_wall_clock_s": 120.0
+        },
+        "budget_trip": null,
+        "transcript": [
+          {
+            "role": "system",
+            "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou have tools available. Call them as needed to gather what you need before answering. Some questions cannot be answered from a single tool call: if a result points you at something else — a replacement operation, another version — look that up too before you answer.\n"
+          },
+          {
+            "role": "user",
+            "content": "Question: Search the documentation with api_version \"v4\" and tell me the default timeout_ms of Client.send() in v4.\n"
+          },
+          {
+            "role": "assistant",
+            "content": "ANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none"
+          }
+        ]
+      },
+      "score": {
+        "question_id": "w9-err-v4",
+        "passed": true,
+        "checks": [
+          {
+            "name": "parsed",
+            "ok": true,
+            "applicable": true,
+            "detail": "",
+            "evidence": []
+          },
+          {
+            "name": "refusal_matches_expectation",
+            "ok": true,
+            "applicable": true,
+            "detail": "refused=True, expected=True",
+            "evidence": []
+          },
+          {
+            "name": "must_contain",
+            "ok": true,
+            "applicable": false,
+            "detail": "0/0 present",
+            "evidence": []
+          },
+          {
+            "name": "must_not_contain",
+            "ok": true,
+            "applicable": true,
+            "detail": "clean",
+            "evidence": []
+          },
+          {
+            "name": "citations_grounded",
+            "ok": true,
+            "applicable": false,
+            "detail": "0 not in corpus, 0 not returned by a tool",
+            "evidence": []
+          },
+          {
+            "name": "version_named",
+            "ok": false,
+            "applicable": false,
+            "detail": "VERSION=none, expected none",
+            "evidence": []
+          }
+        ]
+      },
+      "wire": [
+        {
+          "seq": 1,
+          "t_ms": 11.9,
+          "server": "docs-search",
+          "direction": "client->server",
+          "message": {
+            "method": "initialize",
+            "params": {
+              "protocolVersion": "2025-06-18",
+              "capabilities": {},
+              "clientInfo": {
+                "name": "gen-ai-dev-week9",
+                "version": "0.1.0"
+              }
+            },
+            "jsonrpc": "2.0",
+            "id": 0
+          }
+        },
+        {
+          "seq": 2,
+          "t_ms": 690.5,
+          "server": "docs-search",
+          "direction": "server->client",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 0,
+            "result": {
+              "protocolVersion": "2025-06-18",
+              "capabilities": {
+                "experimental": {},
+                "tools": {
+                  "listChanged": false
+                }
+              },
+              "serverInfo": {
+                "name": "docs-search",
+                "version": "1.12.4"
+              }
+            }
+          }
+        },
+        {
+          "seq": 3,
+          "t_ms": 691.2,
+          "server": "docs-search",
+          "direction": "client->server",
+          "message": {
+            "method": "notifications/initialized",
+            "jsonrpc": "2.0"
+          }
+        },
+        {
+          "seq": 4,
+          "t_ms": 692.6,
+          "server": "docs-search",
+          "direction": "client->server",
+          "message": {
+            "method": "tools/list",
+            "jsonrpc": "2.0",
+            "id": 1
+          }
+        },
+        {
+          "seq": 5,
+          "t_ms": 694.7,
+          "server": "docs-search",
+          "direction": "server->client",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {
+              "tools": [
+                {
+                  "name": "search_docs",
+                  "description": "Search the SDK reference documentation for prose describing what a Client method does: its behaviour, its parameter names, types and defaults, whether a parameter is required, and the caveats written in the Notes sections.\n\nUse it when the question is about how a Client method behaves, or what one of its parameters means, defaults to, or requires.\n\napi_version selects which version's reference pages are searched: \"v2\" or \"v3\". Only that version is searched, never both. The two versions document different defaults for the same parameter, and some methods and parameters exist only in v3. If the question names a version, pass it. If it asks to compare versions, or does not say and the answer could differ, call once per version.\n\nquery is what to look for, in words: the method and the parameter or behaviour, or just a parameter name. Leave the version out of the query; api_version already filters by it.\n\nReturns JSON: api_version, count, and passages, best match first, each with rank, chunk_id, heading_path, score and text. Passages are ranked by similarity, not filtered for relevance, so the top one can still be off-topic: read the text before relying on it, and cite the chunk_id of any passage you use.\n\nThis tool knows nothing about HTTP paths, operation ids, or whether anything is retired, and it has no changelog or release numbers. If no passage states the answer, the documentation does not state it.",
+                  "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                      "query": {
+                        "type": "string",
+                        "description": "What to look for, in words or as a parameter name."
+                      },
+                      "api_version": {
+                        "type": "string",
+                        "enum": [
+                          "v2",
+                          "v3"
+                        ],
+                        "description": "Which SDK version's pages to search. Required: the two versions document different defaults."
+                      }
+                    },
+                    "required": [
+                      "query",
+                      "api_version"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "seq": 6,
+          "t_ms": 698.0,
+          "server": "package-registry",
+          "direction": "client->server",
+          "message": {
+            "method": "initialize",
+            "params": {
+              "protocolVersion": "2025-06-18",
+              "capabilities": {},
+              "clientInfo": {
+                "name": "gen-ai-dev-week9",
+                "version": "0.1.0"
+              }
+            },
+            "jsonrpc": "2.0",
+            "id": 0
+          }
+        },
+        {
+          "seq": 7,
+          "t_ms": 1073.5,
+          "server": "package-registry",
+          "direction": "server->client",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 0,
+            "result": {
+              "protocolVersion": "2025-06-18",
+              "capabilities": {
+                "experimental": {},
+                "resources": {
+                  "subscribe": false,
+                  "listChanged": false
+                },
+                "tools": {
+                  "listChanged": false
+                }
+              },
+              "serverInfo": {
+                "name": "package-registry",
+                "version": "0.1.0"
+              },
+              "instructions": "Stand-in package registry for the Week 9 experiment. Its data is locally authored, not retrieved from any real package registry, and it is not an official third-party server."
+            }
+          }
+        },
+        {
+          "seq": 8,
+          "t_ms": 1073.7,
+          "server": "package-registry",
+          "direction": "client->server",
+          "message": {
+            "method": "notifications/initialized",
+            "jsonrpc": "2.0"
+          }
+        },
+        {
+          "seq": 9,
+          "t_ms": 1074.0,
+          "server": "package-registry",
+          "direction": "client->server",
+          "message": {
+            "method": "tools/list",
+            "jsonrpc": "2.0",
+            "id": 1
+          }
+        },
+        {
+          "seq": 10,
+          "t_ms": 1076.1,
+          "server": "package-registry",
+          "direction": "server->client",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {
+              "tools": [
+                {
+                  "name": "get_package_versions",
+                  "description": "List every published release of one package in the package registry, with the date each release was published, and name the latest release.\n\nUse it for questions about a package as something you install: which versions exist, which is the newest, when a release came out, or which release to pin.\n\npackage is the package's registry name, the name you would install it by, not an SDK class or method name. Case and the separators - _ . do not matter.\n\nReturns JSON: package, found, summary, latest, and releases oldest first, each with version and released (YYYY-MM-DD). An unknown package comes back as found: false, with a reason naming the packages the registry holds.\n\nA release number such as 1.4.2 is a package version: one published build. It is not an API or documentation version such as v3, though a package's major number may track one. This tool does not say whether a release is deprecated; get_package_deprecation answers that for one release. It says nothing about what SDK methods do, their parameters or defaults, or HTTP operations and endpoints, and it has no changelog or release notes.",
+                  "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                      "package": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Registry name of the package: the name it is installed by."
+                      }
+                    },
+                    "required": [
+                      "package"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "name": "get_package_deprecation",
+                  "description": "Report whether one published release of a package has been deprecated on the package registry by its maintainers, meaning that build should no longer be installed. If it has, also return the maintainers' notice, the date, and the newest release that is not deprecated.\n\nUse it for questions like \"is release 1.4.2 of this package deprecated?\" or \"should we still pin that release?\". This is package deprecation: it is about which build of a package to install.\n\npackage is the registry name, as for get_package_versions. version is one exact release such as 1.4.2; a leading v is accepted. A release line such as 1.x or v1 is not a release: it comes back as found: false, listing the releases in that line. A release that was never published comes back as found: false, naming the latest published release. In both cases the registry answered; the release simply does not exist.\n\nReturns JSON: package, version, found, deprecated, and when deprecated also deprecated_on, notice and replacement.\n\nIt does not answer whether an SDK method, a parameter, or an HTTP API operation or endpoint is deprecated or retired. A deprecated release says nothing about any one operation. It has no changelog or release notes.",
+                  "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                      "package": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Registry name of the package: the name it is installed by."
+                      },
+                      "version": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "One exact published release, e.g. 1.4.2. Not a release line such as 1.x, and not an API version such as v3."
+                      }
+                    },
+                    "required": [
+                      "package",
+                      "version"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "question": {
+        "id": "w9-err-release",
+        "question": "Our lockfile pins example-sdk 3.2.0. Search the documentation with api_version \"3.2.0\" and tell me the default max_retries of Client.send() for that release.",
+        "question_class": "error_recovery",
+        "sdk_version": "v3",
+        "expect_refusal": false,
+        "required_facts": [],
+        "must_contain": [
+          "max_retries"
+        ],
+        "must_not_contain": [],
+        "expected_tools": [],
+        "expected_order": [],
+        "dependency": "",
+        "rationale": ""
+      },
+      "run": {
+        "arm": "week9_agent",
+        "question_id": "w9-err-release",
+        "question": "Our lockfile pins example-sdk 3.2.0. Search the documentation with api_version \"3.2.0\" and tell me the default max_retries of Client.send() for that release.",
+        "servers": {
+          "docs-search": {
+            "protocolVersion": "2025-06-18",
+            "serverInfo": {
+              "name": "docs-search",
+              "version": "1.12.4"
+            },
+            "capabilities": {
+              "experimental": {},
+              "tools": {
+                "listChanged": false
+              }
+            }
+          },
+          "package-registry": {
+            "protocolVersion": "2025-06-18",
+            "serverInfo": {
+              "name": "package-registry",
+              "version": "0.1.0"
+            },
+            "capabilities": {
+              "experimental": {},
+              "resources": {
+                "subscribe": false,
+                "listChanged": false
+              },
+              "tools": {
+                "listChanged": false
+              }
+            }
+          }
+        },
+        "discovered_tools": [
+          {
+            "name": "search_docs",
+            "server": "docs-search"
+          },
+          {
+            "name": "get_package_versions",
+            "server": "package-registry"
+          },
+          {
+            "name": "get_package_deprecation",
+            "server": "package-registry"
+          }
+        ],
+        "tools_offered": [
+          {
+            "type": "function",
+            "function": {
+              "name": "search_docs",
+              "description": "Search the SDK reference documentation for prose describing what a Client method does: its behaviour, its parameter names, types and defaults, whether a parameter is required, and the caveats written in the Notes sections.\n\nUse it when the question is about how a Client method behaves, or what one of its parameters means, defaults to, or requires.\n\napi_version selects which version's reference pages are searched: \"v2\" or \"v3\". Only that version is searched, never both. The two versions document different defaults for the same parameter, and some methods and parameters exist only in v3. If the question names a version, pass it. If it asks to compare versions, or does not say and the answer could differ, call once per version.\n\nquery is what to look for, in words: the method and the parameter or behaviour, or just a parameter name. Leave the version out of the query; api_version already filters by it.\n\nReturns JSON: api_version, count, and passages, best match first, each with rank, chunk_id, heading_path, score and text. Passages are ranked by similarity, not filtered for relevance, so the top one can still be off-topic: read the text before relying on it, and cite the chunk_id of any passage you use.\n\nThis tool knows nothing about HTTP paths, operation ids, or whether anything is retired, and it has no changelog or release numbers. If no passage states the answer, the documentation does not state it.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "What to look for, in words or as a parameter name."
+                  },
+                  "api_version": {
+                    "type": "string",
+                    "enum": [
+                      "v2",
+                      "v3"
+                    ],
+                    "description": "Which SDK version's pages to search. Required: the two versions document different defaults."
+                  }
+                },
+                "required": [
+                  "query",
+                  "api_version"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          {
+            "type": "function",
+            "function": {
+              "name": "get_package_versions",
+              "description": "List every published release of one package in the package registry, with the date each release was published, and name the latest release.\n\nUse it for questions about a package as something you install: which versions exist, which is the newest, when a release came out, or which release to pin.\n\npackage is the package's registry name, the name you would install it by, not an SDK class or method name. Case and the separators - _ . do not matter.\n\nReturns JSON: package, found, summary, latest, and releases oldest first, each with version and released (YYYY-MM-DD). An unknown package comes back as found: false, with a reason naming the packages the registry holds.\n\nA release number such as 1.4.2 is a package version: one published build. It is not an API or documentation version such as v3, though a package's major number may track one. This tool does not say whether a release is deprecated; get_package_deprecation answers that for one release. It says nothing about what SDK methods do, their parameters or defaults, or HTTP operations and endpoints, and it has no changelog or release notes.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "package": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Registry name of the package: the name it is installed by."
+                  }
+                },
+                "required": [
+                  "package"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          {
+            "type": "function",
+            "function": {
+              "name": "get_package_deprecation",
+              "description": "Report whether one published release of a package has been deprecated on the package registry by its maintainers, meaning that build should no longer be installed. If it has, also return the maintainers' notice, the date, and the newest release that is not deprecated.\n\nUse it for questions like \"is release 1.4.2 of this package deprecated?\" or \"should we still pin that release?\". This is package deprecation: it is about which build of a package to install.\n\npackage is the registry name, as for get_package_versions. version is one exact release such as 1.4.2; a leading v is accepted. A release line such as 1.x or v1 is not a release: it comes back as found: false, listing the releases in that line. A release that was never published comes back as found: false, naming the latest published release. In both cases the registry answered; the release simply does not exist.\n\nReturns JSON: package, version, found, deprecated, and when deprecated also deprecated_on, notice and replacement.\n\nIt does not answer whether an SDK method, a parameter, or an HTTP API operation or endpoint is deprecated or retired. A deprecated release says nothing about any one operation. It has no changelog or release notes.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "package": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Registry name of the package: the name it is installed by."
+                  },
+                  "version": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "One exact published release, e.g. 1.4.2. Not a release line such as 1.x, and not an API version such as v3."
+                  }
+                },
+                "required": [
+                  "package",
+                  "version"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        ],
+        "output": {
+          "answer": "The default max_retries for Client.send() is 3.",
+          "sdk_version": "v3",
+          "citations": [
+            "v3/client-send#parameters::1"
+          ],
+          "refused": false,
+          "raw": "ANSWER: The default max_retries for Client.send() is 3.  \nVERSION: v3  \nCITATIONS: v3/client-send#parameters::1",
+          "parse_error": ""
+        },
+        "tool_calls": [
+          {
+            "seq": 1,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v3",
+              "query": "Client.send max_retries default"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 27409.539,
+            "result_chars": 4197,
+            "result_chunk_ids": [
+              "v3/client-send#clientsend::0",
+              "v3/client-send#parameters::1",
+              "v3/client-configure#notes::3",
+              "v3/client-send#notes::3",
+              "v3/client-send#example::2"
+            ]
+          }
+        ],
+        "tool_sequence": [
+          "search_docs"
+        ],
+        "laps": [
+          {
+            "lap": 1,
+            "messages_in": 2,
+            "tool_messages_in": 0,
+            "tool_calls_out": 1,
+            "tools_called": [
+              "search_docs"
+            ],
+            "content_chars": 0,
+            "finish": "tool_calls",
+            "prompt_tokens": 1460,
+            "completion_tokens": 136,
+            "cached_tokens": 0,
+            "usage_missing": false,
+            "latency_ms": 739.642,
+            "rate_limit_wait_s": 0.0
+          },
+          {
+            "lap": 2,
+            "messages_in": 4,
+            "tool_messages_in": 1,
+            "tool_calls_out": 0,
+            "tools_called": [],
+            "content_chars": 111,
+            "finish": "content",
+            "prompt_tokens": 2567,
+            "completion_tokens": 279,
+            "cached_tokens": 1280,
+            "usage_missing": false,
+            "latency_ms": 1298.815,
+            "rate_limit_wait_s": 0.0
+          }
+        ],
+        "usage": [
+          {
+            "lap": 1,
+            "prompt_tokens": 1460,
+            "completion_tokens": 136,
+            "cached_tokens": 0,
+            "usage_missing": false,
+            "latency_ms": 739.642,
+            "cumulative_prompt": 1460,
+            "cumulative_completion": 136,
+            "cumulative_cost_usd": 0.0003006
+          },
+          {
+            "lap": 2,
+            "prompt_tokens": 2567,
+            "completion_tokens": 279,
+            "cached_tokens": 1280,
+            "usage_missing": false,
+            "latency_ms": 1298.815,
+            "cumulative_prompt": 4027,
+            "cumulative_completion": 415,
+            "cumulative_cost_usd": 0.00075705
+          }
+        ],
+        "prompt_tokens": 4027,
+        "completion_tokens": 415,
+        "cached_tokens": 1280,
+        "total_tokens": 4442,
+        "usage_missing_calls": 0,
+        "cost_usd": 0.0007570499999999999,
+        "price_verified": true,
+        "latency_ms": 29479.307,
+        "rate_limit_wait_s": 0.0,
+        "elapsed_s": 29.479,
+        "termination": "final_answer",
+        "termination_detail": "model answered without requesting more tools",
+        "budgets": {
+          "max_iterations": 8,
+          "max_tokens": 25000,
+          "max_cost_usd": 0.01,
+          "max_wall_clock_s": 120.0
+        },
+        "budget_trip": null,
+        "transcript": [
+          {
+            "role": "system",
+            "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou have tools available. Call them as needed to gather what you need before answering. Some questions cannot be answered from a single tool call: if a result points you at something else — a replacement operation, another version — look that up too before you answer.\n"
+          },
+          {
+            "role": "user",
+            "content": "Question: Our lockfile pins example-sdk 3.2.0. Search the documentation with api_version \"3.2.0\" and tell me the default max_retries of Client.send() for that release.\n"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_9e78e831-93b9-4227-b4dd-e67168bb40c4",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v3\",\"query\":\"Client.send max_retries default\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_9e78e831-93b9-4227-b4dd-e67168bb40c4",
+            "name": "search_docs",
+            "content": "{\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-send#clientsend::0\\\", \\\"heading_path\\\": \\\"Client.send()\\\", \\\"score\\\": 0.6483, \\\"text\\\": \\\"Client.send()\\\\n\\\\n# Client.send()\\\\n\\\\nSends a single request to the configured endpoint and blocks until a response is\\\\nreceived or the retry budget is exhausted. The method is safe to call from\\\\nmultiple threads; each call takes its own connection from the pool and returns\\\\nit on completion. Callers issuing many requests at once should prefer\\\\n`Client.send_batch()`, which amortises connection setup across the whole batch\\\\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\\\\nclient retries automatically according to the backoff parameters below; 4xx\\\\nstatuses are surfaced to the caller immediately and are never retried, because a\\\\nmalformed request does not become well-formed by being sent again.\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.6318, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|------------------|------|-----------|----------|------------------------------------------------------|\\\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-configure#notes::3\\\", \\\"heading_path\\\": \\\"Client.configure() > Notes\\\", \\\"score\\\": 0.5993, \\\"text\\\": \\\"Client.configure() > Notes\\\\n\\\\n## Notes\\\\n\\\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\\\nreal concurrency costs nothing but does not help either.\\\\n\\\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\\\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\\\\nbut ignored, which mirrors how v2 behaved.\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-send#notes::3\\\", \\\"heading_path\\\": \\\"Client.send() > Notes\\\", \\\"score\\\": 0.5829, \\\"text\\\": \\\"Client.send() > Notes\\\\n\\\\n## Notes\\\\n\\\\nThe `retry_backoff_ms` value is the base delay, not the total delay. The client\\\\napplies full jitter, so the actual wait before attempt *n* is drawn at random\\\\nfrom `[0, retry_backoff_ms * 2 ** n)`. A base of 250 with five retries can\\\\ntherefore wait up to\"}"
+          },
+          {
+            "role": "assistant",
+            "content": "ANSWER: The default max_retries for Client.send() is 3.  \nVERSION: v3  \nCITATIONS: v3/client-send#parameters::1"
+          }
+        ]
+      },
+      "score": {
+        "question_id": "w9-err-release",
+        "passed": false,
+        "checks": [
+          {
+            "name": "parsed",
+            "ok": true,
+            "applicable": true,
+            "detail": "",
+            "evidence": []
+          },
+          {
+            "name": "refusal_matches_expectation",
+            "ok": true,
+            "applicable": true,
+            "detail": "refused=False, expected=False",
+            "evidence": []
+          },
+          {
+            "name": "must_contain",
+            "ok": true,
+            "applicable": true,
+            "detail": "1/1 present",
+            "evidence": []
+          },
+          {
+            "name": "must_not_contain",
+            "ok": true,
+            "applicable": true,
+            "detail": "clean",
+            "evidence": []
+          },
+          {
+            "name": "citations_grounded",
+            "ok": true,
+            "applicable": true,
+            "detail": "0 not in corpus, 0 not returned by a tool",
+            "evidence": []
+          },
+          {
+            "name": "version_named",
+            "ok": false,
+            "applicable": true,
+            "detail": "VERSION=v3, expected v3",
+            "evidence": []
+          }
+        ]
+      },
+      "wire": [
+        {
+          "seq": 1,
+          "t_ms": 5.5,
+          "server": "docs-search",
+          "direction": "client->server",
+          "message": {
+            "method": "initialize",
+            "params": {
+              "protocolVersion": "2025-06-18",
+              "capabilities": {},
+              "clientInfo": {
+                "name": "gen-ai-dev-week9",
+                "version": "0.1.0"
+              }
+            },
+            "jsonrpc": "2.0",
+            "id": 0
+          }
+        },
+        {
+          "seq": 2,
+          "t_ms": 432.6,
+          "server": "docs-search",
+          "direction": "server->client",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 0,
+            "result": {
+              "protocolVersion": "2025-06-18",
+              "capabilities": {
+                "experimental": {},
+                "tools": {
+                  "listChanged": false
+                }
+              },
+              "serverInfo": {
+                "name": "docs-search",
+                "version": "1.12.4"
+              }
+            }
+          }
+        },
+        {
+          "seq": 3,
+          "t_ms": 432.8,
+          "server": "docs-search",
+          "direction": "client->server",
+          "message": {
+            "method": "notifications/initialized",
+            "jsonrpc": "2.0"
+          }
+        },
+        {
+          "seq": 4,
+          "t_ms": 433.0,
+          "server": "docs-search",
+          "direction": "client->server",
+          "message": {
+            "method": "tools/list",
+            "jsonrpc": "2.0",
+            "id": 1
+          }
+        },
+        {
+          "seq": 5,
+          "t_ms": 434.3,
+          "server": "docs-search",
+          "direction": "server->client",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {
+              "tools": [
+                {
+                  "name": "search_docs",
+                  "description": "Search the SDK reference documentation for prose describing what a Client method does: its behaviour, its parameter names, types and defaults, whether a parameter is required, and the caveats written in the Notes sections.\n\nUse it when the question is about how a Client method behaves, or what one of its parameters means, defaults to, or requires.\n\napi_version selects which version's reference pages are searched: \"v2\" or \"v3\". Only that version is searched, never both. The two versions document different defaults for the same parameter, and some methods and parameters exist only in v3. If the question names a version, pass it. If it asks to compare versions, or does not say and the answer could differ, call once per version.\n\nquery is what to look for, in words: the method and the parameter or behaviour, or just a parameter name. Leave the version out of the query; api_version already filters by it.\n\nReturns JSON: api_version, count, and passages, best match first, each with rank, chunk_id, heading_path, score and text. Passages are ranked by similarity, not filtered for relevance, so the top one can still be off-topic: read the text before relying on it, and cite the chunk_id of any passage you use.\n\nThis tool knows nothing about HTTP paths, operation ids, or whether anything is retired, and it has no changelog or release numbers. If no passage states the answer, the documentation does not state it.",
+                  "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                      "query": {
+                        "type": "string",
+                        "description": "What to look for, in words or as a parameter name."
+                      },
+                      "api_version": {
+                        "type": "string",
+                        "enum": [
+                          "v2",
+                          "v3"
+                        ],
+                        "description": "Which SDK version's pages to search. Required: the two versions document different defaults."
+                      }
+                    },
+                    "required": [
+                      "query",
+                      "api_version"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "seq": 6,
+          "t_ms": 442.4,
+          "server": "package-registry",
+          "direction": "client->server",
+          "message": {
+            "method": "initialize",
+            "params": {
+              "protocolVersion": "2025-06-18",
+              "capabilities": {},
+              "clientInfo": {
+                "name": "gen-ai-dev-week9",
+                "version": "0.1.0"
+              }
+            },
+            "jsonrpc": "2.0",
+            "id": 0
+          }
+        },
+        {
+          "seq": 7,
+          "t_ms": 834.0,
+          "server": "package-registry",
+          "direction": "server->client",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 0,
+            "result": {
+              "protocolVersion": "2025-06-18",
+              "capabilities": {
+                "experimental": {},
+                "resources": {
+                  "subscribe": false,
+                  "listChanged": false
+                },
+                "tools": {
+                  "listChanged": false
+                }
+              },
+              "serverInfo": {
+                "name": "package-registry",
+                "version": "0.1.0"
+              },
+              "instructions": "Stand-in package registry for the Week 9 experiment. Its data is locally authored, not retrieved from any real package registry, and it is not an official third-party server."
+            }
+          }
+        },
+        {
+          "seq": 8,
+          "t_ms": 834.3,
+          "server": "package-registry",
+          "direction": "client->server",
+          "message": {
+            "method": "notifications/initialized",
+            "jsonrpc": "2.0"
+          }
+        },
+        {
+          "seq": 9,
+          "t_ms": 834.6,
+          "server": "package-registry",
+          "direction": "client->server",
+          "message": {
+            "method": "tools/list",
+            "jsonrpc": "2.0",
+            "id": 1
+          }
+        },
+        {
+          "seq": 10,
+          "t_ms": 835.9,
+          "server": "package-registry",
+          "direction": "server->client",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {
+              "tools": [
+                {
+                  "name": "get_package_versions",
+                  "description": "List every published release of one package in the package registry, with the date each release was published, and name the latest release.\n\nUse it for questions about a package as something you install: which versions exist, which is the newest, when a release came out, or which release to pin.\n\npackage is the package's registry name, the name you would install it by, not an SDK class or method name. Case and the separators - _ . do not matter.\n\nReturns JSON: package, found, summary, latest, and releases oldest first, each with version and released (YYYY-MM-DD). An unknown package comes back as found: false, with a reason naming the packages the registry holds.\n\nA release number such as 1.4.2 is a package version: one published build. It is not an API or documentation version such as v3, though a package's major number may track one. This tool does not say whether a release is deprecated; get_package_deprecation answers that for one release. It says nothing about what SDK methods do, their parameters or defaults, or HTTP operations and endpoints, and it has no changelog or release notes.",
+                  "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                      "package": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Registry name of the package: the name it is installed by."
+                      }
+                    },
+                    "required": [
+                      "package"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "name": "get_package_deprecation",
+                  "description": "Report whether one published release of a package has been deprecated on the package registry by its maintainers, meaning that build should no longer be installed. If it has, also return the maintainers' notice, the date, and the newest release that is not deprecated.\n\nUse it for questions like \"is release 1.4.2 of this package deprecated?\" or \"should we still pin that release?\". This is package deprecation: it is about which build of a package to install.\n\npackage is the registry name, as for get_package_versions. version is one exact release such as 1.4.2; a leading v is accepted. A release line such as 1.x or v1 is not a release: it comes back as found: false, listing the releases in that line. A release that was never published comes back as found: false, naming the latest published release. In both cases the registry answered; the release simply does not exist.\n\nReturns JSON: package, version, found, deprecated, and when deprecated also deprecated_on, notice and replacement.\n\nIt does not answer whether an SDK method, a parameter, or an HTTP API operation or endpoint is deprecated or retired. A deprecated release says nothing about any one operation. It has no changelog or release notes.",
+                  "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                      "package": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Registry name of the package: the name it is installed by."
+                      },
+                      "version": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "One exact published release, e.g. 1.4.2. Not a release line such as 1.x, and not an API version such as v3."
+                      }
+                    },
+                    "required": [
+                      "package",
+                      "version"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "seq": 11,
+          "t_ms": 1577.6,
+          "server": "docs-search",
+          "direction": "client->server",
+          "message": {
+            "method": "tools/call",
+            "params": {
+              "name": "search_docs",
+              "arguments": {
+                "api_version": "v3",
+                "query": "Client.send max_retries default"
+              }
+            },
+            "jsonrpc": "2.0",
+            "id": 2
+          }
+        },
+        {
+          "seq": 12,
+          "t_ms": 28955.7,
+          "server": "docs-search",
+          "direction": "server->client",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 2,
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "{\n  \"api_version\": \"v3\",\n  \"count\": 5,\n  \"passages\": [\n    {\n      \"rank\": 1,\n      \"chunk_id\": \"v3/client-send#clientsend::0\",\n      \"heading_path\": \"Client.send()\",\n      \"score\": 0.6483,\n      \"text\": \"Client.send()\\n\\n# Client.send()\\n\\nSends a single request to the configured endpoint and blocks until a response is\\nreceived or the retry budget is exhausted. The method is safe to call from\\nmultiple threads; each call takes its own connection from the pool and returns\\nit on completion. Callers issuing many requests at once should prefer\\n`Client.send_batch()`, which amortises connection setup across the whole batch\\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\\nclient retries automatically according to the backoff parameters below; 4xx\\nstatuses are surfaced to the caller immediately and are never retried, because a\\nmalformed request does not become well-formed by being sent again.\"\n    },\n    {\n      \"rank\": 2,\n      \"chunk_id\": \"v3/client-send#parameters::1\",\n      \"heading_path\": \"Client.send() > Parameters\",\n      \"score\": 0.6318,\n      \"text\": \"Client.send() > Parameters\\n\\n## Parameters\\n\\n| name             | type | default   | required | description                                          |\\n|------------------|------|-----------|----------|------------------------------------------------------|\\n| payload          | dict | \\u2014         | yes      | The request body, serialised as JSON before sending. |\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\"\n    },\n    {\n      \"rank\": 3,\n      \"chunk_id\": \"v3/client-configure#notes::3\",\n      \"heading_path\": \"Client.configure() > Notes\",\n      \"score\": 0.5993,\n      \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\n`pool_size` is a ceiling, not a reservation \\u2014 connections are created lazily\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\nreal concurrency costs nothing but does not help either.\\n\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\\nbut ignored, which mirrors how v2 behaved.\"\n    },\n    {\n      \"rank\": 4,\n      \"chunk_id\": \"v3/client-send#notes::3\",\n      \"heading_path\": \"Client.send() > Notes\",\n      \"score\": 0.5829,\n      \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` value is the base delay, not the total delay. The client\\napplies full jitter, so the actual wait before attempt *n* is drawn at random\\nfrom `[0, retry_backoff_ms * 2 ** n)`. A base of 250 with five retries can\\ntherefore wait up to eight seconds in the worst case. Set `timeout_ms` with that\\nceiling in mind, since the timeout covers the entire call including every retry\\nattempt rather than each attempt individually.\"\n    },\n    {\n      \"rank\": 5,\n      \"chunk_id\": \"v3/client-send#example::2\",\n      \"heading_path\": \"Client.send() > Example\",\n      \"score\": 0.5821,\n      \"text\": \"Client.send() > Example\\n\\n## Example\\n\\n```python\\nfrom sdk import Client\\n\\nclient = Client(api_key=\\\"sk-...\\\")\\n\\nresponse = client.send(\\n    payload={\\\"query\\\": \\\"hello\\\"},\\n    retry_backoff_ms=500,\\n    max_retries=5,\\n    idempotency_key=\\\"req-0001\\\",\\n    retry_on=[500, 502, 503],\\n)\\n\\nprint(response.status_code)\\nprint(response.json())\\n```\"\n    }\n  ]\n}"
+                }
+              ],
+              "structuredContent": {
+                "api_version": "v3",
+                "count": 5,
+                "passages": [
+                  {
+                    "rank": 1,
+                    "chunk_id": "v3/client-send#clientsend::0",
+                    "heading_path": "Client.send()",
+                    "score": 0.6483,
+                    "text": "Client.send()\n\n# Client.send()\n\nSends a single request to the configured endpoint and blocks until a response is\nreceived or the retry budget is exhausted. The method is safe to call from\nmultiple threads; each call takes its own connection from the pool and returns\nit on completion. Callers issuing many requests at once should prefer\n`Client.send_batch()`, which amortises connection setup across the whole batch\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\nclient retries automatically according to the backoff parameters below; 4xx\nstatuses are surfaced to the caller immediately and are never retried, because a\nmalformed request does not become well-formed by being sent again."
+                  },
+                  {
+                    "rank": 2,
+                    "chunk_id": "v3/client-send#parameters::1",
+                    "heading_path": "Client.send() > Parameters",
+                    "score": 0.6318,
+                    "text": "Client.send() > Parameters\n\n## Parameters\n\n| name             | type | default   | required | description                                          |\n|------------------|------|-----------|----------|------------------------------------------------------|\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |"
+                  },
+                  {
+                    "rank": 3,
+                    "chunk_id": "v3/client-configure#notes::3",
+                    "heading_path": "Client.configure() > Notes",
+                    "score": 0.5993,
+                    "text": "Client.configure() > Notes\n\n## Notes\n\n`pool_size` is a ceiling, not a reservation — connections are created lazily\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\nreal concurrency costs nothing but does not help either.\n\nSetting `retries_enabled` to false disables the automatic retry path entirely.\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\nbut ignored, which mirrors how v2 behaved."
+                  },
+                  {
+                    "rank": 4,
+                    "chunk_id": "v3/client-send#notes::3",
+                    "heading_path": "Client.send() > Notes",
+                    "score": 0.5829,
+                    "text": "Client.send() > Notes\n\n## Notes\n\nThe `retry_backoff_ms` value is the base delay, not the total delay. The client\napplies full jitter, so the actual wait before attempt *n* is drawn at random\nfrom `[0, retry_backoff_ms * 2 ** n)`. A base of 250 with five retries can\ntherefore wait up to eight seconds in the worst case. Set `timeout_ms` with that\nceiling in mind, since the timeout covers the entire call including every retry\nattempt rather than each attempt individually."
+                  },
+                  {
+                    "rank": 5,
+                    "chunk_id": "v3/client-send#example::2",
+                    "heading_path": "Client.send() > Example",
+                    "score": 0.5821,
+                    "text": "Client.send() > Example\n\n## Example\n\n```python\nfrom sdk import Client\n\nclient = Client(api_key=\"sk-...\")\n\nresponse = client.send(\n    payload={\"query\": \"hello\"},\n    retry_backoff_ms=500,\n    max_retries=5,\n    idempotency_key=\"req-0001\",\n    retry_on=[500, 502, 503],\n)\n\nprint(response.status_code)\nprint(response.json())\n```"
+                  }
+                ]
+              },
+              "isError": false
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "tools_list_docs_tool": {
+    "name": "search_docs",
+    "description": "Search the SDK reference documentation for prose describing what a Client method does: its behaviour, its parameter names, types and defaults, whether a parameter is required, and the caveats written in the Notes sections.\n\nUse it when the question is about how a Client method behaves, or what one of its parameters means, defaults to, or requires.\n\napi_version selects which version's reference pages are searched: \"v2\" or \"v3\". Only that version is searched, never both. The two versions document different defaults for the same parameter, and some methods and parameters exist only in v3. If the question names a version, pass it. If it asks to compare versions, or does not say and the answer could differ, call once per version.\n\nquery is what to look for, in words: the method and the parameter or behaviour, or just a parameter name. Leave the version out of the query; api_version already filters by it.\n\nReturns JSON: api_version, count, and passages, best match first, each with rank, chunk_id, heading_path, score and text. Passages are ranked by similarity, not filtered for relevance, so the top one can still be off-topic: read the text before relying on it, and cite the chunk_id of any passage you use.\n\nThis tool knows nothing about HTTP paths, operation ids, or whether anything is retired, and it has no changelog or release numbers. If no passage states the answer, the documentation does not state it.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "What to look for, in words or as a parameter name."
+        },
+        "api_version": {
+          "type": "string",
+          "enum": [
+            "v2",
+            "v3"
+          ],
+          "description": "Which SDK version's pages to search. Required: the two versions document different defaults."
+        }
+      },
+      "required": [
+        "query",
+        "api_version"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "probe_wire": [
+    {
+      "seq": 1,
+      "t_ms": 12.4,
+      "server": "docs-search",
+      "direction": "client->server",
+      "message": {
+        "method": "initialize",
+        "params": {
+          "protocolVersion": "2025-06-18",
+          "capabilities": {},
+          "clientInfo": {
+            "name": "gen-ai-dev-week9",
+            "version": "0.1.0"
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 0
+      }
+    },
+    {
+      "seq": 2,
+      "t_ms": 395.1,
+      "server": "docs-search",
+      "direction": "server->client",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 0,
+        "result": {
+          "protocolVersion": "2025-06-18",
+          "capabilities": {
+            "experimental": {},
+            "tools": {
+              "listChanged": false
+            }
+          },
+          "serverInfo": {
+            "name": "docs-search",
+            "version": "1.12.4"
+          }
+        }
+      }
+    },
+    {
+      "seq": 3,
+      "t_ms": 395.5,
+      "server": "docs-search",
+      "direction": "client->server",
+      "message": {
+        "method": "notifications/initialized",
+        "jsonrpc": "2.0"
+      }
+    },
+    {
+      "seq": 4,
+      "t_ms": 396.1,
+      "server": "docs-search",
+      "direction": "client->server",
+      "message": {
+        "method": "tools/list",
+        "jsonrpc": "2.0",
+        "id": 1
+      }
+    },
+    {
+      "seq": 5,
+      "t_ms": 398.1,
+      "server": "docs-search",
+      "direction": "server->client",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "tools": [
+            {
+              "name": "search_docs",
+              "description": "Search the SDK reference documentation for prose describing what a Client method does: its behaviour, its parameter names, types and defaults, whether a parameter is required, and the caveats written in the Notes sections.\n\nUse it when the question is about how a Client method behaves, or what one of its parameters means, defaults to, or requires.\n\napi_version selects which version's reference pages are searched: \"v2\" or \"v3\". Only that version is searched, never both. The two versions document different defaults for the same parameter, and some methods and parameters exist only in v3. If the question names a version, pass it. If it asks to compare versions, or does not say and the answer could differ, call once per version.\n\nquery is what to look for, in words: the method and the parameter or behaviour, or just a parameter name. Leave the version out of the query; api_version already filters by it.\n\nReturns JSON: api_version, count, and passages, best match first, each with rank, chunk_id, heading_path, score and text. Passages are ranked by similarity, not filtered for relevance, so the top one can still be off-topic: read the text before relying on it, and cite the chunk_id of any passage you use.\n\nThis tool knows nothing about HTTP paths, operation ids, or whether anything is retired, and it has no changelog or release numbers. If no passage states the answer, the documentation does not state it.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "What to look for, in words or as a parameter name."
+                  },
+                  "api_version": {
+                    "type": "string",
+                    "enum": [
+                      "v2",
+                      "v3"
+                    ],
+                    "description": "Which SDK version's pages to search. Required: the two versions document different defaults."
+                  }
+                },
+                "required": [
+                  "query",
+                  "api_version"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "seq": 6,
+      "t_ms": 403.0,
+      "server": "package-registry",
+      "direction": "client->server",
+      "message": {
+        "method": "initialize",
+        "params": {
+          "protocolVersion": "2025-06-18",
+          "capabilities": {},
+          "clientInfo": {
+            "name": "gen-ai-dev-week9",
+            "version": "0.1.0"
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 0
+      }
+    },
+    {
+      "seq": 7,
+      "t_ms": 784.0,
+      "server": "package-registry",
+      "direction": "server->client",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 0,
+        "result": {
+          "protocolVersion": "2025-06-18",
+          "capabilities": {
+            "experimental": {},
+            "resources": {
+              "subscribe": false,
+              "listChanged": false
+            },
+            "tools": {
+              "listChanged": false
+            }
+          },
+          "serverInfo": {
+            "name": "package-registry",
+            "version": "0.1.0"
+          },
+          "instructions": "Stand-in package registry for the Week 9 experiment. Its data is locally authored, not retrieved from any real package registry, and it is not an official third-party server."
+        }
+      }
+    },
+    {
+      "seq": 8,
+      "t_ms": 784.2,
+      "server": "package-registry",
+      "direction": "client->server",
+      "message": {
+        "method": "notifications/initialized",
+        "jsonrpc": "2.0"
+      }
+    },
+    {
+      "seq": 9,
+      "t_ms": 784.5,
+      "server": "package-registry",
+      "direction": "client->server",
+      "message": {
+        "method": "tools/list",
+        "jsonrpc": "2.0",
+        "id": 1
+      }
+    },
+    {
+      "seq": 10,
+      "t_ms": 785.7,
+      "server": "package-registry",
+      "direction": "server->client",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "tools": [
+            {
+              "name": "get_package_versions",
+              "description": "List every published release of one package in the package registry, with the date each release was published, and name the latest release.\n\nUse it for questions about a package as something you install: which versions exist, which is the newest, when a release came out, or which release to pin.\n\npackage is the package's registry name, the name you would install it by, not an SDK class or method name. Case and the separators - _ . do not matter.\n\nReturns JSON: package, found, summary, latest, and releases oldest first, each with version and released (YYYY-MM-DD). An unknown package comes back as found: false, with a reason naming the packages the registry holds.\n\nA release number such as 1.4.2 is a package version: one published build. It is not an API or documentation version such as v3, though a package's major number may track one. This tool does not say whether a release is deprecated; get_package_deprecation answers that for one release. It says nothing about what SDK methods do, their parameters or defaults, or HTTP operations and endpoints, and it has no changelog or release notes.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "package": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Registry name of the package: the name it is installed by."
+                  }
+                },
+                "required": [
+                  "package"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "name": "get_package_deprecation",
+              "description": "Report whether one published release of a package has been deprecated on the package registry by its maintainers, meaning that build should no longer be installed. If it has, also return the maintainers' notice, the date, and the newest release that is not deprecated.\n\nUse it for questions like \"is release 1.4.2 of this package deprecated?\" or \"should we still pin that release?\". This is package deprecation: it is about which build of a package to install.\n\npackage is the registry name, as for get_package_versions. version is one exact release such as 1.4.2; a leading v is accepted. A release line such as 1.x or v1 is not a release: it comes back as found: false, listing the releases in that line. A release that was never published comes back as found: false, naming the latest published release. In both cases the registry answered; the release simply does not exist.\n\nReturns JSON: package, version, found, deprecated, and when deprecated also deprecated_on, notice and replacement.\n\nIt does not answer whether an SDK method, a parameter, or an HTTP API operation or endpoint is deprecated or retired. A deprecated release says nothing about any one operation. It has no changelog or release notes.",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "package": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Registry name of the package: the name it is installed by."
+                  },
+                  "version": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "One exact published release, e.g. 1.4.2. Not a release line such as 1.x, and not an API version such as v3."
+                  }
+                },
+                "required": [
+                  "package",
+                  "version"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "seq": 11,
+      "t_ms": 786.4,
+      "server": "docs-search",
+      "direction": "client->server",
+      "message": {
+        "method": "tools/call",
+        "params": {
+          "name": "search_docs",
+          "arguments": {
+            "query": "default timeout_ms of Client.send",
+            "api_version": "v4"
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 2
+      }
+    },
+    {
+      "seq": 12,
+      "t_ms": 788.3,
+      "server": "docs-search",
+      "direction": "server->client",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Input validation error: 'v4' is not one of ['v2', 'v3']"
+            }
+          ],
+          "isError": true
+        }
+      }
+    },
+    {
+      "seq": 13,
+      "t_ms": 788.7,
+      "server": "docs-search",
+      "direction": "client->server",
+      "message": {
+        "method": "tools/call",
+        "params": {
+          "name": "search_docs",
+          "arguments": {
+            "query": "default timeout_ms of Client.send",
+            "api_version": "3.2.0"
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 3
+      }
+    },
+    {
+      "seq": 14,
+      "t_ms": 790.6,
+      "server": "docs-search",
+      "direction": "server->client",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Input validation error: '3.2.0' is not one of ['v2', 'v3']"
+            }
+          ],
+          "isError": true
+        }
+      }
+    },
+    {
+      "seq": 15,
+      "t_ms": 790.9,
+      "server": "docs-search",
+      "direction": "client->server",
+      "message": {
+        "method": "tools/call",
+        "params": {
+          "name": "search_docs",
+          "arguments": {
+            "query": "default timeout_ms of Client.send",
+            "api_version": "latest"
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 4
+      }
+    },
+    {
+      "seq": 16,
+      "t_ms": 792.4,
+      "server": "docs-search",
+      "direction": "server->client",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "Input validation error: 'latest' is not one of ['v2', 'v3']"
+            }
+          ],
+          "isError": true
+        }
+      }
+    },
+    {
+      "seq": 17,
+      "t_ms": 792.8,
+      "server": "docs-search",
+      "direction": "client->server",
+      "message": {
+        "method": "tools/call",
+        "params": {
+          "name": "search_docs",
+          "arguments": {
+            "query": "default timeout_ms of Client.send",
+            "api_version": "v3"
+          }
+        },
+        "jsonrpc": "2.0",
+        "id": 5
+      }
+    },
+    {
+      "seq": 18,
+      "t_ms": 28129.2,
+      "server": "docs-search",
+      "direction": "server->client",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\n  \"api_version\": \"v3\",\n  \"count\": 5,\n  \"passages\": [\n    {\n      \"rank\": 1,\n      \"chunk_id\": \"v3/client-send#parameters::1\",\n      \"heading_path\": \"Client.send() > Parameters\",\n      \"score\": 0.6786,\n      \"text\": \"Client.send() > Parameters\\n\\n## Parameters\\n\\n| name             | type | default   | required | description                                          |\\n|------------------|------|-----------|----------|------------------------------------------------------|\\n| payload          | dict | \\u2014         | yes      | The request body, serialised as JSON before sending. |\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\"\n    },\n    {\n      \"rank\": 2,\n      \"chunk_id\": \"v3/client-send#notes::3\",\n      \"heading_path\": \"Client.send() > Notes\",\n      \"score\": 0.6403,\n      \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` value is the base delay, not the total delay. The client\\napplies full jitter, so the actual wait before attempt *n* is drawn at random\\nfrom `[0, retry_backoff_ms * 2 ** n)`. A base of 250 with five retries can\\ntherefore wait up to eight seconds in the worst case. Set `timeout_ms` with that\\nceiling in mind, since the timeout covers the entire call including every retry\\nattempt rather than each attempt individually.\"\n    },\n    {\n      \"rank\": 3,\n      \"chunk_id\": \"v3/client-batch#parameters::1\",\n      \"heading_path\": \"Client.send_batch() > Parameters\",\n      \"score\": 0.6078,\n      \"text\": \"Client.send_batch() > Parameters\\n\\n## Parameters\\n\\n| name            | type | default | required | description                                          |\\n|-----------------|------|---------|----------|------------------------------------------------------|\\n| payloads        | list | \\u2014       | yes      | Request bodies, sent in the order given.             |\\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\\n| ordered         | bool | True    | no       | Return responses in submission order.                |\\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|\"\n    },\n    {\n      \"rank\": 4,\n      \"chunk_id\": \"v3/client-send#clientsend::0\",\n      \"heading_path\": \"Client.send()\",\n      \"score\": 0.6041,\n      \"text\": \"Client.send()\\n\\n# Client.send()\\n\\nSends a single request to the configured endpoint and blocks until a response is\\nreceived or the retry budget is exhausted. The method is safe to call from\\nmultiple threads; each call takes its own connection from the pool and returns\\nit on completion. Callers issuing many requests at once should prefer\\n`Client.send_batch()`, which amortises connection setup across the whole batch\\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\\nclient retries automatically according to the backoff parameters below; 4xx\\nstatuses are surfaced to the caller immediately and are never retried, because a\\nmalformed request does not become well-formed by being sent again.\"\n    },\n    {\n      \"rank\": 5,\n      \"chunk_id\": \"v3/client-batch#notes::3\",\n      \"heading_path\": \"Client.send_batch() > Notes\",\n      \"score\": 0.6019,\n      \"text\": \"Client.send_batch() > Notes\\n\\n## Notes\\n\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\n20 requests per second gives you 20 requests per second, not 64. Raising\\n`concurrency` alone will not increase throughput past the rate limit.\\n\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\nusually too tight \\u2014 scale the timeout with the batch size.\"\n    }\n  ]\n}"
+            }
+          ],
+          "structuredContent": {
+            "api_version": "v3",
+            "count": 5,
+            "passages": [
+              {
+                "rank": 1,
+                "chunk_id": "v3/client-send#parameters::1",
+                "heading_path": "Client.send() > Parameters",
+                "score": 0.6786,
+                "text": "Client.send() > Parameters\n\n## Parameters\n\n| name             | type | default   | required | description                                          |\n|------------------|------|-----------|----------|------------------------------------------------------|\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |"
+              },
+              {
+                "rank": 2,
+                "chunk_id": "v3/client-send#notes::3",
+                "heading_path": "Client.send() > Notes",
+                "score": 0.6403,
+                "text": "Client.send() > Notes\n\n## Notes\n\nThe `retry_backoff_ms` value is the base delay, not the total delay. The client\napplies full jitter, so the actual wait before attempt *n* is drawn at random\nfrom `[0, retry_backoff_ms * 2 ** n)`. A base of 250 with five retries can\ntherefore wait up to eight seconds in the worst case. Set `timeout_ms` with that\nceiling in mind, since the timeout covers the entire call including every retry\nattempt rather than each attempt individually."
+              },
+              {
+                "rank": 3,
+                "chunk_id": "v3/client-batch#parameters::1",
+                "heading_path": "Client.send_batch() > Parameters",
+                "score": 0.6078,
+                "text": "Client.send_batch() > Parameters\n\n## Parameters\n\n| name            | type | default | required | description                                          |\n|-----------------|------|---------|----------|------------------------------------------------------|\n| payloads        | list | —       | yes      | Request bodies, sent in the order given.             |\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\n| ordered         | bool | True    | no       | Return responses in submission order.                |\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|"
+              },
+              {
+                "rank": 4,
+                "chunk_id": "v3/client-send#clientsend::0",
+                "heading_path": "Client.send()",
+                "score": 0.6041,
+                "text": "Client.send()\n\n# Client.send()\n\nSends a single request to the configured endpoint and blocks until a response is\nreceived or the retry budget is exhausted. The method is safe to call from\nmultiple threads; each call takes its own connection from the pool and returns\nit on completion. Callers issuing many requests at once should prefer\n`Client.send_batch()`, which amortises connection setup across the whole batch\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\nclient retries automatically according to the backoff parameters below; 4xx\nstatuses are surfaced to the caller immediately and are never retried, because a\nmalformed request does not become well-formed by being sent again."
+              },
+              {
+                "rank": 5,
+                "chunk_id": "v3/client-batch#notes::3",
+                "heading_path": "Client.send_batch() > Notes",
+                "score": 0.6019,
+                "text": "Client.send_batch() > Notes\n\n## Notes\n\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\n20 requests per second gives you 20 requests per second, not 64. Raising\n`concurrency` alone will not increase throughput past the rate limit.\n\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\n60000 ms gives each request roughly 120 ms of budget on average, which is\nusually too tight — scale the timeout with the batch size."
+              }
+            ]
+          },
+          "isError": false
+        }
+      }
+    }
+  ]
+}

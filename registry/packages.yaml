@@ -1,0 +1,43 @@
+# LOCALLY AUTHORED STAND-IN PACKAGE REGISTRY DATA FOR THE WEEK 9 EXPERIMENT.
+#
+# Every release number, date and notice below was written by hand for Week 9
+# Task Set E. None of it was retrieved from a real package registry, and no real
+# package is described. See registry/README.md for what is invented and why.
+#
+# Served by app/mcp/servers/package_server.py. Values are quoted on purpose:
+# unquoted, YAML reads 2024-02-12 as a date object and 2.0 as a float.
+
+provenance: >-
+  locally authored stand-in package registry data for the Week 9 experiment;
+  not retrieved from any real package registry
+
+packages:
+  example-sdk:
+    summary: >-
+      The Python SDK documented under docs/, imported as `sdk`. Its 2.x and 3.x
+      release lines are the SDK versions the documentation calls v2 and v3.
+
+    releases:
+      - {version: "2.0.0", released: "2024-02-12"}
+      - {version: "2.1.0", released: "2024-08-05"}
+      - {version: "3.0.0", released: "2025-04-14"}
+      - {version: "3.1.0", released: "2025-10-06"}
+      - {version: "3.2.0", released: "2026-03-16"}
+
+    # Per-release registry notices: "do not install this build".
+    deprecations:
+      - versions: ["2.0.0", "2.1.0"]
+        deprecated_on: "2026-01-31"
+        notice: >-
+          The 2.x line reached end of life on 2026-01-31 and receives no further
+          fixes.
+      - versions: ["3.0.0"]
+        deprecated_on: "2025-10-06"
+        notice: >-
+          The 3.0.0 wheel was published without its py.typed marker, so type
+          checkers ignore the SDK's annotations. Fixed from 3.1.0.
+
+    # Per-line lifecycle. Served as an MCP resource, not a tool.
+    support:
+      - {line: "3.x", status: "active"}
+      - {line: "2.x", status: "end-of-life", since: "2026-01-31"}
