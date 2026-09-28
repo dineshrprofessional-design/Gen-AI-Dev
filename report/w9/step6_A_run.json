@@ -1,0 +1,270 @@
+{
+  "arm": "week9_agent",
+  "question_id": "w9-pkg-01",
+  "question": "Is release 2.1.0 of the example-sdk package deprecated, and if so, which release should we install instead?",
+  "servers": {
+    "docs-search": {
+      "protocolVersion": "2025-06-18",
+      "serverInfo": {
+        "name": "docs-search",
+        "version": "1.12.4"
+      },
+      "capabilities": {
+        "experimental": {},
+        "tools": {
+          "listChanged": false
+        }
+      }
+    }
+  },
+  "discovered_tools": [
+    {
+      "name": "search_docs",
+      "server": "docs-search"
+    }
+  ],
+  "tools_offered": [
+    {
+      "type": "function",
+      "function": {
+        "name": "search_docs",
+        "description": "Search the SDK reference documentation for prose describing what a Client method does: its behaviour, its parameter names, types and defaults, whether a parameter is required, and the caveats written in the Notes sections.\n\nUse it when the question is about how a Client method behaves, or what one of its parameters means, defaults to, or requires.\n\napi_version selects which version's reference pages are searched: \"v2\" or \"v3\". Only that version is searched, never both. The two versions document different defaults for the same parameter, and some methods and parameters exist only in v3. If the question names a version, pass it. If it asks to compare versions, or does not say and the answer could differ, call once per version.\n\nquery is what to look for, in words: the method and the parameter or behaviour, or just a parameter name. Leave the version out of the query; api_version already filters by it.\n\nReturns JSON: api_version, count, and passages, best match first, each with rank, chunk_id, heading_path, score and text. Passages are ranked by similarity, not filtered for relevance, so the top one can still be off-topic: read the text before relying on it, and cite the chunk_id of any passage you use.\n\nThis tool knows nothing about HTTP paths, operation ids, or whether anything is retired, and it has no changelog or release numbers. If no passage states the answer, the documentation does not state it.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "What to look for, in words or as a parameter name."
+            },
+            "api_version": {
+              "type": "string",
+              "enum": [
+                "v2",
+                "v3"
+              ],
+              "description": "Which SDK version's pages to search. Required: the two versions document different defaults."
+            }
+          },
+          "required": [
+            "query",
+            "api_version"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "output": {
+    "answer": "INSUFFICIENT_CONTEXT",
+    "sdk_version": "none",
+    "citations": [],
+    "refused": true,
+    "raw": "ANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none",
+    "parse_error": ""
+  },
+  "tool_calls": [
+    {
+      "seq": 1,
+      "name": "search_docs",
+      "server": "docs-search",
+      "arguments": {
+        "api_version": "v3",
+        "query": "example-sdk release 2.1.0 deprecated"
+      },
+      "ok": true,
+      "error": "",
+      "latency_ms": 29501.537,
+      "result_chars": 2160,
+      "result_chunk_ids": [
+        "v3/client-send#example::2",
+        "v3/client-configure#example::2",
+        "v3/client-close#example::2",
+        "v3/client-upload#example::2",
+        "v3/client-batch#example::2"
+      ]
+    },
+    {
+      "seq": 2,
+      "name": "search_docs",
+      "server": "docs-search",
+      "arguments": {
+        "api_version": "v2",
+        "query": "example-sdk deprecated"
+      },
+      "ok": true,
+      "error": "",
+      "latency_ms": 1830.971,
+      "result_chars": 1768,
+      "result_chunk_ids": [
+        "v2/client-close#example::2",
+        "v2/client-send#notes::2",
+        "v2/client-configure#example::2",
+        "v2/client-close#notes::3",
+        "v2/client-stream#notes::3"
+      ]
+    }
+  ],
+  "tool_sequence": [
+    "search_docs",
+    "search_docs"
+  ],
+  "laps": [
+    {
+      "lap": 1,
+      "messages_in": 2,
+      "tool_messages_in": 0,
+      "tool_calls_out": 1,
+      "tools_called": [
+        "search_docs"
+      ],
+      "content_chars": 0,
+      "finish": "tool_calls",
+      "prompt_tokens": 796,
+      "completion_tokens": 85,
+      "cached_tokens": 0,
+      "usage_missing": false,
+      "latency_ms": 1510.969,
+      "rate_limit_wait_s": 0.0
+    },
+    {
+      "lap": 2,
+      "messages_in": 4,
+      "tool_messages_in": 1,
+      "tool_calls_out": 1,
+      "tools_called": [
+        "search_docs"
+      ],
+      "content_chars": 0,
+      "finish": "tool_calls",
+      "prompt_tokens": 1516,
+      "completion_tokens": 52,
+      "cached_tokens": 0,
+      "usage_missing": false,
+      "latency_ms": 547.102,
+      "rate_limit_wait_s": 0.0
+    },
+    {
+      "lap": 3,
+      "messages_in": 6,
+      "tool_messages_in": 2,
+      "tool_calls_out": 0,
+      "tools_called": [],
+      "content_chars": 58,
+      "finish": "content",
+      "prompt_tokens": 2074,
+      "completion_tokens": 114,
+      "cached_tokens": 0,
+      "usage_missing": false,
+      "latency_ms": 888.84,
+      "rate_limit_wait_s": 0.0
+    }
+  ],
+  "usage": [
+    {
+      "lap": 1,
+      "prompt_tokens": 796,
+      "completion_tokens": 85,
+      "cached_tokens": 0,
+      "usage_missing": false,
+      "latency_ms": 1510.969,
+      "cumulative_prompt": 796,
+      "cumulative_completion": 85,
+      "cumulative_cost_usd": 0.0001704
+    },
+    {
+      "lap": 2,
+      "prompt_tokens": 1516,
+      "completion_tokens": 52,
+      "cached_tokens": 0,
+      "usage_missing": false,
+      "latency_ms": 547.102,
+      "cumulative_prompt": 2312,
+      "cumulative_completion": 137,
+      "cumulative_cost_usd": 0.000429
+    },
+    {
+      "lap": 3,
+      "prompt_tokens": 2074,
+      "completion_tokens": 114,
+      "cached_tokens": 0,
+      "usage_missing": false,
+      "latency_ms": 888.84,
+      "cumulative_prompt": 4386,
+      "cumulative_completion": 251,
+      "cumulative_cost_usd": 0.0008085
+    }
+  ],
+  "prompt_tokens": 4386,
+  "completion_tokens": 251,
+  "cached_tokens": 0,
+  "total_tokens": 4637,
+  "usage_missing_calls": 0,
+  "cost_usd": 0.0008085,
+  "price_verified": true,
+  "latency_ms": 34297.331,
+  "rate_limit_wait_s": 0.0,
+  "elapsed_s": 34.297,
+  "termination": "final_answer",
+  "termination_detail": "model answered without requesting more tools",
+  "budgets": {
+    "max_iterations": 8,
+    "max_tokens": 25000,
+    "max_cost_usd": 0.01,
+    "max_wall_clock_s": 120.0
+  },
+  "budget_trip": null,
+  "transcript": [
+    {
+      "role": "system",
+      "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou have tools available. Call them as needed to gather what you need before answering. Some questions cannot be answered from a single tool call: if a result points you at something else — a replacement operation, another version — look that up too before you answer.\n"
+    },
+    {
+      "role": "user",
+      "content": "Question: Is release 2.1.0 of the example-sdk package deprecated, and if so, which release should we install instead?\n"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "fc_56402c5b-f1d6-4b8a-90f5-791e0721dd21",
+          "type": "function",
+          "function": {
+            "name": "search_docs",
+            "arguments": "{\"api_version\":\"v3\",\"query\":\"example-sdk release 2.1.0 deprecated\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "fc_56402c5b-f1d6-4b8a-90f5-791e0721dd21",
+      "name": "search_docs",
+      "content": "{\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-send#example::2\", \"heading_path\": \"Client.send() > Example\", \"score\": 0.4831, \"text\": \"Client.send() > Example\\n\\n## Example\\n\\n```python\\nfrom sdk import Client\\n\\nclient = Client(api_key=\\\"sk-...\\\")\\n\\nresponse = client.send(\\n    payload={\\\"query\\\": \\\"hello\\\"},\\n    retry_backoff_ms=500,\\n    max_retries=5,\\n    idempotency_key=\\\"req-0001\\\",\\n    retry_on=[500, 502, 503],\\n)\\n\\nprint(response.status_code)\\nprint(response.json())\\n```\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-configure#example::2\", \"heading_path\": \"Client.configure() > Example\", \"score\": 0.4579, \"text\": \"Client.configure() > Example\\n\\n## Example\\n\\n```python\\nclient = Client()\\nclient.configure(\\n    api_key=\\\"sk-...\\\",\\n    pool_size=32,\\n    default_timeout_ms=45000,\\n    telemetry=False,\\n)\\n```\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-close#example::2\", \"heading_path\": \"Client.close() > Example\", \"score\": 0.438, \"text\": \"Client.close() > Example\\n\\n## Example\\n\\n```python\\nclient = Client(api_key=\\\"sk-...\\\")\\ntry:\\n    client.send(payload={\\\"query\\\": \\\"hello\\\"})\\nfinally:\\n    client.close(timeout_ms=2000)\\n\\n# Or as a context manager, which closes on exit:\\nwith Client(api_key=\\\"sk-...\\\") as client:\\n    client.send(payload={\\\"query\\\": \\\"hello\\\"})\\n```\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-upload#example::2\", \"heading_path\": \"Client.upload() > Example\", \"score\": 0.4352, \"text\": \"Client.upload() > Example\\n\\n## Example\\n\\n```python\\nhandle = client.upload(\\n    path=\\\"./corpus/manual.pdf\\\",\\n    chunk_bytes=16777216,\\n    retain_hours=72,\\n)\\n\\nclient.send(payload={\\\"query\\\": \\\"summarise\\\", \\\"file\\\": handle.id})\\n```\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-batch#example::2\", \"heading_path\": \"Client.send_batch() > Example\", \"score\": 0.4184, \"text\": \"Client.send_batch() > Example\\n\\n## Example\\n\\n```python\\nresponses = client.send_batch(\\n    payloads=[{\\\"query\\\": q} for q in queries],\\n    concurrency=16,\\n    rate_limit_rps=50,\\n    fail_fast=False,\\n)\\n\\nfailed = [r for r in responses if r.status_code >= 500]\\nprint(f\\\"{len(failed)} of {len(responses)} need a retry\\\")\\n```\"}]}"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "fc_89d7d6c2-64ba-4136-b89b-a05f1a53535f",
+          "type": "function",
+          "function": {
+            "name": "search_docs",
+            "arguments": "{\"api_version\":\"v2\",\"query\":\"example-sdk deprecated\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "fc_89d7d6c2-64ba-4136-b89b-a05f1a53535f",
+      "name": "search_docs",
+      "content": "{\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-close#example::2\", \"heading_path\": \"Client.close() > Example\", \"score\": 0.5024, \"text\": \"Client.close() > Example\\n\\n## Example\\n\\n```python\\nclient = Client(api_key=\\\"sk-...\\\")\\nclient.send(payload={\\\"query\\\": \\\"hello\\\"})\\nclient.close()\\n```\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-send#notes::2\", \"heading_path\": \"Client.send() > Notes\", \"score\": 0.4757, \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` parameter is accepted in v2 but ignored. Automatic\\nretries arrived in v3.\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-configure#example::2\", \"heading_path\": \"Client.configure() > Example\", \"score\": 0.471, \"text\": \"Client.configure() > Example\\n\\n## Example\\n\\n```python\\nclient = Client()\\nclient.configure(api_key=\\\"sk-...\\\", pool_size=8, default_timeout_ms=20000)\\n```\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.4691, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\n`force` defaults to true in v2 and setting it to false has no effect — the\\nparameter exists only so that code written against the v3 preview does not fail\\nto import. In v3 the default is false and requests are drained.\\n\\nThere is no context-manager form in v2.\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-stream#notes::3\", \"heading_path\": \"Client.stream() > Notes\", \"score\": 0.438, \"text\": \"Client.stream() > Notes\\n\\n## Notes\\n\\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\\nprofiling showed the smaller reads dominating CPU time on large responses.\\n\\nThere is no context-manager form in v2 — you must call `close()` yourself, and\\nforgetting to do so leaks the connection until the process exits.\"}]}"
+    },
+    {
+      "role": "assistant",
+      "content": "ANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none"
+    }
+  ]
+}
