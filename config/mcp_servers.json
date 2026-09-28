@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "docs-search": {
+      "command": ".venv/bin/python",
+      "args": ["-m", "app.mcp.servers.docs_server"],
+      "cwd": "."
+    }
+  }
+}
