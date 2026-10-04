@@ -1,0 +1,485 @@
+{
+  "llm_calls": 8,
+  "tool_path": [
+    "version",
+    "code"
+  ],
+  "worker_terminations": [
+    "report",
+    "report"
+  ],
+  "hops": [
+    {
+      "case_id": "w6-014",
+      "seq": 1,
+      "edge": "question -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 655,
+      "completion_tokens": 45,
+      "cached_tokens": 0,
+      "total_tokens": 700,
+      "cost_usd": 0.00012525,
+      "latency_ms": 648.534,
+      "http_status": null,
+      "note": "delegates to version/deprecation worker"
+    },
+    {
+      "case_id": "w6-014",
+      "seq": 2,
+      "edge": "orchestrator -> version/deprecation worker",
+      "actor": "version/deprecation worker",
+      "llm_calls": 3,
+      "prompt_tokens": 7203,
+      "completion_tokens": 599,
+      "cached_tokens": 1536,
+      "total_tokens": 7802,
+      "cost_usd": 0.00132465,
+      "latency_ms": 38390.278,
+      "http_status": 200,
+      "note": "2 tool call(s), termination report"
+    },
+    {
+      "case_id": "w6-014",
+      "seq": 3,
+      "edge": "version/deprecation worker -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 750,
+      "completion_tokens": 134,
+      "cached_tokens": 512,
+      "total_tokens": 884,
+      "cost_usd": 0.0001545,
+      "latency_ms": 7906.425,
+      "http_status": null,
+      "note": "delegates to code-sample worker"
+    },
+    {
+      "case_id": "w6-014",
+      "seq": 4,
+      "edge": "orchestrator -> code-sample worker",
+      "actor": "code-sample worker",
+      "llm_calls": 2,
+      "prompt_tokens": 2834,
+      "completion_tokens": 297,
+      "cached_tokens": 0,
+      "total_tokens": 3131,
+      "cost_usd": 0.0006033,
+      "latency_ms": 19437.349,
+      "http_status": 200,
+      "note": "1 tool call(s), termination report"
+    },
+    {
+      "case_id": "w6-014",
+      "seq": 5,
+      "edge": "code-sample worker -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 868,
+      "completion_tokens": 36,
+      "cached_tokens": 256,
+      "total_tokens": 904,
+      "cost_usd": 0.0001326,
+      "latency_ms": 8236.52,
+      "http_status": null,
+      "note": "final answer"
+    }
+  ],
+  "arm": "squad",
+  "case_id": "w6-014",
+  "question": "what type is telemetry",
+  "recorded_at": "2026-10-04T07:00:18.204557+00:00",
+  "git_sha": "b90fe78",
+  "model": "openai/gpt-oss-120b",
+  "termination": "final_answer",
+  "termination_detail": "no VERSION: line",
+  "prompt_tokens": 12310,
+  "completion_tokens": 1111,
+  "cached_tokens": 2304,
+  "total_tokens": 13421,
+  "cost_usd": 0.0023403,
+  "latency_ms": 74628.009,
+  "rate_limit_wait_s": 41.0,
+  "adjusted_latency_ms": 33628.009,
+  "answer": {
+    "answer": "In v3, the `telemetry` parameter is a boolean. VERSION: v3 CITATIONS: v3/client-configure#parameters::1",
+    "sdk_version": "none",
+    "citations": [],
+    "refused": false,
+    "raw": "ANSWER: In v3, the `telemetry` parameter is a boolean. VERSION: v3 CITATIONS: v3/client-configure#parameters::1",
+    "parse_error": "no VERSION: line"
+  },
+  "run": {
+    "arm": "squad",
+    "question_id": "w6-014",
+    "question": "what type is telemetry",
+    "output": {
+      "answer": "In v3, the `telemetry` parameter is a boolean. VERSION: v3 CITATIONS: v3/client-configure#parameters::1",
+      "sdk_version": "none",
+      "citations": [],
+      "refused": false,
+      "raw": "ANSWER: In v3, the `telemetry` parameter is a boolean. VERSION: v3 CITATIONS: v3/client-configure#parameters::1",
+      "parse_error": "no VERSION: line"
+    },
+    "hops": [
+      {
+        "case_id": "w6-014",
+        "seq": 1,
+        "edge": "question -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 655,
+        "completion_tokens": 45,
+        "cached_tokens": 0,
+        "total_tokens": 700,
+        "cost_usd": 0.00012525,
+        "latency_ms": 648.534,
+        "http_status": null,
+        "note": "delegates to version/deprecation worker"
+      },
+      {
+        "case_id": "w6-014",
+        "seq": 2,
+        "edge": "orchestrator -> version/deprecation worker",
+        "actor": "version/deprecation worker",
+        "llm_calls": 3,
+        "prompt_tokens": 7203,
+        "completion_tokens": 599,
+        "cached_tokens": 1536,
+        "total_tokens": 7802,
+        "cost_usd": 0.00132465,
+        "latency_ms": 38390.278,
+        "http_status": 200,
+        "note": "2 tool call(s), termination report"
+      },
+      {
+        "case_id": "w6-014",
+        "seq": 3,
+        "edge": "version/deprecation worker -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 750,
+        "completion_tokens": 134,
+        "cached_tokens": 512,
+        "total_tokens": 884,
+        "cost_usd": 0.0001545,
+        "latency_ms": 7906.425,
+        "http_status": null,
+        "note": "delegates to code-sample worker"
+      },
+      {
+        "case_id": "w6-014",
+        "seq": 4,
+        "edge": "orchestrator -> code-sample worker",
+        "actor": "code-sample worker",
+        "llm_calls": 2,
+        "prompt_tokens": 2834,
+        "completion_tokens": 297,
+        "cached_tokens": 0,
+        "total_tokens": 3131,
+        "cost_usd": 0.0006033,
+        "latency_ms": 19437.349,
+        "http_status": 200,
+        "note": "1 tool call(s), termination report"
+      },
+      {
+        "case_id": "w6-014",
+        "seq": 5,
+        "edge": "code-sample worker -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 868,
+        "completion_tokens": 36,
+        "cached_tokens": 256,
+        "total_tokens": 904,
+        "cost_usd": 0.0001326,
+        "latency_ms": 8236.52,
+        "http_status": null,
+        "note": "final answer"
+      }
+    ],
+    "workers": [
+      {
+        "worker": "version",
+        "output": "TARGET_VERSION: v3\nVERSION_NOTES: telemetry parameter is of type **bool** in v3 (see [v3/client-configure#parameters::1]); the telemetry parameter does not exist in v2.\nDEPRECATION: none found",
+        "termination": "report",
+        "tool_calls": [
+          {
+            "seq": 1,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v2",
+              "query": "telemetry"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 14287.131,
+            "result_chars": 2824,
+            "result_chunk_ids": [
+              "v2/client-configure#parameters::1",
+              "v2/client-stream#parameters::1",
+              "v2/client-send#parameters::1",
+              "v2/client-close#parameters::1",
+              "v2/client-stream#example::2"
+            ]
+          },
+          {
+            "seq": 2,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v3",
+              "query": "telemetry"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 1733.069,
+            "result_chars": 4201,
+            "result_chunk_ids": [
+              "v3/client-configure#example::2",
+              "v3/client-configure#parameters::1",
+              "v3/client-send#parameters::1",
+              "v3/client-upload#parameters::1",
+              "v3/client-batch#parameters::1"
+            ]
+          }
+        ],
+        "llm_calls": 3,
+        "prompt_tokens": 7203,
+        "completion_tokens": 599,
+        "cached_tokens": 1536,
+        "total_tokens": 7802,
+        "cost_usd": 0.00132465,
+        "rate_limit_wait_s": 19.0,
+        "latency_ms": 38326.661,
+        "transcript": [
+          {
+            "role": "system",
+            "content": "You are the version/deprecation worker in a documentation team. You have one job: establish which SDK version a developer question concerns, and what about it differs between versions or is deprecated.\n\nUse your tools, and state nothing you have not seen a tool return. search_docs searches one documentation version at a time (\"v2\" or \"v3\"). The package tools report published releases and deprecation notices.\n\nIf the question names a version, that is the target. If it compares versions, the target is both. Otherwise the target is v3, the newest documented version.\n\nReply in exactly this format and nothing else:\nTARGET_VERSION: <v2, v3 or both>\nVERSION_NOTES: <what differs between v2 and v3 for what the question asks, with chunk ids in [brackets]; or: none found>\nDEPRECATION: <any deprecation that applies, from a tool result; or: none found>\n\nDo not answer the question itself. Another worker does that.\n"
+          },
+          {
+            "role": "user",
+            "content": "Developer question: what type is telemetry"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_cbc9b5af-d5fe-4222-a72c-751c457100c1",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v2\",\"query\":\"telemetry\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_cbc9b5af-d5fe-4222-a72c-751c457100c1",
+            "name": "search_docs",
+            "content": "{\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-configure#parameters::1\", \"heading_path\": \"Client.configure() > Parameters\", \"score\": 0.4167, \"text\": \"Client.configure() > Parameters\\n\\n## Parameters\\n\\n| name               | type | default        | required | description                                    |\\n|--------------------|------|----------------|----------|-------------------------------------------------|\\n| api_key            | str  | —              | yes      | Credential used for every request.             |\\n| base_url           | str  | https://api.example.com | no | Endpoint root for all calls.            |\\n| pool_size          | int  | 4              | no       | Maximum simultaneous pooled connections.       |\\n| default_timeout_ms | int  | 10000          | no       | Timeout applied when a call does not set one.  |\\n| log_level          | str  | error          | no       | One of debug, info, warning, error.            |\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-stream#parameters::1\", \"heading_path\": \"Client.stream() > Parameters\", \"score\": 0.4102, \"text\": \"Client.stream() > Parameters\\n\\n## Parameters\\n\\n| name         | type | default | required | description                                     |\\n|--------------|------|---------|----------|--------------------------------------------------|\\n| payload      | dict | —       | yes      | The request body.                               |\\n| chunk_size   | int  | 512     | no       | Bytes read from the socket per iteration.       |\\n| heartbeat_ms | int  | 30000   | no       | Interval between server keep-alive frames.      |\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-send#parameters::1\", \"heading_path\": \"Client.send() > Parameters\", \"score\": 0.4012, \"text\": \"Client.send() > Parameters\\n\\n## Parameters\\n\\n| name             | type | default | required |\\n|------------------|------|---------|----------|\\n| payload          | dict | —       | yes      |\\n| timeout_ms       | int  | 10000   | no       |\\n| retry_backoff_ms | int  | 100     | no       |\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-close#parameters::1\", \"heading_path\": \"Client.close() > Parameters\", \"score\": 0.3971, \"text\": \"Client.close() > Parameters\\n\\n## Parameters\\n\\n| name  | type | default | required | description                              |\\n|-------|------|---------|----------|-------------------------------------------|\\n| force | bool | True    | no       | Cancel in-flight requests. Always true.  |\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-stream#example::2\", \"heading_path\": \"Client.stream() > Example\", \"score\": 0.3779, \"text\": \"Client.stream() > Example\\n\\n## Example\\n\\n```python\\nevents = client.stream(payload={\\\"query\\\": \\\"hello\\\"})\\nfor event in events:\\n    print(event.text, end=\\\"\\\")\\nevents.close()\\n```\"}]}"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_6cea3ee1-fad1-4206-91d4-d84e62e6a242",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v3\",\"query\":\"telemetry\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_6cea3ee1-fad1-4206-91d4-d84e62e6a242",
+            "name": "search_docs",
+            "content": "{\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-configure#example::2\\\", \\\"heading_path\\\": \\\"Client.configure() > Example\\\", \\\"score\\\": 0.4989, \\\"text\\\": \\\"Client.configure() > Example\\\\n\\\\n## Example\\\\n\\\\n```python\\\\nclient = Client()\\\\nclient.configure(\\\\n    api_key=\\\\\\\"sk-...\\\\\\\",\\\\n    pool_size=32,\\\\n    default_timeout_ms=45000,\\\\n    telemetry=False,\\\\n)\\\\n```\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-configure#parameters::1\\\", \\\"heading_path\\\": \\\"Client.configure() > Parameters\\\", \\\"score\\\": 0.4595, \\\"text\\\": \\\"Client.configure() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name              | type | default        | required | description                                        |\\\\n|-------------------|------|----------------|----------|-----------------------------------------------------|\\\\n| api_key           | str  | —              | yes      | Credential used for every request.                 |\\\\n| base_url          | str  | https://api.example.com | no | Endpoint root for all calls.                |\\\\n| pool_size         | int  | 10             | no       | Maximum simultaneous pooled connections.           |\\\\n| pool_reap_seconds | int  | 90             | no       | Idle time before a pooled connection is collected. |\\\\n| default_timeout_ms| int  | 30000          | no       | Timeout applied when a call does not set one.      |\\\\n| retries_enabled   | bool | True           | no       | Master switch for the automatic retry path.        |\\\\n| log_level         | str  | warning        | no       | One of debug, info, warning, error.                |\\\\n| telemetry         | bool | True           | no       | Send anonymous usage counters to the vendor.       |\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.4443, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|------------------|------|-----------|----------|------------------------------------------------------|\\\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\\\n| stream           | bool | False     | no       | Return a generator instead of a materialised body.   |\\\\n| verify_tls       | bool | True      | no       | Validate the server certificate chain.               |\\\\n| proxy            | str  | None      | no       | HTTP proxy URL applied to this call only.            |\\\\n| user_agent       | str  | None      | no       | Overrides the default SDK user agent string.         |\\\\n| retry_on         | list | [500,502] | no       | Status codes that trigger the automatic retry path.  |\\\\n| max_redirects    | int  | 5         | no       | Redirects followed before RedirectLoopError is set.  |\\\\n| pool_timeout_ms  | int  | 5000      | no       | Time spent waiting for a free pooled connection.     |\\\\n| trace_id         | str  | None      | no       | Propagated to the server for distributed tracing.    |\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-upload#parameters::1\\\", \\\"heading_path\\\": \\\"Client.upload() > Parameters\\\", \\\"score\\\": 0.4337, \\\"text\\\": \\\"Client.upload() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name          | type | default  | \"}"
+          },
+          {
+            "role": "assistant",
+            "content": "TARGET_VERSION: v3\nVERSION_NOTES: telemetry parameter is of type **bool** in v3 (see [v3/client-configure#parameters::1]); the telemetry parameter does not exist in v2.\nDEPRECATION: none found"
+          }
+        ]
+      },
+      {
+        "worker": "code",
+        "output": "CONTENT: v3: the `telemetry` parameter is of type **bool** [v3/client-configure#parameters::1]\nCODE: none",
+        "termination": "report",
+        "tool_calls": [
+          {
+            "seq": 1,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v3",
+              "query": "telemetry parameter"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 8674.481,
+            "result_chars": 4190,
+            "result_chunk_ids": [
+              "v3/client-upload#parameters::1",
+              "v3/client-configure#parameters::1",
+              "v3/client-batch#parameters::1",
+              "v3/client-send#parameters::1",
+              "v3/client-stream#parameters::1"
+            ]
+          }
+        ],
+        "llm_calls": 2,
+        "prompt_tokens": 2834,
+        "completion_tokens": 297,
+        "cached_tokens": 0,
+        "total_tokens": 3131,
+        "cost_usd": 0.0006033,
+        "rate_limit_wait_s": 8.0,
+        "latency_ms": 19422.661,
+        "transcript": [
+          {
+            "role": "system",
+            "content": "You are the code-sample worker in a documentation team. You receive one task and the target SDK version. Find what the documentation says, and report it.\n\nUse search_docs with api_version set to the target version. When the target is both, search each version separately. State nothing you have not seen a passage say.\n\nCopy code only if a passage shows it, verbatim. Never compose a call the documentation does not show.\n\nReply in exactly this format and nothing else:\nCONTENT: <the facts that answer the task, naming the version they belong to, with chunk ids in [brackets]>\nCODE: <a code sample copied verbatim from a passage, or: none>\n\nIf the passages do not contain the answer, reply CONTENT: not documented, and CODE: none.\n"
+          },
+          {
+            "role": "user",
+            "content": "Task: type of telemetry\nTarget version: v3\nVersion notes from the version worker: telemetry parameter is of type bool in v3 (see [v3/client-configure#parameters::1]); the telemetry parameter does not exist in v2."
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_124531c2-1ed7-49f3-86a6-0552a3d8dedc",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v3\",\"query\":\"telemetry parameter\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_124531c2-1ed7-49f3-86a6-0552a3d8dedc",
+            "name": "search_docs",
+            "content": "{\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-upload#parameters::1\\\", \\\"heading_path\\\": \\\"Client.upload() > Parameters\\\", \\\"score\\\": 0.561, \\\"text\\\": \\\"Client.upload() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name          | type | default  | required | description                                        |\\\\n|---------------|------|----------|----------|-----------------------------------------------------|\\\\n| path          | str  | —        | yes      | Local path of the file to upload.                  |\\\\n| content_type  | str  | None     | no       | Overrides the type guessed from the extension.     |\\\\n| chunk_bytes   | int  | 8388608  | no       | Multipart threshold and part size, in bytes.       |\\\\n| retain_hours  | int  | 24       | no       | How long the handle stays valid.                   |\\\\n| checksum      | bool | True     | no       | Verify a SHA-256 checksum after upload.            |\\\\n| resume        | bool | True     | no       | Resume an interrupted multipart upload.            |\\\\n| max_bytes     | int  | 524288000| no       | Reject files larger than this before sending.      |\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-configure#parameters::1\\\", \\\"heading_path\\\": \\\"Client.configure() > Parameters\\\", \\\"score\\\": 0.5593, \\\"text\\\": \\\"Client.configure() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name              | type | default        | required | description                                        |\\\\n|-------------------|------|----------------|----------|-----------------------------------------------------|\\\\n| api_key           | str  | —              | yes      | Credential used for every request.                 |\\\\n| base_url          | str  | https://api.example.com | no | Endpoint root for all calls.                |\\\\n| pool_size         | int  | 10             | no       | Maximum simultaneous pooled connections.           |\\\\n| pool_reap_seconds | int  | 90             | no       | Idle time before a pooled connection is collected. |\\\\n| default_timeout_ms| int  | 30000          | no       | Timeout applied when a call does not set one.      |\\\\n| retries_enabled   | bool | True           | no       | Master switch for the automatic retry path.        |\\\\n| log_level         | str  | warning        | no       | One of debug, info, warning, error.                |\\\\n| telemetry         | bool | True           | no       | Send anonymous usage counters to the vendor.       |\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-batch#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send_batch() > Parameters\\\", \\\"score\\\": 0.5513, \\\"text\\\": \\\"Client.send_batch() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name            | type | default | required | description                                          |\\\\n|-----------------|------|---------|----------|------------------------------------------------------|\\\\n| payloads        | list | —       | yes      | Request bodies, sent in the order given.             |\\\\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\\\\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\\\\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\\\\n| ordered         | bool | True    | no       | Return responses in submission order.                |\\\\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\\\\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\\\\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.5424, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|------------------|------|-----------|----------|\"}"
+          },
+          {
+            "role": "assistant",
+            "content": "CONTENT: v3: the `telemetry` parameter is of type **bool** [v3/client-configure#parameters::1]\nCODE: none"
+          }
+        ]
+      }
+    ],
+    "delegations": [
+      {
+        "worker": "version",
+        "arguments": {
+          "question": "what type is telemetry"
+        },
+        "http_status": 200
+      },
+      {
+        "worker": "code",
+        "arguments": {
+          "target_version": "v3",
+          "task": "type of telemetry",
+          "version_notes": "telemetry parameter is of type bool in v3 (see [v3/client-configure#parameters::1]); the telemetry parameter does not exist in v2."
+        },
+        "http_status": 200
+      }
+    ],
+    "prompt_tokens": 12310,
+    "completion_tokens": 1111,
+    "cached_tokens": 2304,
+    "total_tokens": 13421,
+    "cost_usd": 0.0023403,
+    "latency_ms": 74628.009,
+    "rate_limit_wait_s": 41.0,
+    "termination": "final_answer",
+    "termination_detail": "no VERSION: line",
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou lead a team of two workers, available to you as tools. You cannot search the documentation yourself.\n\n1. Call delegate_version_check with the developer's question. It reports the target version, and what differs between versions or is deprecated.\n2. Call delegate_code_sample with the task, the target version from step 1, and the version notes. It reports the documented facts and any documented code sample, with chunk ids.\n3. Write the answer from the workers' reports only, and cite the chunk ids they cite.\n\nYour final reply uses the format above: ANSWER, VERSION and CITATIONS each on a line of its own.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: what type is telemetry\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_f36a62a9-82f6-4c0b-b849-1941bd752236",
+            "type": "function",
+            "function": {
+              "name": "delegate_version_check",
+              "arguments": "{\"question\":\"what type is telemetry\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_f36a62a9-82f6-4c0b-b849-1941bd752236",
+        "name": "delegate_version_check",
+        "content": "{\"worker\": \"version/deprecation worker\", \"report\": \"TARGET_VERSION: v3\\nVERSION_NOTES: telemetry parameter is of type **bool** in v3 (see [v3/client-configure#parameters::1]); the telemetry parameter does not exist in v2.\\nDEPRECATION: none found\"}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_3e550947-ac3e-49a1-aa0e-777661887291",
+            "type": "function",
+            "function": {
+              "name": "delegate_code_sample",
+              "arguments": "{\"target_version\":\"v3\",\"task\":\"type of telemetry\",\"version_notes\":\"telemetry parameter is of type bool in v3 (see [v3/client-configure#parameters::1]); the telemetry parameter does not exist in v2.\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_3e550947-ac3e-49a1-aa0e-777661887291",
+        "name": "delegate_code_sample",
+        "content": "{\"worker\": \"code-sample worker\", \"report\": \"CONTENT: v3: the `telemetry` parameter is of type **bool** [v3/client-configure#parameters::1]\\nCODE: none\"}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: In v3, the `telemetry` parameter is a boolean. VERSION: v3 CITATIONS: v3/client-configure#parameters::1"
+      }
+    ]
+  },
+  "grade": {
+    "passed": false,
+    "answer_text": "",
+    "context_ids": [
+      "v2/client-configure#parameters::1",
+      "v2/client-stream#parameters::1",
+      "v2/client-send#parameters::1",
+      "v2/client-close#parameters::1",
+      "v2/client-stream#example::2",
+      "v3/client-configure#example::2",
+      "v3/client-configure#parameters::1",
+      "v3/client-send#parameters::1",
+      "v3/client-upload#parameters::1",
+      "v3/client-batch#parameters::1",
+      "v3/client-stream#parameters::1"
+    ],
+    "assertions": [],
+    "judge": {
+      "verdict": "NOT_JUDGED",
+      "reason": "no parsable answer: no VERSION: line"
+    }
+  }
+}

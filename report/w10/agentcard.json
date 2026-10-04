@@ -1,0 +1,41 @@
+{
+  "protocolVersion": "0.3.0",
+  "name": "docs-squad-orchestrator",
+  "description": "Answers developer questions about the example SDK (Client methods, parameters, defaults, v2 vs v3 differences) by delegating to a version/deprecation worker and a code-sample worker, then writing one answer grounded in the reference documentation, with chunk-id citations. Week 10 design: this card is what the orchestrator would advertise; the build in app/rag/week10_squad.py serves its workers over plain local HTTP, not A2A.",
+  "url": "http://localhost:8000/a2a/docs-squad",
+  "preferredTransport": "JSONRPC",
+  "version": "0.1.0",
+  "provider": {
+    "organization": "Gen-AI-Dev (local experiment)",
+    "url": "https://github.com/dineshrprofessional-design/Gen-AI-Dev"
+  },
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": true
+  },
+  "securitySchemes": {
+    "bearer": {
+      "type": "http",
+      "scheme": "bearer",
+      "description": "Caller token, scoped per skill. The local build has no authentication; a deployment would need it before exposing the squad."
+    }
+  },
+  "security": [{ "bearer": [] }],
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain"],
+  "skills": [
+    {
+      "id": "answer-sdk-question",
+      "name": "Answer an SDK documentation question",
+      "description": "One question in, one answer out, in the ANSWER / VERSION / CITATIONS contract. Every claim comes from the v2/v3 reference documentation or the package registry; when they do not contain the answer, the reply is INSUFFICIENT_CONTEXT. When a worker fails, the task cannot complete as asked (see report/w10/a2a.md).",
+      "tags": ["documentation", "sdk", "versions", "deprecation", "code-samples"],
+      "examples": [
+        "What is the default value of retry_backoff_ms on Client.send() in v3?",
+        "did chunk_size change between v2 and v3"
+      ],
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/plain"]
+    }
+  ]
+}

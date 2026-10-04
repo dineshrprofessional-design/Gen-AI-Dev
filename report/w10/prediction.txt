@@ -1,0 +1,36 @@
+WEEK 10 PREDICTION: committed before the squad is built and before any race run.
+Date: 2026-10-04. Cases: eval/week10_selection.yaml (10 Week-6 cases, rule-selected, seed 10).
+
+ARMS
+  single  app/rag/week9_agent.py, unchanged; tools from MCP (search_docs,
+          get_package_versions, get_package_deprecation)
+  squad   orchestrator LLM delegating to a version/deprecation worker and a
+          code-sample worker over HTTP; workers reach the same MCP tools, each
+          with a narrow subset
+
+PREDICTIONS
+  1. Pass rate: the squad does NOT beat the single agent by 2 or more cases.
+     Most of these 10 questions are single-hop lookups ("what type is X",
+     "is X required"). Splitting them into a version check plus a content
+     lookup adds hops, not information, and every hop is another place to drop
+     or overstate a fact.
+  2. Tokens: multiplier between 3.0 and 5.0. The orchestrator re-sends the
+     question and every worker report on each of its laps, and each worker
+     carries its own search results across its own laps.
+  3. Latency: squad p50 is 2x to 3x the single agent's. At least 5 sequential
+     LLM calls per question against about 2.
+  4. Largest token share: the orchestrator -> code-sample worker hand-off, whose
+     search_docs passages are re-sent across the worker's laps.
+  5. Injected 500 on w6-019: the orchestrator degrades, answering without the
+     version worker. Risk of "lie": it states a version-specific answer that no
+     successful version check supports.
+
+DECISION RULE (fixed now, applied to whatever the numbers say)
+  KEEP the squad only if it passes at least 2 more of the 10 cases than the
+  single agent. A 1-case difference is inside the run-to-run noise Week 7
+  measured on this model (both arms had bistable questions). Otherwise KILL:
+  equal or worse accuracy at a higher token bill is not a trade.
+
+  Each arm runs once. A run lost to an infrastructure failure (provider quota,
+  network) is re-run and logged as such. A run that completes is never re-run,
+  whatever it scores.

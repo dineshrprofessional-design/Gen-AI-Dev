@@ -1,0 +1,83 @@
+# Week 10 race: which Week 6 cases, and how they were chosen. Generated, do not edit:
+#   python -m app.rag.week10_cases --write   /   --check
+generated_by: python -m app.rag.week10_cases --write
+week6_cases: eval/week6_cases.jsonl
+week6_cases_sha256: 47f0b2a2fb941759ebad4ee18a500ae61758858bb2f7940e4cadbadca910fa94
+seed: 10
+rule: drop Judge v2 worked examples ['w6-020', 'w6-023']; then random.Random(10).sample 9 of the sorted
+  answer cases and 1 of the sorted refusal cases
+excluded_judge_examples:
+- w6-020
+- w6-023
+pool_sizes:
+  answer: 27
+  refuse: 3
+selected:
+- case_id: w6-001
+  expected_behavior: answer
+  sdk_version: v3
+  mode: '1'
+  question: what does the client do when the endpoint returns 5xx
+- case_id: w6-002
+  expected_behavior: answer
+  sdk_version: v3
+  mode: '1'
+  question: is chunk_size required
+- case_id: w6-007
+  expected_behavior: answer
+  sdk_version: v3
+  mode: '1'
+  question: can I call close twice
+- case_id: w6-014
+  expected_behavior: answer
+  sdk_version: v3
+  mode: '3'
+  question: what type is telemetry
+- case_id: w6-015
+  expected_behavior: answer
+  sdk_version: v3
+  mode: '3'
+  question: can I disable telemetry for GDPR compliance
+- case_id: w6-016
+  expected_behavior: answer
+  sdk_version: v3
+  mode: '3'
+  question: What is the default value of retry_backoff_ms on Client.send() in v3?
+- case_id: w6-019
+  expected_behavior: answer
+  sdk_version: both
+  mode: '4'
+  question: did chunk_size change between v2 and v3
+- case_id: w6-026
+  expected_behavior: answer
+  sdk_version: v3
+  mode: clean
+  question: what type is concurrency
+- case_id: w6-029
+  expected_behavior: answer
+  sdk_version: v3
+  mode: clean
+  question: What type is the max_redirects parameter on Client.send()?
+- case_id: w6-031
+  expected_behavior: refuse
+  sdk_version: none
+  mode: clean
+  question: What is the rate limit on the /v1/embeddings endpoint?
+failure_case: w6-019
+smoke_case: w6-003
+pass_rule: A case passes when Judge v2 (app/rag/week6_judge.py, the Week 6 prompt and model, temperature
+  0) returns PASS and no Week 6 assertion (app/rag/week6_assertions.py) returns fail; n/a and skipped
+  do not fail. Both instruments see the arm's ANSWER text only, with the citations the arm captured and,
+  as context, every chunk or tool result its tools returned during the run. The VERSION and CITATIONS
+  lines are metadata and are withheld, because the VERSION line would satisfy the version_stated assertion
+  on every answer. An answer with no parsable ANSWER line fails, as in Week 7.
+metrics:
+  pass_rate: cases passed / 10, by PASS_RULE
+  latency: wall clock per question, minus time spent sleeping on provider 429s (Week 7 rule, both arms
+    alike); p50 and p99 by nearest rank (app/rag/percentile.py). With 10 samples p99 is the slowest run.
+  total_tokens: 'prompt + completion tokens of every LLM call the arm made, summed over the 10 cases:
+    for the squad that is the orchestrator plus both workers. Judge tokens are evaluation overhead, not
+    either arm''s cost, and are excluded from both.'
+  cost_per_question: list price from eval/week7_prices.yaml (openai/gpt-oss-120b, cached input at its
+    own rate) / 10. The free tier bills nothing; this is what the tokens would cost.
+  multiplier: squad total tokens / single-agent total tokens, one decimal place

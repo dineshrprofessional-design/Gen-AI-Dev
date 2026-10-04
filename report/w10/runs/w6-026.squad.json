@@ -1,0 +1,433 @@
+{
+  "llm_calls": 6,
+  "tool_path": [
+    "version"
+  ],
+  "worker_terminations": [
+    "max_laps"
+  ],
+  "hops": [
+    {
+      "case_id": "w6-026",
+      "seq": 1,
+      "edge": "question -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 655,
+      "completion_tokens": 46,
+      "cached_tokens": 256,
+      "total_tokens": 701,
+      "cost_usd": 0.00010665,
+      "latency_ms": 245.456,
+      "http_status": null,
+      "note": "delegates to version/deprecation worker"
+    },
+    {
+      "case_id": "w6-026",
+      "seq": 2,
+      "edge": "orchestrator -> version/deprecation worker",
+      "actor": "version/deprecation worker",
+      "llm_calls": 4,
+      "prompt_tokens": 10963,
+      "completion_tokens": 669,
+      "cached_tokens": 1536,
+      "total_tokens": 11632,
+      "cost_usd": 0.00193065,
+      "latency_ms": 61135.731,
+      "http_status": 200,
+      "note": "4 tool call(s), termination max_laps"
+    },
+    {
+      "case_id": "w6-026",
+      "seq": 3,
+      "edge": "version/deprecation worker -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 706,
+      "completion_tokens": 127,
+      "cached_tokens": 512,
+      "total_tokens": 833,
+      "cost_usd": 0.0001437,
+      "latency_ms": 5462.598,
+      "http_status": null,
+      "note": "final answer"
+    }
+  ],
+  "arm": "squad",
+  "case_id": "w6-026",
+  "question": "what type is concurrency",
+  "recorded_at": "2026-10-04T19:35:28.718280+00:00",
+  "git_sha": "e850b85",
+  "model": "openai/gpt-oss-120b",
+  "termination": "final_answer",
+  "termination_detail": "orchestrator answered",
+  "prompt_tokens": 12324,
+  "completion_tokens": 842,
+  "cached_tokens": 2304,
+  "total_tokens": 13166,
+  "cost_usd": 0.002181,
+  "latency_ms": 66846.66,
+  "rate_limit_wait_s": 59.0,
+  "adjusted_latency_ms": 7846.66,
+  "answer": {
+    "answer": "INSUFFICIENT_CONTEXT",
+    "sdk_version": "none",
+    "citations": [],
+    "refused": true,
+    "raw": "ANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none",
+    "parse_error": ""
+  },
+  "run": {
+    "arm": "squad",
+    "question_id": "w6-026",
+    "question": "what type is concurrency",
+    "output": {
+      "answer": "INSUFFICIENT_CONTEXT",
+      "sdk_version": "none",
+      "citations": [],
+      "refused": true,
+      "raw": "ANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none",
+      "parse_error": ""
+    },
+    "hops": [
+      {
+        "case_id": "w6-026",
+        "seq": 1,
+        "edge": "question -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 655,
+        "completion_tokens": 46,
+        "cached_tokens": 256,
+        "total_tokens": 701,
+        "cost_usd": 0.00010665,
+        "latency_ms": 245.456,
+        "http_status": null,
+        "note": "delegates to version/deprecation worker"
+      },
+      {
+        "case_id": "w6-026",
+        "seq": 2,
+        "edge": "orchestrator -> version/deprecation worker",
+        "actor": "version/deprecation worker",
+        "llm_calls": 4,
+        "prompt_tokens": 10963,
+        "completion_tokens": 669,
+        "cached_tokens": 1536,
+        "total_tokens": 11632,
+        "cost_usd": 0.00193065,
+        "latency_ms": 61135.731,
+        "http_status": 200,
+        "note": "4 tool call(s), termination max_laps"
+      },
+      {
+        "case_id": "w6-026",
+        "seq": 3,
+        "edge": "version/deprecation worker -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 706,
+        "completion_tokens": 127,
+        "cached_tokens": 512,
+        "total_tokens": 833,
+        "cost_usd": 0.0001437,
+        "latency_ms": 5462.598,
+        "http_status": null,
+        "note": "final answer"
+      }
+    ],
+    "workers": [
+      {
+        "worker": "version",
+        "output": "",
+        "termination": "max_laps",
+        "tool_calls": [
+          {
+            "seq": 1,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v2",
+              "query": "concurrency"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 1128.377,
+            "result_chars": 2433,
+            "result_chunk_ids": [
+              "v2/client-close#notes::3",
+              "v2/client-configure#parameters::1",
+              "v2/client-configure#example::2",
+              "v2/client-stream#notes::3",
+              "v2/client-send#notes::2"
+            ]
+          },
+          {
+            "seq": 2,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v3",
+              "query": "concurrency"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 907.653,
+            "result_chars": 3594,
+            "result_chunk_ids": [
+              "v3/client-batch#notes::3",
+              "v3/client-batch#example::2",
+              "v3/client-configure#notes::3",
+              "v3/client-batch#parameters::1",
+              "v3/client-close#notes::3"
+            ]
+          },
+          {
+            "seq": 3,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v3",
+              "query": "concurrency deprecated"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 651.69,
+            "result_chars": 2897,
+            "result_chunk_ids": [
+              "v3/client-batch#notes::3",
+              "v3/client-configure#notes::3",
+              "v3/client-close#notes::3",
+              "v3/client-batch#example::2",
+              "v3/client-upload#notes::3"
+            ]
+          },
+          {
+            "seq": 4,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v2",
+              "query": "concurrency"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 894.212,
+            "result_chars": 2433,
+            "result_chunk_ids": [
+              "v2/client-close#notes::3",
+              "v2/client-configure#parameters::1",
+              "v2/client-configure#example::2",
+              "v2/client-stream#notes::3",
+              "v2/client-send#notes::2"
+            ]
+          }
+        ],
+        "llm_calls": 4,
+        "prompt_tokens": 10963,
+        "completion_tokens": 669,
+        "cached_tokens": 1536,
+        "total_tokens": 11632,
+        "cost_usd": 0.00193065,
+        "rate_limit_wait_s": 54.0,
+        "latency_ms": 61127.658,
+        "transcript": [
+          {
+            "role": "system",
+            "content": "You are the version/deprecation worker in a documentation team. You have one job: establish which SDK version a developer question concerns, and what about it differs between versions or is deprecated.\n\nUse your tools, and state nothing you have not seen a tool return. search_docs searches one documentation version at a time (\"v2\" or \"v3\"). The package tools report published releases and deprecation notices.\n\nIf the question names a version, that is the target. If it compares versions, the target is both. Otherwise the target is v3, the newest documented version.\n\nReply in exactly this format and nothing else:\nTARGET_VERSION: <v2, v3 or both>\nVERSION_NOTES: <what differs between v2 and v3 for what the question asks, with chunk ids in [brackets]; or: none found>\nDEPRECATION: <any deprecation that applies, from a tool result; or: none found>\n\nDo not answer the question itself. Another worker does that.\n"
+          },
+          {
+            "role": "user",
+            "content": "Developer question: what type is concurrency"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_118d77bc-1ddc-4e58-be5c-801b2db2c0cf",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v2\",\"query\":\"concurrency\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_118d77bc-1ddc-4e58-be5c-801b2db2c0cf",
+            "name": "search_docs",
+            "content": "{\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.4179, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\n`force` defaults to true in v2 and setting it to false has no effect — the\\nparameter exists only so that code written against the v3 preview does not fail\\nto import. In v3 the default is false and requests are drained.\\n\\nThere is no context-manager form in v2.\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-configure#parameters::1\", \"heading_path\": \"Client.configure() > Parameters\", \"score\": 0.4064, \"text\": \"Client.configure() > Parameters\\n\\n## Parameters\\n\\n| name               | type | default        | required | description                                    |\\n|--------------------|------|----------------|----------|-------------------------------------------------|\\n| api_key            | str  | —              | yes      | Credential used for every request.             |\\n| base_url           | str  | https://api.example.com | no | Endpoint root for all calls.            |\\n| pool_size          | int  | 4              | no       | Maximum simultaneous pooled connections.       |\\n| default_timeout_ms | int  | 10000          | no       | Timeout applied when a call does not set one.  |\\n| log_level          | str  | error          | no       | One of debug, info, warning, error.            |\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-configure#example::2\", \"heading_path\": \"Client.configure() > Example\", \"score\": 0.3999, \"text\": \"Client.configure() > Example\\n\\n## Example\\n\\n```python\\nclient = Client()\\nclient.configure(api_key=\\\"sk-...\\\", pool_size=8, default_timeout_ms=20000)\\n```\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-stream#notes::3\", \"heading_path\": \"Client.stream() > Notes\", \"score\": 0.3912, \"text\": \"Client.stream() > Notes\\n\\n## Notes\\n\\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\\nprofiling showed the smaller reads dominating CPU time on large responses.\\n\\nThere is no context-manager form in v2 — you must call `close()` yourself, and\\nforgetting to do so leaks the connection until the process exits.\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-send#notes::2\", \"heading_path\": \"Client.send() > Notes\", \"score\": 0.3907, \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` parameter is accepted in v2 but ignored. Automatic\\nretries arrived in v3.\"}]}"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_3777352d-5bbd-4943-b840-9a044c61c6e8",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v3\",\"query\":\"concurrency\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_3777352d-5bbd-4943-b840-9a044c61c6e8",
+            "name": "search_docs",
+            "content": "{\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-batch#notes::3\", \"heading_path\": \"Client.send_batch() > Notes\", \"score\": 0.5905, \"text\": \"Client.send_batch() > Notes\\n\\n## Notes\\n\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\n20 requests per second gives you 20 requests per second, not 64. Raising\\n`concurrency` alone will not increase throughput past the rate limit.\\n\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\nusually too tight — scale the timeout with the batch size.\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-batch#example::2\", \"heading_path\": \"Client.send_batch() > Example\", \"score\": 0.4791, \"text\": \"Client.send_batch() > Example\\n\\n## Example\\n\\n```python\\nresponses = client.send_batch(\\n    payloads=[{\\\"query\\\": q} for q in queries],\\n    concurrency=16,\\n    rate_limit_rps=50,\\n    fail_fast=False,\\n)\\n\\nfailed = [r for r in responses if r.status_code >= 500]\\nprint(f\\\"{len(failed)} of {len(responses)} need a retry\\\")\\n```\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.4718, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\nreal concurrency costs nothing but does not help either.\\n\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\\nbut ignored, which mirrors how v2 behaved.\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-batch#parameters::1\", \"heading_path\": \"Client.send_batch() > Parameters\", \"score\": 0.441, \"text\": \"Client.send_batch() > Parameters\\n\\n## Parameters\\n\\n| name            | type | default | required | description                                          |\\n|-----------------|------|---------|----------|------------------------------------------------------|\\n| payloads        | list | —       | yes      | Request bodies, sent in the order given.             |\\n| concurrency     | int  | 8       | no       | Requests in flight at once across the batch.         |\\n| timeout_ms      | int  | 60000   | no       | Budget for the whole batch, not per request.         |\\n| fail_fast       | bool | False   | no       | Abort remaining requests after the first failure.    |\\n| ordered         | bool | True    | no       | Return responses in submission order.                |\\n| rate_limit_rps  | int  | 20      | no       | Requests per second ceiling for this batch.          |\\n| chunk_bytes     | int  | 1048576 | no       | Split oversized payload groups at this boundary.     |\\n| progress_every  | int  | 0       | no       | Emit a progress callback every N responses; 0 is off.|\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.4176, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\nWith `force=True` in-flight requests are cancelled rather than drained, and\\ntheir futures raise `CancelledError`. Prefer the default unless the process is\\nshutting down and latency matters more than completeness.\\n\\nIf `drain` is true and `timeout_ms` elapses before in-flight requests finish,\\nthe remaining connections are closed anyway and a warning is logged. Close is\\nnever allowed to block indefinitely.\"}]}"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_f154462e-1cd2-4008-b36b-fd56149fbb18",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v3\",\"query\":\"concurrency deprecated\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_f154462e-1cd2-4008-b36b-fd56149fbb18",
+            "name": "search_docs",
+            "content": "{\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-batch#notes::3\", \"heading_path\": \"Client.send_batch() > Notes\", \"score\": 0.4541, \"text\": \"Client.send_batch() > Notes\\n\\n## Notes\\n\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\n20 requests per second gives you 20 requests per second, not 64. Raising\\n`concurrency` alone will not increase throughput past the rate limit.\\n\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\nusually too tight — scale the timeout with the batch size.\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.4443, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\nreal concurrency costs nothing but does not help either.\\n\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\\nbut ignored, which mirrors how v2 behaved.\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.3777, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\nWith `force=True` in-flight requests are cancelled rather than drained, and\\ntheir futures raise `CancelledError`. Prefer the default unless the process is\\nshutting down and latency matters more than completeness.\\n\\nIf `drain` is true and `timeout_ms` elapses before in-flight requests finish,\\nthe remaining connections are closed anyway and a warning is logged. Close is\\nnever allowed to block indefinitely.\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-batch#example::2\", \"heading_path\": \"Client.send_batch() > Example\", \"score\": 0.3656, \"text\": \"Client.send_batch() > Example\\n\\n## Example\\n\\n```python\\nresponses = client.send_batch(\\n    payloads=[{\\\"query\\\": q} for q in queries],\\n    concurrency=16,\\n    rate_limit_rps=50,\\n    fail_fast=False,\\n)\\n\\nfailed = [r for r in responses if r.status_code >= 500]\\nprint(f\\\"{len(failed)} of {len(responses)} need a retry\\\")\\n```\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-upload#notes::3\", \"heading_path\": \"Client.upload() > Notes\", \"score\": 0.3536, \"text\": \"Client.upload() > Notes\\n\\n## Notes\\n\\nWhen `resume` is true the client records part offsets in a local state file\\nnext to the upload. Deleting that file forces a fresh upload from byte zero.\\n\\n`checksum` costs one extra pass over the file. Disabling it is only sensible\\nfor files you can cheaply re-upload, because a silent corruption will otherwise\\nsurface much later as an unexplained parsing error.\"}]}"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_78273077-73c2-4ab4-a820-4c5252a355be",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v2\",\"query\":\"concurrency\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_78273077-73c2-4ab4-a820-4c5252a355be",
+            "name": "search_docs",
+            "content": "{\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.4179, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\n`force` defaults to true in v2 and setting it to false has no effect — the\\nparameter exists only so that code written against the v3 preview does not fail\\nto import. In v3 the default is false and requests are drained.\\n\\nThere is no context-manager form in v2.\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-configure#parameters::1\", \"heading_path\": \"Client.configure() > Parameters\", \"score\": 0.4064, \"text\": \"Client.configure() > Parameters\\n\\n## Parameters\\n\\n| name               | type | default        | required | description                                    |\\n|--------------------|------|----------------|----------|-------------------------------------------------|\\n| api_key            | str  | —              | yes      | Credential used for every request.             |\\n| base_url           | str  | https://api.example.com | no | Endpoint root for all calls.            |\\n| pool_size          | int  | 4              | no       | Maximum simultaneous pooled connections.       |\\n| default_timeout_ms | int  | 10000          | no       | Timeout applied when a call does not set one.  |\\n| log_level          | str  | error          | no       | One of debug, info, warning, error.            |\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-configure#example::2\", \"heading_path\": \"Client.configure() > Example\", \"score\": 0.3999, \"text\": \"Client.configure() > Example\\n\\n## Example\\n\\n```python\\nclient = Client()\\nclient.configure(api_key=\\\"sk-...\\\", pool_size=8, default_timeout_ms=20000)\\n```\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-stream#notes::3\", \"heading_path\": \"Client.stream() > Notes\", \"score\": 0.3912, \"text\": \"Client.stream() > Notes\\n\\n## Notes\\n\\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\\nprofiling showed the smaller reads dominating CPU time on large responses.\\n\\nThere is no context-manager form in v2 — you must call `close()` yourself, and\\nforgetting to do so leaks the connection until the process exits.\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-send#notes::2\", \"heading_path\": \"Client.send() > Notes\", \"score\": 0.3907, \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` parameter is accepted in v2 but ignored. Automatic\\nretries arrived in v3.\"}]}"
+          }
+        ]
+      }
+    ],
+    "delegations": [
+      {
+        "worker": "version",
+        "arguments": {
+          "question": "what type is concurrency"
+        },
+        "http_status": 200
+      }
+    ],
+    "prompt_tokens": 12324,
+    "completion_tokens": 842,
+    "cached_tokens": 2304,
+    "total_tokens": 13166,
+    "cost_usd": 0.002181,
+    "latency_ms": 66846.66,
+    "rate_limit_wait_s": 59.0,
+    "termination": "final_answer",
+    "termination_detail": "orchestrator answered",
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou lead a team of two workers, available to you as tools. You cannot search the documentation yourself.\n\n1. Call delegate_version_check with the developer's question. It reports the target version, and what differs between versions or is deprecated.\n2. Call delegate_code_sample with the task, the target version from step 1, and the version notes. It reports the documented facts and any documented code sample, with chunk ids.\n3. Write the answer from the workers' reports only, and cite the chunk ids they cite.\n\nYour final reply uses the format above: ANSWER, VERSION and CITATIONS each on a line of its own.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: what type is concurrency\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_d1327b07-5010-4fdb-b974-e19a2c4abe2c",
+            "type": "function",
+            "function": {
+              "name": "delegate_version_check",
+              "arguments": "{\"question\":\"what type is concurrency\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_d1327b07-5010-4fdb-b974-e19a2c4abe2c",
+        "name": "delegate_version_check",
+        "content": "{\"worker\": \"version/deprecation worker\", \"report\": \"(no report: max_laps)\"}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none"
+      }
+    ]
+  },
+  "grade": {
+    "passed": false,
+    "answer_text": "INSUFFICIENT_CONTEXT",
+    "context_ids": [
+      "v2/client-close#notes::3",
+      "v2/client-configure#parameters::1",
+      "v2/client-configure#example::2",
+      "v2/client-stream#notes::3",
+      "v2/client-send#notes::2",
+      "v3/client-batch#notes::3",
+      "v3/client-batch#example::2",
+      "v3/client-configure#notes::3",
+      "v3/client-batch#parameters::1",
+      "v3/client-close#notes::3",
+      "v3/client-upload#notes::3"
+    ],
+    "assertions": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer refused",
+        "evidence": []
+      }
+    ],
+    "judge": {
+      "verdict": "FAIL",
+      "reason": "The context includes a parameters table stating concurrency is of type int, so the answer was available.",
+      "error": ""
+    }
+  }
+}
