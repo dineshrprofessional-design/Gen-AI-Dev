@@ -1,0 +1,238 @@
+{
+  "llm_calls": 2,
+  "tool_path": [
+    "version"
+  ],
+  "worker_terminations": [],
+  "hops": [
+    {
+      "case_id": "w6-019",
+      "seq": 1,
+      "edge": "question -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 661,
+      "completion_tokens": 51,
+      "cached_tokens": 512,
+      "total_tokens": 712,
+      "cost_usd": 9.135e-05,
+      "latency_ms": 1347.517,
+      "http_status": null,
+      "note": "delegates to version/deprecation worker"
+    },
+    {
+      "case_id": "w6-019",
+      "seq": 2,
+      "edge": "orchestrator -> version/deprecation worker",
+      "actor": "version/deprecation worker",
+      "llm_calls": 0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cached_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 2.015,
+      "http_status": 500,
+      "note": "HTTP 500: Internal Server Error"
+    },
+    {
+      "case_id": "w6-019",
+      "seq": 3,
+      "edge": "version/deprecation worker -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 715,
+      "completion_tokens": 112,
+      "cached_tokens": 0,
+      "total_tokens": 827,
+      "cost_usd": 0.00017445,
+      "latency_ms": 349.678,
+      "http_status": null,
+      "note": "final answer"
+    }
+  ],
+  "arm": "squad",
+  "case_id": "w6-019",
+  "question": "did chunk_size change between v2 and v3",
+  "recorded_at": "2026-10-04T19:42:25.426119+00:00",
+  "git_sha": "e850b85",
+  "model": "openai/gpt-oss-120b",
+  "termination": "final_answer",
+  "termination_detail": "orchestrator answered",
+  "prompt_tokens": 1376,
+  "completion_tokens": 163,
+  "cached_tokens": 512,
+  "total_tokens": 1539,
+  "cost_usd": 0.0002658,
+  "latency_ms": 1699.543,
+  "rate_limit_wait_s": 0.0,
+  "adjusted_latency_ms": 1699.543,
+  "answer": {
+    "answer": "INSUFFICIENT_CONTEXT",
+    "sdk_version": "none",
+    "citations": [],
+    "refused": true,
+    "raw": "ANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none",
+    "parse_error": ""
+  },
+  "run": {
+    "arm": "squad",
+    "question_id": "w6-019",
+    "question": "did chunk_size change between v2 and v3",
+    "output": {
+      "answer": "INSUFFICIENT_CONTEXT",
+      "sdk_version": "none",
+      "citations": [],
+      "refused": true,
+      "raw": "ANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none",
+      "parse_error": ""
+    },
+    "hops": [
+      {
+        "case_id": "w6-019",
+        "seq": 1,
+        "edge": "question -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 661,
+        "completion_tokens": 51,
+        "cached_tokens": 512,
+        "total_tokens": 712,
+        "cost_usd": 9.135e-05,
+        "latency_ms": 1347.517,
+        "http_status": null,
+        "note": "delegates to version/deprecation worker"
+      },
+      {
+        "case_id": "w6-019",
+        "seq": 2,
+        "edge": "orchestrator -> version/deprecation worker",
+        "actor": "version/deprecation worker",
+        "llm_calls": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "cached_tokens": 0,
+        "total_tokens": 0,
+        "cost_usd": 0.0,
+        "latency_ms": 2.015,
+        "http_status": 500,
+        "note": "HTTP 500: Internal Server Error"
+      },
+      {
+        "case_id": "w6-019",
+        "seq": 3,
+        "edge": "version/deprecation worker -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 715,
+        "completion_tokens": 112,
+        "cached_tokens": 0,
+        "total_tokens": 827,
+        "cost_usd": 0.00017445,
+        "latency_ms": 349.678,
+        "http_status": null,
+        "note": "final answer"
+      }
+    ],
+    "workers": [],
+    "delegations": [
+      {
+        "worker": "version",
+        "arguments": {
+          "question": "did chunk_size change between v2 and v3"
+        },
+        "http_status": 500
+      }
+    ],
+    "prompt_tokens": 1376,
+    "completion_tokens": 163,
+    "cached_tokens": 512,
+    "total_tokens": 1539,
+    "cost_usd": 0.0002658,
+    "latency_ms": 1699.543,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "orchestrator answered",
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou lead a team of two workers, available to you as tools. You cannot search the documentation yourself.\n\n1. Call delegate_version_check with the developer's question. It reports the target version, and what differs between versions or is deprecated.\n2. Call delegate_code_sample with the task, the target version from step 1, and the version notes. It reports the documented facts and any documented code sample, with chunk ids.\n3. Write the answer from the workers' reports only, and cite the chunk ids they cite.\n\nYour final reply uses the format above: ANSWER, VERSION and CITATIONS each on a line of its own.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: did chunk_size change between v2 and v3\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_63df0f90-c3ec-46bf-b94a-a03d05b61695",
+            "type": "function",
+            "function": {
+              "name": "delegate_version_check",
+              "arguments": "{\"question\":\"did chunk_size change between v2 and v3\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_63df0f90-c3ec-46bf-b94a-a03d05b61695",
+        "name": "delegate_version_check",
+        "content": "{\"error\": \"HTTP 500 from the version/deprecation worker: Internal Server Error\"}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none"
+      }
+    ]
+  },
+  "failure_injected": {
+    "worker": "version",
+    "case_id": "w6-019",
+    "http_500_attempts": 1
+  },
+  "grade": {
+    "passed": true,
+    "answer_text": "INSUFFICIENT_CONTEXT",
+    "context_ids": [],
+    "assertions": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer refused",
+        "evidence": []
+      }
+    ],
+    "judge": {
+      "verdict": "PASS",
+      "reason": "With no context provided, the assistant correctly indicated insufficient information.",
+      "error": ""
+    }
+  }
+}

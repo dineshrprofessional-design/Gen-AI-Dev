@@ -1,0 +1,55 @@
+# Week 10 hand-off log: every hop of every squad run, with its provider-reported token count.
+# edge: who handed what to whom. A worker hop counts all of that worker's LLM calls for the hand-off;
+# an orchestrator hop is one LLM call, which re-sends everything before it.
+
+case    hop  edge                                                 calls  prompt  compl   total http  note
+w6-001    1  question -> orchestrator                                 1     663     53     716    -  delegates to version/deprecation worker
+w6-001    2  orchestrator -> version/deprecation worker               3   7,586    729   8,315  200  2 tool call(s), termination report
+w6-001    3  version/deprecation worker -> orchestrator               1     803    147     950    -  delegates to code-sample worker
+w6-001    4  orchestrator -> code-sample worker                       2   2,891    302   3,193  200  1 tool call(s), termination report
+w6-001    5  code-sample worker -> orchestrator                       1     944     48     992    -  final answer
+w6-002    1  question -> orchestrator                                 1     655     46     701    -  delegates to version/deprecation worker
+w6-002    2  orchestrator -> version/deprecation worker               3   7,014    635   7,649  200  2 tool call(s), termination report
+w6-002    3  version/deprecation worker -> orchestrator               1     798    139     937    -  final answer
+w6-007    1  question -> orchestrator                                 1     656     47     703    -  delegates to version/deprecation worker
+w6-007    2  orchestrator -> version/deprecation worker               3   6,590    759   7,349  200  2 tool call(s), termination report
+w6-007    3  version/deprecation worker -> orchestrator               1     797    194     991    -  delegates to code-sample worker
+w6-007    4  orchestrator -> code-sample worker                       2   2,605    401   3,006  200  1 tool call(s), termination report
+w6-007    5  code-sample worker -> orchestrator                       1     913     96   1,009    -  final answer
+w6-014    1  question -> orchestrator                                 1     655     45     700    -  delegates to version/deprecation worker
+w6-014    2  orchestrator -> version/deprecation worker               3   7,203    599   7,802  200  2 tool call(s), termination report
+w6-014    3  version/deprecation worker -> orchestrator               1     750    134     884    -  delegates to code-sample worker
+w6-014    4  orchestrator -> code-sample worker                       2   2,834    297   3,131  200  1 tool call(s), termination report
+w6-014    5  code-sample worker -> orchestrator                       1     868     36     904    -  final answer
+w6-015    1  question -> orchestrator                                 1     658     48     706    -  delegates to version/deprecation worker
+w6-015    2  orchestrator -> version/deprecation worker               3   7,212    555   7,767  200  2 tool call(s), termination report
+w6-015    3  version/deprecation worker -> orchestrator               1     787    137     924    -  final answer
+w6-016    1  question -> orchestrator                                 1     668     58     726    -  delegates to version/deprecation worker
+w6-016    2  orchestrator -> version/deprecation worker               3   7,642    487   8,129  200  2 tool call(s), termination report
+w6-016    3  version/deprecation worker -> orchestrator               1     807    161     968    -  delegates to code-sample worker
+w6-016    4  orchestrator -> code-sample worker                       2   2,947    300   3,247  200  1 tool call(s), termination report
+w6-016    5  code-sample worker -> orchestrator                       1     937     94   1,031    -  final answer
+w6-019    1  question -> orchestrator                                 1     661     51     712    -  delegates to version/deprecation worker
+w6-019    2  orchestrator -> version/deprecation worker               3   6,975    570   7,545  200  2 tool call(s), termination report
+w6-019    3  version/deprecation worker -> orchestrator               1     799    161     960    -  final answer
+w6-026    1  question -> orchestrator                                 1     655     46     701    -  delegates to version/deprecation worker
+w6-026    2  orchestrator -> version/deprecation worker               4  10,963    669  11,632  200  4 tool call(s), termination max_laps
+w6-026    3  version/deprecation worker -> orchestrator               1     706    127     833    -  final answer
+w6-029    1  question -> orchestrator                                 1     663     54     717    -  delegates to version/deprecation worker
+w6-029    2  orchestrator -> version/deprecation worker               3   7,130    587   7,717  200  2 tool call(s), termination report
+w6-029    3  version/deprecation worker -> orchestrator               1     803    140     943    -  final answer
+w6-031    1  question -> orchestrator                                 1     665     55     720    -  delegates to version/deprecation worker
+w6-031    2  orchestrator -> version/deprecation worker               1   1,555    175   1,730  200  0 tool call(s), termination report
+w6-031    3  version/deprecation worker -> orchestrator               1     739     81     820    -  delegates to code-sample worker
+w6-031    4  orchestrator -> code-sample worker                       4   9,646    290   9,936  200  4 tool call(s), termination max_laps
+w6-031    5  code-sample worker -> orchestrator                       1     808     39     847    -  final answer
+
+TOTALS BY HAND-OFF (all squad runs)
+  orchestrator -> version/deprecation worker            10 hops    75,635 tokens   63.4%
+  orchestrator -> code-sample worker                     5 hops    22,513 tokens   18.9%
+  version/deprecation worker -> orchestrator            10 hops     9,210 tokens    7.7%
+  question -> orchestrator                              10 hops     7,102 tokens    6.0%
+  code-sample worker -> orchestrator                     5 hops     4,783 tokens    4.0%
+  squad total                                                     119,243 tokens
+
+Context re-send multiplier: 119,243 squad tokens / 78,201 single-agent tokens = 1.5x. Largest share: "orchestrator -> version/deprecation worker", 63% of all squad tokens (75,635 tokens over 10 hand-offs).
