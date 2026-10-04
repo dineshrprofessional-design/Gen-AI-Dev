@@ -34,6 +34,8 @@ judge call that failed in transport, never an arm.
 
 import argparse
 import json
+import logging
+import re
 import subprocess
 import sys
 import time
@@ -78,6 +80,54 @@ def log(line: str) -> None:
 
 def git_sha() -> str:
     return subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
+
+
+class ProviderRetryMeter(logging.Handler):
+    """The 429 back-off the OpenAI SDK sleeps through on its own, which chat_once never sees.
+
+    The SDK retries a 429 up to twice (DEFAULT_MAX_RETRIES = 2) before raising,
+    so that sleep lands inside one call's latency rather than in
+    `rate_limit_wait_s`. The smoke run found it: 7 to 9 s LLM calls with zero
+    recorded wait. httpx logs each response's status, then the SDK logs the sleep
+    it is about to take, so every sleep is tied to the status that caused it.
+    Only sleeps after a 429 are subtracted; that is the frozen latency rule.
+    Any other retry stays counted.
+    """
+
+    def __init__(self) -> None:
+        super().__init__(level=logging.DEBUG)
+        self.last_status: int | None = None
+        self.waits: list[tuple[int | None, float]] = []
+
+    def emit(self, record: logging.LogRecord) -> None:
+        message = record.getMessage()
+        if record.name == "httpx":
+            found = re.search(r'"HTTP/[\d.]+ (\d{3})', message)
+            if found:
+                self.last_status = int(found.group(1))
+        elif record.name == "openai._base_client":
+            found = re.match(r"Retrying request to .* in ([\d.]+) seconds", message)
+            if found:
+                self.waits.append((self.last_status, float(found.group(1))))
+
+    def install(self) -> "ProviderRetryMeter":
+        for name in ("httpx", "openai._base_client"):
+            logger = logging.getLogger(name)
+            logger.setLevel(logging.DEBUG)
+            logger.addHandler(self)
+            logger.propagate = False
+        return self
+
+
+RETRIES = ProviderRetryMeter()
+
+
+def metered_chat(messages, **kwargs) -> ChatResult:
+    """chat_once, with the SDK's own 429 sleeps added to the wait it already reports."""
+    before = len(RETRIES.waits)
+    result = chat_once(messages, **kwargs)
+    result.rate_limit_wait_s += sum(seconds for status, seconds in RETRIES.waits[before:] if status == 429)
+    return result
 
 
 def frozen_selection() -> dict:
@@ -232,7 +282,7 @@ def execute(case_ids: list[str], folder: Path, positions: dict[str, int], delay:
     done = 0
     with McpClient(load_config()) as client:
         warm_up(client)
-        app = build_worker_app(client, chat=chat_once, cfg=cfg, model=model, price=load_price(model), failure=failure)
+        app = build_worker_app(client, chat=metered_chat, cfg=cfg, model=model, price=load_price(model), failure=failure)
         with TestClient(app, raise_server_exceptions=False) as http:
             for case_id in case_ids:
                 order = arms if positions.get(case_id, 0) % 2 == 0 else tuple(reversed(arms))
@@ -241,7 +291,7 @@ def execute(case_ids: list[str], folder: Path, positions: dict[str, int], delay:
                     if path.exists():
                         continue
                     question = as_question(grader.by_id[case_id])
-                    record, output, tool_calls, transcripts = run_arm(arm, question, client, http, cfg)
+                    record, output, tool_calls, transcripts = run_arm(arm, question, client, http, cfg, chat=metered_chat)
                     lost = infra_failure(record)
                     if lost:
                         save(record, folder / "aborted" / f"{case_id}.{arm}.{int(time.time())}.json")
@@ -479,6 +529,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--delay", type=float, default=15.0, help="seconds between runs (provider per-minute cap)")
     args = parser.parse_args(argv)
     configure_logging()
+    RETRIES.install()
 
     if args.self_test:
         return self_test()

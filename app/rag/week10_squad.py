@@ -292,6 +292,8 @@ target version, and what differs between versions or is deprecated.
 the version notes. It reports the documented facts and any documented code \
 sample, with chunk ids.
 3. Write the answer from the workers' reports only, and cite the chunk ids they cite.
+
+Your final reply uses the format above: ANSWER, VERSION and CITATIONS each on a line of its own.
 """
 
 ORCHESTRATOR_TOOLS = [
