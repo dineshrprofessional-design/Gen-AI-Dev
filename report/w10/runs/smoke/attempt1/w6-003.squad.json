@@ -1,0 +1,487 @@
+{
+  "llm_calls": 8,
+  "tool_path": [
+    "version",
+    "code"
+  ],
+  "worker_terminations": [
+    "report",
+    "report"
+  ],
+  "hops": [
+    {
+      "case_id": "w6-003",
+      "seq": 1,
+      "edge": "question -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 634,
+      "completion_tokens": 47,
+      "cached_tokens": 0,
+      "total_tokens": 681,
+      "cost_usd": 0.0001233,
+      "latency_ms": 615.628,
+      "http_status": null,
+      "note": "delegates to version/deprecation worker"
+    },
+    {
+      "case_id": "w6-003",
+      "seq": 2,
+      "edge": "orchestrator -> version/deprecation worker",
+      "actor": "version/deprecation worker",
+      "llm_calls": 3,
+      "prompt_tokens": 6816,
+      "completion_tokens": 626,
+      "cached_tokens": 0,
+      "total_tokens": 7442,
+      "cost_usd": 0.001398,
+      "latency_ms": 42435.854,
+      "http_status": 200,
+      "note": "2 tool call(s), termination report"
+    },
+    {
+      "case_id": "w6-003",
+      "seq": 3,
+      "edge": "version/deprecation worker -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 787,
+      "completion_tokens": 116,
+      "cached_tokens": 0,
+      "total_tokens": 903,
+      "cost_usd": 0.00018765,
+      "latency_ms": 8932.974,
+      "http_status": null,
+      "note": "delegates to code-sample worker"
+    },
+    {
+      "case_id": "w6-003",
+      "seq": 4,
+      "edge": "orchestrator -> code-sample worker",
+      "actor": "code-sample worker",
+      "llm_calls": 2,
+      "prompt_tokens": 2744,
+      "completion_tokens": 406,
+      "cached_tokens": 768,
+      "total_tokens": 3150,
+      "cost_usd": 0.0005976,
+      "latency_ms": 23283.756,
+      "http_status": 200,
+      "note": "1 tool call(s), termination report"
+    },
+    {
+      "case_id": "w6-003",
+      "seq": 5,
+      "edge": "code-sample worker -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 953,
+      "completion_tokens": 67,
+      "cached_tokens": 0,
+      "total_tokens": 1020,
+      "cost_usd": 0.00018315,
+      "latency_ms": 1629.761,
+      "http_status": null,
+      "note": "final answer"
+    }
+  ],
+  "arm": "squad",
+  "case_id": "w6-003",
+  "question": "when are idle connections reaped",
+  "recorded_at": "2026-10-04T06:43:02.494373+00:00",
+  "git_sha": "24f063f",
+  "model": "openai/gpt-oss-120b",
+  "termination": "final_answer",
+  "termination_detail": "no VERSION: line",
+  "prompt_tokens": 11934,
+  "completion_tokens": 1262,
+  "cached_tokens": 768,
+  "total_tokens": 13196,
+  "cost_usd": 0.0024897,
+  "latency_ms": 76920.541,
+  "rate_limit_wait_s": 0.0,
+  "adjusted_latency_ms": 76920.541,
+  "answer": {
+    "answer": "In v3, idle connections are reaped after they have been idle for the number of seconds set by `pool_reap_seconds`, which defaults to 90 seconds. VERSION: v3 CITATIONS: v3/client-configure#notes::3, v3/client-configure#parameters::1",
+    "sdk_version": "none",
+    "citations": [],
+    "refused": false,
+    "raw": "ANSWER: In v3, idle connections are reaped after they have been idle for the number of seconds set by `pool_reap_seconds`, which defaults to 90 seconds. VERSION: v3 CITATIONS: v3/client-configure#notes::3, v3/client-configure#parameters::1",
+    "parse_error": "no VERSION: line"
+  },
+  "run": {
+    "arm": "squad",
+    "question_id": "w6-003",
+    "question": "when are idle connections reaped",
+    "output": {
+      "answer": "In v3, idle connections are reaped after they have been idle for the number of seconds set by `pool_reap_seconds`, which defaults to 90 seconds. VERSION: v3 CITATIONS: v3/client-configure#notes::3, v3/client-configure#parameters::1",
+      "sdk_version": "none",
+      "citations": [],
+      "refused": false,
+      "raw": "ANSWER: In v3, idle connections are reaped after they have been idle for the number of seconds set by `pool_reap_seconds`, which defaults to 90 seconds. VERSION: v3 CITATIONS: v3/client-configure#notes::3, v3/client-configure#parameters::1",
+      "parse_error": "no VERSION: line"
+    },
+    "hops": [
+      {
+        "case_id": "w6-003",
+        "seq": 1,
+        "edge": "question -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 634,
+        "completion_tokens": 47,
+        "cached_tokens": 0,
+        "total_tokens": 681,
+        "cost_usd": 0.0001233,
+        "latency_ms": 615.628,
+        "http_status": null,
+        "note": "delegates to version/deprecation worker"
+      },
+      {
+        "case_id": "w6-003",
+        "seq": 2,
+        "edge": "orchestrator -> version/deprecation worker",
+        "actor": "version/deprecation worker",
+        "llm_calls": 3,
+        "prompt_tokens": 6816,
+        "completion_tokens": 626,
+        "cached_tokens": 0,
+        "total_tokens": 7442,
+        "cost_usd": 0.001398,
+        "latency_ms": 42435.854,
+        "http_status": 200,
+        "note": "2 tool call(s), termination report"
+      },
+      {
+        "case_id": "w6-003",
+        "seq": 3,
+        "edge": "version/deprecation worker -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 787,
+        "completion_tokens": 116,
+        "cached_tokens": 0,
+        "total_tokens": 903,
+        "cost_usd": 0.00018765,
+        "latency_ms": 8932.974,
+        "http_status": null,
+        "note": "delegates to code-sample worker"
+      },
+      {
+        "case_id": "w6-003",
+        "seq": 4,
+        "edge": "orchestrator -> code-sample worker",
+        "actor": "code-sample worker",
+        "llm_calls": 2,
+        "prompt_tokens": 2744,
+        "completion_tokens": 406,
+        "cached_tokens": 768,
+        "total_tokens": 3150,
+        "cost_usd": 0.0005976,
+        "latency_ms": 23283.756,
+        "http_status": 200,
+        "note": "1 tool call(s), termination report"
+      },
+      {
+        "case_id": "w6-003",
+        "seq": 5,
+        "edge": "code-sample worker -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 953,
+        "completion_tokens": 67,
+        "cached_tokens": 0,
+        "total_tokens": 1020,
+        "cost_usd": 0.00018315,
+        "latency_ms": 1629.761,
+        "http_status": null,
+        "note": "final answer"
+      }
+    ],
+    "workers": [
+      {
+        "worker": "version",
+        "output": "TARGET_VERSION: v3\nVERSION_NOTES: In v2 there is no connection reaper; pooled connections live until the client is garbage collected [v2/client-configure#notes::3]. In v3 connections are reaped after a period of idleness defined by `pool_reap_seconds` (default 90 seconds) [v3/client-configure#notes::3] and the parameter is documented in the configure method [v3/client-configure#parameters::1].\nDEPRECATION: none found",
+        "termination": "report",
+        "tool_calls": [
+          {
+            "seq": 1,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v2",
+              "query": "idle connections reaped"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 19203.657,
+            "result_chars": 2420,
+            "result_chunk_ids": [
+              "v2/client-stream#clientstream::0",
+              "v2/client-close#clientclose::0",
+              "v2/client-configure#notes::3",
+              "v2/client-send#notes::2",
+              "v2/client-configure#parameters::1"
+            ]
+          },
+          {
+            "seq": 2,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v3",
+              "query": "idle connections reaped"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 1524.543,
+            "result_chars": 3318,
+            "result_chunk_ids": [
+              "v3/client-configure#notes::3",
+              "v3/client-close#clientclose::0",
+              "v3/client-stream#clientstream::0",
+              "v3/client-close#notes::3",
+              "v3/client-configure#parameters::1"
+            ]
+          }
+        ],
+        "llm_calls": 3,
+        "prompt_tokens": 6816,
+        "completion_tokens": 626,
+        "cached_tokens": 0,
+        "total_tokens": 7442,
+        "cost_usd": 0.001398,
+        "rate_limit_wait_s": 0.0,
+        "latency_ms": 42310.063,
+        "transcript": [
+          {
+            "role": "system",
+            "content": "You are the version/deprecation worker in a documentation team. You have one job: establish which SDK version a developer question concerns, and what about it differs between versions or is deprecated.\n\nUse your tools, and state nothing you have not seen a tool return. search_docs searches one documentation version at a time (\"v2\" or \"v3\"). The package tools report published releases and deprecation notices.\n\nIf the question names a version, that is the target. If it compares versions, the target is both. Otherwise the target is v3, the newest documented version.\n\nReply in exactly this format and nothing else:\nTARGET_VERSION: <v2, v3 or both>\nVERSION_NOTES: <what differs between v2 and v3 for what the question asks, with chunk ids in [brackets]; or: none found>\nDEPRECATION: <any deprecation that applies, from a tool result; or: none found>\n\nDo not answer the question itself. Another worker does that.\n"
+          },
+          {
+            "role": "user",
+            "content": "Developer question: when are idle connections reaped"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_bcc50571-c599-43a4-b60c-f96c2efe1058",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v2\",\"query\":\"idle connections reaped\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_bcc50571-c599-43a4-b60c-f96c2efe1058",
+            "name": "search_docs",
+            "content": "{\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-stream#clientstream::0\", \"heading_path\": \"Client.stream()\", \"score\": 0.4975, \"text\": \"Client.stream()\\n\\n# Client.stream()\\n\\nOpens a streaming connection and yields events as they arrive. In v2 the\\ngenerator does not reconnect: a dropped connection raises `StreamClosed` and the\\ncaller must start again from the beginning. Resumable streams arrived in v3.\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-close#clientclose::0\", \"heading_path\": \"Client.close()\", \"score\": 0.488, \"text\": \"Client.close()\\n\\n# Client.close()\\n\\nCloses every pooled connection. In v2 this is unconditional: in-flight requests\\nare cancelled rather than drained, and there is no timeout to wait on. Graceful\\ndraining arrived in v3.\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.4761, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\nThere is no `retries_enabled` switch in v2 because there is no automatic retry\\npath to switch off. There is no connection reaper either: pooled connections\\nlive until the client is garbage collected.\\n\\nThe v2 default `pool_size` is 4, raised to 10 in v3.\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-send#notes::2\", \"heading_path\": \"Client.send() > Notes\", \"score\": 0.3965, \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` parameter is accepted in v2 but ignored. Automatic\\nretries arrived in v3.\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-configure#parameters::1\", \"heading_path\": \"Client.configure() > Parameters\", \"score\": 0.3871, \"text\": \"Client.configure() > Parameters\\n\\n## Parameters\\n\\n| name               | type | default        | required | description                                    |\\n|--------------------|------|----------------|----------|-------------------------------------------------|\\n| api_key            | str  | —              | yes      | Credential used for every request.             |\\n| base_url           | str  | https://api.example.com | no | Endpoint root for all calls.            |\\n| pool_size          | int  | 4              | no       | Maximum simultaneous pooled connections.       |\\n| default_timeout_ms | int  | 10000          | no       | Timeout applied when a call does not set one.  |\\n| log_level          | str  | error          | no       | One of debug, info, warning, error.            |\"}]}"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_6898927b-15ee-4ac8-8c94-ea88c036e75f",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v3\",\"query\":\"idle connections reaped\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_6898927b-15ee-4ac8-8c94-ea88c036e75f",
+            "name": "search_docs",
+            "content": "{\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.5048, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\nreal concurrency costs nothing but does not help either.\\n\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\\nbut ignored, which mirrors how v2 behaved.\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-close#clientclose::0\", \"heading_path\": \"Client.close()\", \"score\": 0.4754, \"text\": \"Client.close()\\n\\n# Client.close()\\n\\nReleases every pooled connection and stops the background reaper thread. Safe\\nto call more than once; subsequent calls are no-ops. A client that is not\\nclosed leaks its pool until the interpreter exits, which matters in long-lived\\nprocesses and in tests that construct many clients.\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-stream#clientstream::0\", \"heading_path\": \"Client.stream()\", \"score\": 0.4485, \"text\": \"Client.stream()\\n\\n# Client.stream()\\n\\nOpens a streaming connection and yields events as they arrive. The generator\\nholds its connection open for the lifetime of the iteration, so callers must\\neither exhaust it or close it explicitly.\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-close#notes::3\", \"heading_path\": \"Client.close() > Notes\", \"score\": 0.4454, \"text\": \"Client.close() > Notes\\n\\n## Notes\\n\\nWith `force=True` in-flight requests are cancelled rather than drained, and\\ntheir futures raise `CancelledError`. Prefer the default unless the process is\\nshutting down and latency matters more than completeness.\\n\\nIf `drain` is true and `timeout_ms` elapses before in-flight requests finish,\\nthe remaining connections are closed anyway and a warning is logged. Close is\\nnever allowed to block indefinitely.\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-configure#parameters::1\", \"heading_path\": \"Client.configure() > Parameters\", \"score\": 0.4411, \"text\": \"Client.configure() > Parameters\\n\\n## Parameters\\n\\n| name              | type | default        | required | description                                        |\\n|-------------------|------|----------------|----------|-----------------------------------------------------|\\n| api_key           | str  | —              | yes      | Credential used for every request.                 |\\n| base_url          | str  | https://api.example.com | no | Endpoint root for all calls.                |\\n| pool_size         | int  | 10             | no       | Maximum simultaneous pooled connections.           |\\n| pool_reap_seconds | int  | 90             | no       | Idle time before a pooled connection is collected. |\\n| default_timeout_ms| int  | 30000          | no       | Timeout applied when a call does not set one.      |\\n| retries_enabled   | bool | True           | no       | Master switch for the automatic retry path.        |\\n| log_level         | str  | warning        | no       | One of debug, info, warning, error.                |\\n| telemetry         | bool | True           | no       | Send anonymous usage counters to the vendor.       |\"}]}"
+          },
+          {
+            "role": "assistant",
+            "content": "TARGET_VERSION: v3\nVERSION_NOTES: In v2 there is no connection reaper; pooled connections live until the client is garbage collected [v2/client-configure#notes::3]. In v3 connections are reaped after a period of idleness defined by `pool_reap_seconds` (default 90 seconds) [v3/client-configure#notes::3] and the parameter is documented in the configure method [v3/client-configure#parameters::1].\nDEPRECATION: none found"
+          }
+        ]
+      },
+      {
+        "worker": "code",
+        "output": "CONTENT: v3: idle connections are reaped after `pool_reap_seconds` seconds of idleness (default 90 seconds) [v3/client-configure#notes::3] — the `pool_reap_seconds` parameter is documented in `Client.configure()` [v3/client-configure#parameters::1]  \nCODE: none",
+        "termination": "report",
+        "tool_calls": [
+          {
+            "seq": 1,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v3",
+              "query": "configure pool_reap_seconds"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 4714.436,
+            "result_chars": 3562,
+            "result_chunk_ids": [
+              "v3/client-configure#notes::3",
+              "v3/client-configure#parameters::1",
+              "v3/client-configure#example::2",
+              "v3/client-batch#notes::3",
+              "v3/client-send#notes::3"
+            ]
+          }
+        ],
+        "llm_calls": 2,
+        "prompt_tokens": 2744,
+        "completion_tokens": 406,
+        "cached_tokens": 768,
+        "total_tokens": 3150,
+        "cost_usd": 0.0005976,
+        "rate_limit_wait_s": 0.0,
+        "latency_ms": 23135.522,
+        "transcript": [
+          {
+            "role": "system",
+            "content": "You are the code-sample worker in a documentation team. You receive one task and the target SDK version. Find what the documentation says, and report it.\n\nUse search_docs with api_version set to the target version. When the target is both, search each version separately. State nothing you have not seen a passage say.\n\nCopy code only if a passage shows it, verbatim. Never compose a call the documentation does not show.\n\nReply in exactly this format and nothing else:\nCONTENT: <the facts that answer the task, naming the version they belong to, with chunk ids in [brackets]>\nCODE: <a code sample copied verbatim from a passage, or: none>\n\nIf the passages do not contain the answer, reply CONTENT: not documented, and CODE: none.\n"
+          },
+          {
+            "role": "user",
+            "content": "Task: idle connections reaped\nTarget version: v3\nVersion notes from the version worker: In v3 connections are reaped after a period of idleness defined by `pool_reap_seconds` (default 90 seconds) and the parameter is documented in the configure method."
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_c7ac6e74-d457-4c04-aa09-722cb89e5380",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v3\",\"query\":\"configure pool_reap_seconds\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_c7ac6e74-d457-4c04-aa09-722cb89e5380",
+            "name": "search_docs",
+            "content": "{\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.613, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\nreal concurrency costs nothing but does not help either.\\n\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\\nbut ignored, which mirrors how v2 behaved.\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-configure#parameters::1\", \"heading_path\": \"Client.configure() > Parameters\", \"score\": 0.5726, \"text\": \"Client.configure() > Parameters\\n\\n## Parameters\\n\\n| name              | type | default        | required | description                                        |\\n|-------------------|------|----------------|----------|-----------------------------------------------------|\\n| api_key           | str  | —              | yes      | Credential used for every request.                 |\\n| base_url          | str  | https://api.example.com | no | Endpoint root for all calls.                |\\n| pool_size         | int  | 10             | no       | Maximum simultaneous pooled connections.           |\\n| pool_reap_seconds | int  | 90             | no       | Idle time before a pooled connection is collected. |\\n| default_timeout_ms| int  | 30000          | no       | Timeout applied when a call does not set one.      |\\n| retries_enabled   | bool | True           | no       | Master switch for the automatic retry path.        |\\n| log_level         | str  | warning        | no       | One of debug, info, warning, error.                |\\n| telemetry         | bool | True           | no       | Send anonymous usage counters to the vendor.       |\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-configure#example::2\", \"heading_path\": \"Client.configure() > Example\", \"score\": 0.5499, \"text\": \"Client.configure() > Example\\n\\n## Example\\n\\n```python\\nclient = Client()\\nclient.configure(\\n    api_key=\\\"sk-...\\\",\\n    pool_size=32,\\n    default_timeout_ms=45000,\\n    telemetry=False,\\n)\\n```\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-batch#notes::3\", \"heading_path\": \"Client.send_batch() > Notes\", \"score\": 0.508, \"text\": \"Client.send_batch() > Notes\\n\\n## Notes\\n\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\n20 requests per second gives you 20 requests per second, not 64. Raising\\n`concurrency` alone will not increase throughput past the rate limit.\\n\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\nusually too tight — scale the timeout with the batch size.\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-send#notes::3\", \"heading_path\": \"Client.send() > Notes\", \"score\": 0.4975, \"text\": \"Client.send() > Notes\\n\\n## Notes\\n\\nThe `retry_backoff_ms` value is the base delay, not the total delay. The client\\napplies full jitter, so the actual wait before attempt *n* is drawn at random\\nfrom `[0, retry_backoff_ms * 2 ** n)`. A base of 250 with five retries can\\ntherefore wait up to eight seconds in the worst case. Set `timeout_ms` with that\\nceiling in mind, since the timeout covers the entire call including every retry\\nattempt rather than each attempt individually.\"}]}"
+          },
+          {
+            "role": "assistant",
+            "content": "CONTENT: v3: idle connections are reaped after `pool_reap_seconds` seconds of idleness (default 90 seconds) [v3/client-configure#notes::3] — the `pool_reap_seconds` parameter is documented in `Client.configure()` [v3/client-configure#parameters::1]  \nCODE: none"
+          }
+        ]
+      }
+    ],
+    "delegations": [
+      {
+        "worker": "version",
+        "arguments": {
+          "question": "when are idle connections reaped"
+        },
+        "http_status": 200
+      },
+      {
+        "worker": "code",
+        "arguments": {
+          "target_version": "v3",
+          "task": "idle connections reaped",
+          "version_notes": "In v3 connections are reaped after a period of idleness defined by `pool_reap_seconds` (default 90 seconds) and the parameter is documented in the configure method."
+        },
+        "http_status": 200
+      }
+    ],
+    "prompt_tokens": 11934,
+    "completion_tokens": 1262,
+    "cached_tokens": 768,
+    "total_tokens": 13196,
+    "cost_usd": 0.0024897,
+    "latency_ms": 76920.541,
+    "rate_limit_wait_s": 0.0,
+    "termination": "final_answer",
+    "termination_detail": "no VERSION: line",
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou lead a team of two workers, available to you as tools. You cannot search the documentation yourself.\n\n1. Call delegate_version_check with the developer's question. It reports the target version, and what differs between versions or is deprecated.\n2. Call delegate_code_sample with the task, the target version from step 1, and the version notes. It reports the documented facts and any documented code sample, with chunk ids.\n3. Write the answer from the workers' reports only, and cite the chunk ids they cite.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: when are idle connections reaped\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_6737709a-9ce1-4125-9db3-760651f7ddbf",
+            "type": "function",
+            "function": {
+              "name": "delegate_version_check",
+              "arguments": "{\"question\":\"when are idle connections reaped\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_6737709a-9ce1-4125-9db3-760651f7ddbf",
+        "name": "delegate_version_check",
+        "content": "{\"worker\": \"version/deprecation worker\", \"report\": \"TARGET_VERSION: v3\\nVERSION_NOTES: In v2 there is no connection reaper; pooled connections live until the client is garbage collected [v2/client-configure#notes::3]. In v3 connections are reaped after a period of idleness defined by `pool_reap_seconds` (default 90 seconds) [v3/client-configure#notes::3] and the parameter is documented in the configure method [v3/client-configure#parameters::1].\\nDEPRECATION: none found\"}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_4403a343-c2a0-4a2b-b21e-0a787ffd9f43",
+            "type": "function",
+            "function": {
+              "name": "delegate_code_sample",
+              "arguments": "{\"target_version\":\"v3\",\"task\":\"idle connections reaped\",\"version_notes\":\"In v3 connections are reaped after a period of idleness defined by `pool_reap_seconds` (default 90 seconds) and the parameter is documented in the configure method.\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_4403a343-c2a0-4a2b-b21e-0a787ffd9f43",
+        "name": "delegate_code_sample",
+        "content": "{\"worker\": \"code-sample worker\", \"report\": \"CONTENT: v3: idle connections are reaped after `pool_reap_seconds` seconds of idleness (default 90 seconds) [v3/client-configure#notes::3] — the `pool_reap_seconds` parameter is documented in `Client.configure()` [v3/client-configure#parameters::1]  \\nCODE: none\"}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: In v3, idle connections are reaped after they have been idle for the number of seconds set by `pool_reap_seconds`, which defaults to 90 seconds. VERSION: v3 CITATIONS: v3/client-configure#notes::3, v3/client-configure#parameters::1"
+      }
+    ]
+  },
+  "grade": {
+    "passed": false,
+    "answer_text": "",
+    "context_ids": [
+      "v2/client-stream#clientstream::0",
+      "v2/client-close#clientclose::0",
+      "v2/client-configure#notes::3",
+      "v2/client-send#notes::2",
+      "v2/client-configure#parameters::1",
+      "v3/client-configure#notes::3",
+      "v3/client-close#clientclose::0",
+      "v3/client-stream#clientstream::0",
+      "v3/client-close#notes::3",
+      "v3/client-configure#parameters::1",
+      "v3/client-configure#example::2",
+      "v3/client-batch#notes::3",
+      "v3/client-send#notes::3"
+    ],
+    "assertions": [],
+    "judge": {
+      "verdict": "NOT_JUDGED",
+      "reason": "no parsable answer: no VERSION: line"
+    }
+  }
+}

@@ -1,0 +1,484 @@
+{
+  "llm_calls": 8,
+  "tool_path": [
+    "version",
+    "code"
+  ],
+  "worker_terminations": [
+    "report",
+    "report"
+  ],
+  "hops": [
+    {
+      "case_id": "w6-001",
+      "seq": 1,
+      "edge": "question -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 663,
+      "completion_tokens": 53,
+      "cached_tokens": 0,
+      "total_tokens": 716,
+      "cost_usd": 0.00013125,
+      "latency_ms": 650.704,
+      "http_status": null,
+      "note": "delegates to version/deprecation worker"
+    },
+    {
+      "case_id": "w6-001",
+      "seq": 2,
+      "edge": "orchestrator -> version/deprecation worker",
+      "actor": "version/deprecation worker",
+      "llm_calls": 3,
+      "prompt_tokens": 7586,
+      "completion_tokens": 729,
+      "cached_tokens": 0,
+      "total_tokens": 8315,
+      "cost_usd": 0.0015753,
+      "latency_ms": 40673.642,
+      "http_status": 200,
+      "note": "2 tool call(s), termination report"
+    },
+    {
+      "case_id": "w6-001",
+      "seq": 3,
+      "edge": "version/deprecation worker -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 803,
+      "completion_tokens": 147,
+      "cached_tokens": 0,
+      "total_tokens": 950,
+      "cost_usd": 0.00020865,
+      "latency_ms": 7979.482,
+      "http_status": null,
+      "note": "delegates to code-sample worker"
+    },
+    {
+      "case_id": "w6-001",
+      "seq": 4,
+      "edge": "orchestrator -> code-sample worker",
+      "actor": "code-sample worker",
+      "llm_calls": 2,
+      "prompt_tokens": 2891,
+      "completion_tokens": 302,
+      "cached_tokens": 768,
+      "total_tokens": 3193,
+      "cost_usd": 0.00055725,
+      "latency_ms": 27165.995,
+      "http_status": 200,
+      "note": "1 tool call(s), termination report"
+    },
+    {
+      "case_id": "w6-001",
+      "seq": 5,
+      "edge": "code-sample worker -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 944,
+      "completion_tokens": 48,
+      "cached_tokens": 0,
+      "total_tokens": 992,
+      "cost_usd": 0.0001704,
+      "latency_ms": 576.883,
+      "http_status": null,
+      "note": "final answer"
+    }
+  ],
+  "arm": "squad",
+  "case_id": "w6-001",
+  "question": "what does the client do when the endpoint returns 5xx",
+  "recorded_at": "2026-10-04T06:53:42.091739+00:00",
+  "git_sha": "b90fe78",
+  "model": "openai/gpt-oss-120b",
+  "termination": "final_answer",
+  "termination_detail": "no VERSION: line",
+  "prompt_tokens": 12887,
+  "completion_tokens": 1279,
+  "cached_tokens": 768,
+  "total_tokens": 14166,
+  "cost_usd": 0.00264285,
+  "latency_ms": 77085.575,
+  "rate_limit_wait_s": 26.0,
+  "adjusted_latency_ms": 51085.575,
+  "answer": {
+    "answer": "In v3 the client automatically retries the request when the endpoint returns a 5xx status, using the configured backoff parameters. VERSION: v3 CITATIONS: v3/client-send#clientsend::0",
+    "sdk_version": "none",
+    "citations": [],
+    "refused": false,
+    "raw": "ANSWER: In v3 the client automatically retries the request when the endpoint returns a 5xx status, using the configured backoff parameters. VERSION: v3 CITATIONS: v3/client-send#clientsend::0",
+    "parse_error": "no VERSION: line"
+  },
+  "run": {
+    "arm": "squad",
+    "question_id": "w6-001",
+    "question": "what does the client do when the endpoint returns 5xx",
+    "output": {
+      "answer": "In v3 the client automatically retries the request when the endpoint returns a 5xx status, using the configured backoff parameters. VERSION: v3 CITATIONS: v3/client-send#clientsend::0",
+      "sdk_version": "none",
+      "citations": [],
+      "refused": false,
+      "raw": "ANSWER: In v3 the client automatically retries the request when the endpoint returns a 5xx status, using the configured backoff parameters. VERSION: v3 CITATIONS: v3/client-send#clientsend::0",
+      "parse_error": "no VERSION: line"
+    },
+    "hops": [
+      {
+        "case_id": "w6-001",
+        "seq": 1,
+        "edge": "question -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 663,
+        "completion_tokens": 53,
+        "cached_tokens": 0,
+        "total_tokens": 716,
+        "cost_usd": 0.00013125,
+        "latency_ms": 650.704,
+        "http_status": null,
+        "note": "delegates to version/deprecation worker"
+      },
+      {
+        "case_id": "w6-001",
+        "seq": 2,
+        "edge": "orchestrator -> version/deprecation worker",
+        "actor": "version/deprecation worker",
+        "llm_calls": 3,
+        "prompt_tokens": 7586,
+        "completion_tokens": 729,
+        "cached_tokens": 0,
+        "total_tokens": 8315,
+        "cost_usd": 0.0015753,
+        "latency_ms": 40673.642,
+        "http_status": 200,
+        "note": "2 tool call(s), termination report"
+      },
+      {
+        "case_id": "w6-001",
+        "seq": 3,
+        "edge": "version/deprecation worker -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 803,
+        "completion_tokens": 147,
+        "cached_tokens": 0,
+        "total_tokens": 950,
+        "cost_usd": 0.00020865,
+        "latency_ms": 7979.482,
+        "http_status": null,
+        "note": "delegates to code-sample worker"
+      },
+      {
+        "case_id": "w6-001",
+        "seq": 4,
+        "edge": "orchestrator -> code-sample worker",
+        "actor": "code-sample worker",
+        "llm_calls": 2,
+        "prompt_tokens": 2891,
+        "completion_tokens": 302,
+        "cached_tokens": 768,
+        "total_tokens": 3193,
+        "cost_usd": 0.00055725,
+        "latency_ms": 27165.995,
+        "http_status": 200,
+        "note": "1 tool call(s), termination report"
+      },
+      {
+        "case_id": "w6-001",
+        "seq": 5,
+        "edge": "code-sample worker -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 944,
+        "completion_tokens": 48,
+        "cached_tokens": 0,
+        "total_tokens": 992,
+        "cost_usd": 0.0001704,
+        "latency_ms": 576.883,
+        "http_status": null,
+        "note": "final answer"
+      }
+    ],
+    "workers": [
+      {
+        "worker": "version",
+        "output": "TARGET_VERSION: v3\nVERSION_NOTES: In v3, the client automatically retries when the endpoint returns a 5xx status, using the configured backoff parameters (see [v3/client-send#clientsend::0]). In v2, there is no automatic retry mechanism for 5xx responses; retries are not enabled (see [v2/client-configure#notes::3]).\nDEPRECATION: none found",
+        "termination": "report",
+        "tool_calls": [
+          {
+            "seq": 1,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v3",
+              "query": "5xx"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 21917.985,
+            "result_chars": 4196,
+            "result_chunk_ids": [
+              "v3/client-send#clientsend::0",
+              "v3/client-upload#parameters::1",
+              "v3/client-batch#notes::3",
+              "v3/client-send#parameters::1",
+              "v3/client-send#example::2"
+            ]
+          },
+          {
+            "seq": 2,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v2",
+              "query": "5xx"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 2393.302,
+            "result_chars": 2982,
+            "result_chunk_ids": [
+              "v2/client-configure#parameters::1",
+              "v2/client-stream#parameters::1",
+              "v2/client-send#parameters::1",
+              "v2/client-configure#notes::3",
+              "v2/client-stream#notes::3"
+            ]
+          }
+        ],
+        "llm_calls": 3,
+        "prompt_tokens": 7586,
+        "completion_tokens": 729,
+        "cached_tokens": 0,
+        "total_tokens": 8315,
+        "cost_usd": 0.0015753,
+        "rate_limit_wait_s": 12.0,
+        "latency_ms": 40524.994,
+        "transcript": [
+          {
+            "role": "system",
+            "content": "You are the version/deprecation worker in a documentation team. You have one job: establish which SDK version a developer question concerns, and what about it differs between versions or is deprecated.\n\nUse your tools, and state nothing you have not seen a tool return. search_docs searches one documentation version at a time (\"v2\" or \"v3\"). The package tools report published releases and deprecation notices.\n\nIf the question names a version, that is the target. If it compares versions, the target is both. Otherwise the target is v3, the newest documented version.\n\nReply in exactly this format and nothing else:\nTARGET_VERSION: <v2, v3 or both>\nVERSION_NOTES: <what differs between v2 and v3 for what the question asks, with chunk ids in [brackets]; or: none found>\nDEPRECATION: <any deprecation that applies, from a tool result; or: none found>\n\nDo not answer the question itself. Another worker does that.\n"
+          },
+          {
+            "role": "user",
+            "content": "Developer question: what does the client do when the endpoint returns 5xx"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_a218e0d5-1bc2-4a56-9bb9-100afe83d73b",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v3\",\"query\":\"5xx\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_a218e0d5-1bc2-4a56-9bb9-100afe83d73b",
+            "name": "search_docs",
+            "content": "{\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-send#clientsend::0\\\", \\\"heading_path\\\": \\\"Client.send()\\\", \\\"score\\\": 0.4119, \\\"text\\\": \\\"Client.send()\\\\n\\\\n# Client.send()\\\\n\\\\nSends a single request to the configured endpoint and blocks until a response is\\\\nreceived or the retry budget is exhausted. The method is safe to call from\\\\nmultiple threads; each call takes its own connection from the pool and returns\\\\nit on completion. Callers issuing many requests at once should prefer\\\\n`Client.send_batch()`, which amortises connection setup across the whole batch\\\\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\\\\nclient retries automatically according to the backoff parameters below; 4xx\\\\nstatuses are surfaced to the caller immediately and are never retried, because a\\\\nmalformed request does not become well-formed by being sent again.\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-upload#parameters::1\\\", \\\"heading_path\\\": \\\"Client.upload() > Parameters\\\", \\\"score\\\": 0.4025, \\\"text\\\": \\\"Client.upload() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name          | type | default  | required | description                                        |\\\\n|---------------|------|----------|----------|-----------------------------------------------------|\\\\n| path          | str  | —        | yes      | Local path of the file to upload.                  |\\\\n| content_type  | str  | None     | no       | Overrides the type guessed from the extension.     |\\\\n| chunk_bytes   | int  | 8388608  | no       | Multipart threshold and part size, in bytes.       |\\\\n| retain_hours  | int  | 24       | no       | How long the handle stays valid.                   |\\\\n| checksum      | bool | True     | no       | Verify a SHA-256 checksum after upload.            |\\\\n| resume        | bool | True     | no       | Resume an interrupted multipart upload.            |\\\\n| max_bytes     | int  | 524288000| no       | Reject files larger than this before sending.      |\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-batch#notes::3\\\", \\\"heading_path\\\": \\\"Client.send_batch() > Notes\\\", \\\"score\\\": 0.3966, \\\"text\\\": \\\"Client.send_batch() > Notes\\\\n\\\\n## Notes\\\\n\\\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\\\n20 requests per second gives you 20 requests per second, not 64. Raising\\\\n`concurrency` alone will not increase throughput past the rate limit.\\\\n\\\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\\\nusually too tight — scale the timeout with the batch size.\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.3932, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|------------------|------|-----------|----------|------------------------------------------------------|\\\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\\\n| stream           | bool | False     | no       | Return a generator instead \"}"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_cda71354-46b8-46fc-9aef-d3c3221c8385",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v2\",\"query\":\"5xx\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_cda71354-46b8-46fc-9aef-d3c3221c8385",
+            "name": "search_docs",
+            "content": "{\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-configure#parameters::1\", \"heading_path\": \"Client.configure() > Parameters\", \"score\": 0.3734, \"text\": \"Client.configure() > Parameters\\n\\n## Parameters\\n\\n| name               | type | default        | required | description                                    |\\n|--------------------|------|----------------|----------|-------------------------------------------------|\\n| api_key            | str  | —              | yes      | Credential used for every request.             |\\n| base_url           | str  | https://api.example.com | no | Endpoint root for all calls.            |\\n| pool_size          | int  | 4              | no       | Maximum simultaneous pooled connections.       |\\n| default_timeout_ms | int  | 10000          | no       | Timeout applied when a call does not set one.  |\\n| log_level          | str  | error          | no       | One of debug, info, warning, error.            |\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-stream#parameters::1\", \"heading_path\": \"Client.stream() > Parameters\", \"score\": 0.3647, \"text\": \"Client.stream() > Parameters\\n\\n## Parameters\\n\\n| name         | type | default | required | description                                     |\\n|--------------|------|---------|----------|--------------------------------------------------|\\n| payload      | dict | —       | yes      | The request body.                               |\\n| chunk_size   | int  | 512     | no       | Bytes read from the socket per iteration.       |\\n| heartbeat_ms | int  | 30000   | no       | Interval between server keep-alive frames.      |\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-send#parameters::1\", \"heading_path\": \"Client.send() > Parameters\", \"score\": 0.3623, \"text\": \"Client.send() > Parameters\\n\\n## Parameters\\n\\n| name             | type | default | required |\\n|------------------|------|---------|----------|\\n| payload          | dict | —       | yes      |\\n| timeout_ms       | int  | 10000   | no       |\\n| retry_backoff_ms | int  | 100     | no       |\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.3497, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\nThere is no `retries_enabled` switch in v2 because there is no automatic retry\\npath to switch off. There is no connection reaper either: pooled connections\\nlive until the client is garbage collected.\\n\\nThe v2 default `pool_size` is 4, raised to 10 in v3.\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-stream#notes::3\", \"heading_path\": \"Client.stream() > Notes\", \"score\": 0.3469, \"text\": \"Client.stream() > Notes\\n\\n## Notes\\n\\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\\nprofiling showed the smaller reads dominating CPU time on large responses.\\n\\nThere is no context-manager form in v2 — you must call `close()` yourself, and\\nforgetting to do so leaks the connection until the process exits.\"}]}"
+          },
+          {
+            "role": "assistant",
+            "content": "TARGET_VERSION: v3\nVERSION_NOTES: In v3, the client automatically retries when the endpoint returns a 5xx status, using the configured backoff parameters (see [v3/client-send#clientsend::0]). In v2, there is no automatic retry mechanism for 5xx responses; retries are not enabled (see [v2/client-configure#notes::3]).\nDEPRECATION: none found"
+          }
+        ]
+      },
+      {
+        "worker": "code",
+        "output": "CONTENT: In v3, the client automatically retries when the endpoint returns a 5xx status, using the configured backoff parameters. [v3/client-send#clientsend::0]\nCODE: none",
+        "termination": "report",
+        "tool_calls": [
+          {
+            "seq": 1,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v3",
+              "query": "5xx"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 18074.907,
+            "result_chars": 4196,
+            "result_chunk_ids": [
+              "v3/client-send#clientsend::0",
+              "v3/client-upload#parameters::1",
+              "v3/client-batch#notes::3",
+              "v3/client-send#parameters::1",
+              "v3/client-send#example::2"
+            ]
+          }
+        ],
+        "llm_calls": 2,
+        "prompt_tokens": 2891,
+        "completion_tokens": 302,
+        "cached_tokens": 768,
+        "total_tokens": 3193,
+        "cost_usd": 0.00055725,
+        "rate_limit_wait_s": 7.0,
+        "latency_ms": 27126.821,
+        "transcript": [
+          {
+            "role": "system",
+            "content": "You are the code-sample worker in a documentation team. You receive one task and the target SDK version. Find what the documentation says, and report it.\n\nUse search_docs with api_version set to the target version. When the target is both, search each version separately. State nothing you have not seen a passage say.\n\nCopy code only if a passage shows it, verbatim. Never compose a call the documentation does not show.\n\nReply in exactly this format and nothing else:\nCONTENT: <the facts that answer the task, naming the version they belong to, with chunk ids in [brackets]>\nCODE: <a code sample copied verbatim from a passage, or: none>\n\nIf the passages do not contain the answer, reply CONTENT: not documented, and CODE: none.\n"
+          },
+          {
+            "role": "user",
+            "content": "Task: what does the client do when the endpoint returns 5xx\nTarget version: v3\nVersion notes from the version worker: In v3, the client automatically retries when the endpoint returns a 5xx status, using the configured backoff parameters (see [v3/client-send#clientsend::0])."
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_318a33a1-0167-4726-ac3b-7afff2178f4a",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v3\",\"query\":\"5xx\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_318a33a1-0167-4726-ac3b-7afff2178f4a",
+            "name": "search_docs",
+            "content": "{\"truncated\": true, \"note\": \"result truncated at 4000 chars\", \"content\": \"{\\\"api_version\\\": \\\"v3\\\", \\\"count\\\": 5, \\\"passages\\\": [{\\\"rank\\\": 1, \\\"chunk_id\\\": \\\"v3/client-send#clientsend::0\\\", \\\"heading_path\\\": \\\"Client.send()\\\", \\\"score\\\": 0.4119, \\\"text\\\": \\\"Client.send()\\\\n\\\\n# Client.send()\\\\n\\\\nSends a single request to the configured endpoint and blocks until a response is\\\\nreceived or the retry budget is exhausted. The method is safe to call from\\\\nmultiple threads; each call takes its own connection from the pool and returns\\\\nit on completion. Callers issuing many requests at once should prefer\\\\n`Client.send_batch()`, which amortises connection setup across the whole batch\\\\nand applies a shared rate limiter. When the endpoint returns a 5xx status the\\\\nclient retries automatically according to the backoff parameters below; 4xx\\\\nstatuses are surfaced to the caller immediately and are never retried, because a\\\\nmalformed request does not become well-formed by being sent again.\\\"}, {\\\"rank\\\": 2, \\\"chunk_id\\\": \\\"v3/client-upload#parameters::1\\\", \\\"heading_path\\\": \\\"Client.upload() > Parameters\\\", \\\"score\\\": 0.4025, \\\"text\\\": \\\"Client.upload() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name          | type | default  | required | description                                        |\\\\n|---------------|------|----------|----------|-----------------------------------------------------|\\\\n| path          | str  | —        | yes      | Local path of the file to upload.                  |\\\\n| content_type  | str  | None     | no       | Overrides the type guessed from the extension.     |\\\\n| chunk_bytes   | int  | 8388608  | no       | Multipart threshold and part size, in bytes.       |\\\\n| retain_hours  | int  | 24       | no       | How long the handle stays valid.                   |\\\\n| checksum      | bool | True     | no       | Verify a SHA-256 checksum after upload.            |\\\\n| resume        | bool | True     | no       | Resume an interrupted multipart upload.            |\\\\n| max_bytes     | int  | 524288000| no       | Reject files larger than this before sending.      |\\\"}, {\\\"rank\\\": 3, \\\"chunk_id\\\": \\\"v3/client-batch#notes::3\\\", \\\"heading_path\\\": \\\"Client.send_batch() > Notes\\\", \\\"score\\\": 0.3966, \\\"text\\\": \\\"Client.send_batch() > Notes\\\\n\\\\n## Notes\\\\n\\\\n`concurrency` and `rate_limit_rps` interact. The client honours whichever is\\\\nmore restrictive at any moment, so setting concurrency to 64 against a limit of\\\\n20 requests per second gives you 20 requests per second, not 64. Raising\\\\n`concurrency` alone will not increase throughput past the rate limit.\\\\n\\\\n`timeout_ms` covers the entire batch. A batch of 500 payloads at the default\\\\n60000 ms gives each request roughly 120 ms of budget on average, which is\\\\nusually too tight — scale the timeout with the batch size.\\\"}, {\\\"rank\\\": 4, \\\"chunk_id\\\": \\\"v3/client-send#parameters::1\\\", \\\"heading_path\\\": \\\"Client.send() > Parameters\\\", \\\"score\\\": 0.3932, \\\"text\\\": \\\"Client.send() > Parameters\\\\n\\\\n## Parameters\\\\n\\\\n| name             | type | default   | required | description                                          |\\\\n|------------------|------|-----------|----------|------------------------------------------------------|\\\\n| payload          | dict | —         | yes      | The request body, serialised as JSON before sending. |\\\\n| timeout_ms       | int  | 30000     | no       | Total budget for the call, including every retry.    |\\\\n| retry_backoff_ms | int  | 250       | no       | Base delay between retries, before jitter is applied.|\\\\n| max_retries      | int  | 3         | no       | Attempts after the first before the call gives up.   |\\\\n| idempotency_key  | str  | None      | no       | Deduplicates retries server-side within 24 hours.    |\\\\n| compress         | bool | False     | no       | Gzip the request body before transmission.           |\\\\n| headers          | dict | None      | no       | Extra headers merged over the client defaults.       |\\\\n| base_url         | str  | None      | no       | Overrides the client base URL for this call only.    |\\\\n| stream           | bool | False     | no       | Return a generator instead \"}"
+          },
+          {
+            "role": "assistant",
+            "content": "CONTENT: In v3, the client automatically retries when the endpoint returns a 5xx status, using the configured backoff parameters. [v3/client-send#clientsend::0]\nCODE: none"
+          }
+        ]
+      }
+    ],
+    "delegations": [
+      {
+        "worker": "version",
+        "arguments": {
+          "question": "what does the client do when the endpoint returns 5xx"
+        },
+        "http_status": 200
+      },
+      {
+        "worker": "code",
+        "arguments": {
+          "target_version": "v3",
+          "task": "what does the client do when the endpoint returns 5xx",
+          "version_notes": "In v3, the client automatically retries when the endpoint returns a 5xx status, using the configured backoff parameters (see [v3/client-send#clientsend::0])."
+        },
+        "http_status": 200
+      }
+    ],
+    "prompt_tokens": 12887,
+    "completion_tokens": 1279,
+    "cached_tokens": 768,
+    "total_tokens": 14166,
+    "cost_usd": 0.00264285,
+    "latency_ms": 77085.575,
+    "rate_limit_wait_s": 26.0,
+    "termination": "final_answer",
+    "termination_detail": "no VERSION: line",
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou lead a team of two workers, available to you as tools. You cannot search the documentation yourself.\n\n1. Call delegate_version_check with the developer's question. It reports the target version, and what differs between versions or is deprecated.\n2. Call delegate_code_sample with the task, the target version from step 1, and the version notes. It reports the documented facts and any documented code sample, with chunk ids.\n3. Write the answer from the workers' reports only, and cite the chunk ids they cite.\n\nYour final reply uses the format above: ANSWER, VERSION and CITATIONS each on a line of its own.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: what does the client do when the endpoint returns 5xx\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_b6f01adb-0a3d-460e-a0cb-0a27ad014ed2",
+            "type": "function",
+            "function": {
+              "name": "delegate_version_check",
+              "arguments": "{\"question\":\"what does the client do when the endpoint returns 5xx\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_b6f01adb-0a3d-460e-a0cb-0a27ad014ed2",
+        "name": "delegate_version_check",
+        "content": "{\"worker\": \"version/deprecation worker\", \"report\": \"TARGET_VERSION: v3\\nVERSION_NOTES: In v3, the client automatically retries when the endpoint returns a 5xx status, using the configured backoff parameters (see [v3/client-send#clientsend::0]). In v2, there is no automatic retry mechanism for 5xx responses; retries are not enabled (see [v2/client-configure#notes::3]).\\nDEPRECATION: none found\"}"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_79f0c333-2377-4a46-a1b3-dd51a34420c7",
+            "type": "function",
+            "function": {
+              "name": "delegate_code_sample",
+              "arguments": "{\"target_version\":\"v3\",\"task\":\"what does the client do when the endpoint returns 5xx\",\"version_notes\":\"In v3, the client automatically retries when the endpoint returns a 5xx status, using the configured backoff parameters (see [v3/client-send#clientsend::0]).\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_79f0c333-2377-4a46-a1b3-dd51a34420c7",
+        "name": "delegate_code_sample",
+        "content": "{\"worker\": \"code-sample worker\", \"report\": \"CONTENT: In v3, the client automatically retries when the endpoint returns a 5xx status, using the configured backoff parameters. [v3/client-send#clientsend::0]\\nCODE: none\"}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: In v3 the client automatically retries the request when the endpoint returns a 5xx status, using the configured backoff parameters. VERSION: v3 CITATIONS: v3/client-send#clientsend::0"
+      }
+    ]
+  },
+  "grade": {
+    "passed": false,
+    "answer_text": "",
+    "context_ids": [
+      "v3/client-send#clientsend::0",
+      "v3/client-upload#parameters::1",
+      "v3/client-batch#notes::3",
+      "v3/client-send#parameters::1",
+      "v3/client-send#example::2",
+      "v2/client-configure#parameters::1",
+      "v2/client-stream#parameters::1",
+      "v2/client-send#parameters::1",
+      "v2/client-configure#notes::3",
+      "v2/client-stream#notes::3"
+    ],
+    "assertions": [],
+    "judge": {
+      "verdict": "NOT_JUDGED",
+      "reason": "no parsable answer: no VERSION: line"
+    }
+  }
+}

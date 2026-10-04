@@ -1,0 +1,362 @@
+{
+  "llm_calls": 5,
+  "tool_path": [
+    "version"
+  ],
+  "worker_terminations": [
+    "report"
+  ],
+  "hops": [
+    {
+      "case_id": "w6-002",
+      "seq": 1,
+      "edge": "question -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 655,
+      "completion_tokens": 46,
+      "cached_tokens": 0,
+      "total_tokens": 701,
+      "cost_usd": 0.00012585,
+      "latency_ms": 661.775,
+      "http_status": null,
+      "note": "delegates to version/deprecation worker"
+    },
+    {
+      "case_id": "w6-002",
+      "seq": 2,
+      "edge": "orchestrator -> version/deprecation worker",
+      "actor": "version/deprecation worker",
+      "llm_calls": 3,
+      "prompt_tokens": 7014,
+      "completion_tokens": 635,
+      "cached_tokens": 0,
+      "total_tokens": 7649,
+      "cost_usd": 0.0014331,
+      "latency_ms": 38826.782,
+      "http_status": 200,
+      "note": "2 tool call(s), termination report"
+    },
+    {
+      "case_id": "w6-002",
+      "seq": 3,
+      "edge": "version/deprecation worker -> orchestrator",
+      "actor": "orchestrator",
+      "llm_calls": 1,
+      "prompt_tokens": 798,
+      "completion_tokens": 139,
+      "cached_tokens": 0,
+      "total_tokens": 937,
+      "cost_usd": 0.0002031,
+      "latency_ms": 6823.553,
+      "http_status": null,
+      "note": "final answer"
+    }
+  ],
+  "arm": "squad",
+  "case_id": "w6-002",
+  "question": "is chunk_size required",
+  "recorded_at": "2026-10-04T06:54:48.571985+00:00",
+  "git_sha": "b90fe78",
+  "model": "openai/gpt-oss-120b",
+  "termination": "final_answer",
+  "termination_detail": "orchestrator answered",
+  "prompt_tokens": 8467,
+  "completion_tokens": 820,
+  "cached_tokens": 0,
+  "total_tokens": 9287,
+  "cost_usd": 0.00176205,
+  "latency_ms": 46319.758,
+  "rate_limit_wait_s": 13.0,
+  "adjusted_latency_ms": 33319.758,
+  "answer": {
+    "answer": "`chunk_size` is not required; it is optional in both SDK versions.",
+    "sdk_version": "both",
+    "citations": [
+      "v3/client-stream#parameters::1",
+      "v2/client-stream#parameters::1"
+    ],
+    "refused": false,
+    "raw": "ANSWER: `chunk_size` is not required; it is optional in both SDK versions.  \nVERSION: both  \nCITATIONS: v3/client-stream#parameters::1, v2/client-stream#parameters::1",
+    "parse_error": ""
+  },
+  "run": {
+    "arm": "squad",
+    "question_id": "w6-002",
+    "question": "is chunk_size required",
+    "output": {
+      "answer": "`chunk_size` is not required; it is optional in both SDK versions.",
+      "sdk_version": "both",
+      "citations": [
+        "v3/client-stream#parameters::1",
+        "v2/client-stream#parameters::1"
+      ],
+      "refused": false,
+      "raw": "ANSWER: `chunk_size` is not required; it is optional in both SDK versions.  \nVERSION: both  \nCITATIONS: v3/client-stream#parameters::1, v2/client-stream#parameters::1",
+      "parse_error": ""
+    },
+    "hops": [
+      {
+        "case_id": "w6-002",
+        "seq": 1,
+        "edge": "question -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 655,
+        "completion_tokens": 46,
+        "cached_tokens": 0,
+        "total_tokens": 701,
+        "cost_usd": 0.00012585,
+        "latency_ms": 661.775,
+        "http_status": null,
+        "note": "delegates to version/deprecation worker"
+      },
+      {
+        "case_id": "w6-002",
+        "seq": 2,
+        "edge": "orchestrator -> version/deprecation worker",
+        "actor": "version/deprecation worker",
+        "llm_calls": 3,
+        "prompt_tokens": 7014,
+        "completion_tokens": 635,
+        "cached_tokens": 0,
+        "total_tokens": 7649,
+        "cost_usd": 0.0014331,
+        "latency_ms": 38826.782,
+        "http_status": 200,
+        "note": "2 tool call(s), termination report"
+      },
+      {
+        "case_id": "w6-002",
+        "seq": 3,
+        "edge": "version/deprecation worker -> orchestrator",
+        "actor": "orchestrator",
+        "llm_calls": 1,
+        "prompt_tokens": 798,
+        "completion_tokens": 139,
+        "cached_tokens": 0,
+        "total_tokens": 937,
+        "cost_usd": 0.0002031,
+        "latency_ms": 6823.553,
+        "http_status": null,
+        "note": "final answer"
+      }
+    ],
+    "workers": [
+      {
+        "worker": "version",
+        "output": "TARGET_VERSION: v3\nVERSION_NOTES: In v3, `chunk_size` is optional (required = no) with a default of 1024 bytes [ v3/client-stream#parameters::1 ]; in v2 it is also optional (required = no) but defaults to 512 bytes [ v2/client-stream#parameters::1 ]. The requirement status is the same, only the default value differs.\nDEPRECATION: none found",
+        "termination": "report",
+        "tool_calls": [
+          {
+            "seq": 1,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v3",
+              "query": "chunk_size"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 21592.698,
+            "result_chars": 2951,
+            "result_chunk_ids": [
+              "v3/client-stream#parameters::1",
+              "v3/client-upload#clientupload::0",
+              "v3/client-upload#example::2",
+              "v3/client-upload#parameters::1",
+              "v3/client-configure#notes::3"
+            ]
+          },
+          {
+            "seq": 2,
+            "name": "search_docs",
+            "server": "docs-search",
+            "arguments": {
+              "api_version": "v2",
+              "query": "chunk_size"
+            },
+            "ok": true,
+            "error": "",
+            "latency_ms": 5985.136,
+            "result_chars": 2847,
+            "result_chunk_ids": [
+              "v2/client-stream#notes::3",
+              "v2/client-stream#parameters::1",
+              "v2/client-configure#notes::3",
+              "v2/client-configure#example::2",
+              "v2/client-configure#parameters::1"
+            ]
+          }
+        ],
+        "llm_calls": 3,
+        "prompt_tokens": 7014,
+        "completion_tokens": 635,
+        "cached_tokens": 0,
+        "total_tokens": 7649,
+        "cost_usd": 0.0014331,
+        "rate_limit_wait_s": 7.0,
+        "latency_ms": 38773.488,
+        "transcript": [
+          {
+            "role": "system",
+            "content": "You are the version/deprecation worker in a documentation team. You have one job: establish which SDK version a developer question concerns, and what about it differs between versions or is deprecated.\n\nUse your tools, and state nothing you have not seen a tool return. search_docs searches one documentation version at a time (\"v2\" or \"v3\"). The package tools report published releases and deprecation notices.\n\nIf the question names a version, that is the target. If it compares versions, the target is both. Otherwise the target is v3, the newest documented version.\n\nReply in exactly this format and nothing else:\nTARGET_VERSION: <v2, v3 or both>\nVERSION_NOTES: <what differs between v2 and v3 for what the question asks, with chunk ids in [brackets]; or: none found>\nDEPRECATION: <any deprecation that applies, from a tool result; or: none found>\n\nDo not answer the question itself. Another worker does that.\n"
+          },
+          {
+            "role": "user",
+            "content": "Developer question: is chunk_size required"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_da5bcd0c-49ec-4947-b620-3abed967151a",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v3\",\"query\":\"chunk_size\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_da5bcd0c-49ec-4947-b620-3abed967151a",
+            "name": "search_docs",
+            "content": "{\"api_version\": \"v3\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v3/client-stream#parameters::1\", \"heading_path\": \"Client.stream() > Parameters\", \"score\": 0.5143, \"text\": \"Client.stream() > Parameters\\n\\n## Parameters\\n\\n| name         | type | default | required |\\n|--------------|------|---------|----------|\\n| payload      | dict | —       | yes      |\\n| chunk_size   | int  | 1024    | no       |\\n| heartbeat_ms | int  | 15000   | no       |\"}, {\"rank\": 2, \"chunk_id\": \"v3/client-upload#clientupload::0\", \"heading_path\": \"Client.upload()\", \"score\": 0.46, \"text\": \"Client.upload()\\n\\n# Client.upload()\\n\\nUploads a file and returns a handle that can be referenced by later requests.\\nFiles above `chunk_bytes` are sent as a multipart upload and reassembled\\nserver-side; below it, a single request is used. The handle is valid for 24\\nhours unless `retain_hours` says otherwise.\"}, {\"rank\": 3, \"chunk_id\": \"v3/client-upload#example::2\", \"heading_path\": \"Client.upload() > Example\", \"score\": 0.4529, \"text\": \"Client.upload() > Example\\n\\n## Example\\n\\n```python\\nhandle = client.upload(\\n    path=\\\"./corpus/manual.pdf\\\",\\n    chunk_bytes=16777216,\\n    retain_hours=72,\\n)\\n\\nclient.send(payload={\\\"query\\\": \\\"summarise\\\", \\\"file\\\": handle.id})\\n```\"}, {\"rank\": 4, \"chunk_id\": \"v3/client-upload#parameters::1\", \"heading_path\": \"Client.upload() > Parameters\", \"score\": 0.4371, \"text\": \"Client.upload() > Parameters\\n\\n## Parameters\\n\\n| name          | type | default  | required | description                                        |\\n|---------------|------|----------|----------|-----------------------------------------------------|\\n| path          | str  | —        | yes      | Local path of the file to upload.                  |\\n| content_type  | str  | None     | no       | Overrides the type guessed from the extension.     |\\n| chunk_bytes   | int  | 8388608  | no       | Multipart threshold and part size, in bytes.       |\\n| retain_hours  | int  | 24       | no       | How long the handle stays valid.                   |\\n| checksum      | bool | True     | no       | Verify a SHA-256 checksum after upload.            |\\n| resume        | bool | True     | no       | Resume an interrupted multipart upload.            |\\n| max_bytes     | int  | 524288000| no       | Reject files larger than this before sending.      |\"}, {\"rank\": 5, \"chunk_id\": \"v3/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.4346, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\n`pool_size` is a ceiling, not a reservation — connections are created lazily\\nand reaped after `pool_reap_seconds` of idleness. Setting it far above your\\nreal concurrency costs nothing but does not help either.\\n\\nSetting `retries_enabled` to false disables the automatic retry path entirely.\\nThe per-call `retry_backoff_ms` and `max_retries` parameters are then accepted\\nbut ignored, which mirrors how v2 behaved.\"}]}"
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "fc_bba1b08b-5b63-439b-bc58-b8ea7eda3b18",
+                "type": "function",
+                "function": {
+                  "name": "search_docs",
+                  "arguments": "{\"api_version\":\"v2\",\"query\":\"chunk_size\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "fc_bba1b08b-5b63-439b-bc58-b8ea7eda3b18",
+            "name": "search_docs",
+            "content": "{\"api_version\": \"v2\", \"count\": 5, \"passages\": [{\"rank\": 1, \"chunk_id\": \"v2/client-stream#notes::3\", \"heading_path\": \"Client.stream() > Notes\", \"score\": 0.5661, \"text\": \"Client.stream() > Notes\\n\\n## Notes\\n\\nThe default `chunk_size` in v2 is 512 bytes. It was raised to 1024 in v3 after\\nprofiling showed the smaller reads dominating CPU time on large responses.\\n\\nThere is no context-manager form in v2 — you must call `close()` yourself, and\\nforgetting to do so leaks the connection until the process exits.\"}, {\"rank\": 2, \"chunk_id\": \"v2/client-stream#parameters::1\", \"heading_path\": \"Client.stream() > Parameters\", \"score\": 0.4424, \"text\": \"Client.stream() > Parameters\\n\\n## Parameters\\n\\n| name         | type | default | required | description                                     |\\n|--------------|------|---------|----------|--------------------------------------------------|\\n| payload      | dict | —       | yes      | The request body.                               |\\n| chunk_size   | int  | 512     | no       | Bytes read from the socket per iteration.       |\\n| heartbeat_ms | int  | 30000   | no       | Interval between server keep-alive frames.      |\"}, {\"rank\": 3, \"chunk_id\": \"v2/client-configure#notes::3\", \"heading_path\": \"Client.configure() > Notes\", \"score\": 0.4003, \"text\": \"Client.configure() > Notes\\n\\n## Notes\\n\\nThere is no `retries_enabled` switch in v2 because there is no automatic retry\\npath to switch off. There is no connection reaper either: pooled connections\\nlive until the client is garbage collected.\\n\\nThe v2 default `pool_size` is 4, raised to 10 in v3.\"}, {\"rank\": 4, \"chunk_id\": \"v2/client-configure#example::2\", \"heading_path\": \"Client.configure() > Example\", \"score\": 0.3942, \"text\": \"Client.configure() > Example\\n\\n## Example\\n\\n```python\\nclient = Client()\\nclient.configure(api_key=\\\"sk-...\\\", pool_size=8, default_timeout_ms=20000)\\n```\"}, {\"rank\": 5, \"chunk_id\": \"v2/client-configure#parameters::1\", \"heading_path\": \"Client.configure() > Parameters\", \"score\": 0.3793, \"text\": \"Client.configure() > Parameters\\n\\n## Parameters\\n\\n| name               | type | default        | required | description                                    |\\n|--------------------|------|----------------|----------|-------------------------------------------------|\\n| api_key            | str  | —              | yes      | Credential used for every request.             |\\n| base_url           | str  | https://api.example.com | no | Endpoint root for all calls.            |\\n| pool_size          | int  | 4              | no       | Maximum simultaneous pooled connections.       |\\n| default_timeout_ms | int  | 10000          | no       | Timeout applied when a call does not set one.  |\\n| log_level          | str  | error          | no       | One of debug, info, warning, error.            |\"}]}"
+          },
+          {
+            "role": "assistant",
+            "content": "TARGET_VERSION: v3\nVERSION_NOTES: In v3, `chunk_size` is optional (required = no) with a default of 1024 bytes [ v3/client-stream#parameters::1 ]; in v2 it is also optional (required = no) but defaults to 512 bytes [ v2/client-stream#parameters::1 ]. The requirement status is the same, only the default value differs.\nDEPRECATION: none found"
+          }
+        ]
+      }
+    ],
+    "delegations": [
+      {
+        "worker": "version",
+        "arguments": {
+          "question": "is chunk_size required"
+        },
+        "http_status": 200
+      }
+    ],
+    "prompt_tokens": 8467,
+    "completion_tokens": 820,
+    "cached_tokens": 0,
+    "total_tokens": 9287,
+    "cost_usd": 0.00176205,
+    "latency_ms": 46319.758,
+    "rate_limit_wait_s": 13.0,
+    "termination": "final_answer",
+    "termination_detail": "orchestrator answered",
+    "transcript": [
+      {
+        "role": "system",
+        "content": "You answer developer questions about an SDK and the HTTP API behind it, using ONLY what the tools return. You have no other knowledge of this SDK.\n\nReply in exactly this format, and nothing else:\n\nANSWER: <your answer, one short paragraph>\nVERSION: <v2, v3, both, or none>\nCITATIONS: <comma-separated chunk ids or operationIds you used, or none>\n\nRules:\n\n1. Every factual claim must come from a tool result. Never state a parameter name, a default value, a path or a version you have not seen a tool return.\n\n2. If the tools do not contain the answer, reply with exactly:\nANSWER: INSUFFICIENT_CONTEXT\nVERSION: none\nCITATIONS: none\n\n3. Defaults differ between v2 and v3. When you state a value, say which version it belongs to. VERSION must name the version your ANSWER describes.\n\n4. Cite what you actually used: chunk ids look like v3/client-send#parameters::1 and operationIds look like sendMessageV3. Do not cite anything a tool did not return to you.\n\n5. Be brief. Answer the question asked, then stop.\n\nYou lead a team of two workers, available to you as tools. You cannot search the documentation yourself.\n\n1. Call delegate_version_check with the developer's question. It reports the target version, and what differs between versions or is deprecated.\n2. Call delegate_code_sample with the task, the target version from step 1, and the version notes. It reports the documented facts and any documented code sample, with chunk ids.\n3. Write the answer from the workers' reports only, and cite the chunk ids they cite.\n\nYour final reply uses the format above: ANSWER, VERSION and CITATIONS each on a line of its own.\n"
+      },
+      {
+        "role": "user",
+        "content": "Question: is chunk_size required\n"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "fc_32101240-4409-443e-a5d4-3bf3f4744a86",
+            "type": "function",
+            "function": {
+              "name": "delegate_version_check",
+              "arguments": "{\"question\":\"is chunk_size required\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "fc_32101240-4409-443e-a5d4-3bf3f4744a86",
+        "name": "delegate_version_check",
+        "content": "{\"worker\": \"version/deprecation worker\", \"report\": \"TARGET_VERSION: v3\\nVERSION_NOTES: In v3, `chunk_size` is optional (required = no) with a default of 1024 bytes [ v3/client-stream#parameters::1 ]; in v2 it is also optional (required = no) but defaults to 512 bytes [ v2/client-stream#parameters::1 ]. The requirement status is the same, only the default value differs.\\nDEPRECATION: none found\"}"
+      },
+      {
+        "role": "assistant",
+        "content": "ANSWER: `chunk_size` is not required; it is optional in both SDK versions.  \nVERSION: both  \nCITATIONS: v3/client-stream#parameters::1, v2/client-stream#parameters::1"
+      }
+    ]
+  },
+  "grade": {
+    "passed": true,
+    "answer_text": "`chunk_size` is not required; it is optional in both SDK versions.",
+    "context_ids": [
+      "v3/client-stream#parameters::1",
+      "v3/client-upload#clientupload::0",
+      "v3/client-upload#example::2",
+      "v3/client-upload#parameters::1",
+      "v3/client-configure#notes::3",
+      "v2/client-stream#notes::3",
+      "v2/client-stream#parameters::1",
+      "v2/client-configure#notes::3",
+      "v2/client-configure#example::2",
+      "v2/client-configure#parameters::1"
+    ],
+    "assertions": [
+      {
+        "name": "citation_captured",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "citation_resolves",
+        "status": "pass",
+        "detail": "answer cites nothing",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_parses",
+        "status": "n/a",
+        "detail": "no python fence in answer",
+        "evidence": []
+      },
+      {
+        "name": "code_sample_grounded",
+        "status": "n/a",
+        "detail": "answer shows no code",
+        "evidence": []
+      },
+      {
+        "name": "version_stated",
+        "status": "n/a",
+        "detail": "answer quotes no version-divergent value",
+        "evidence": []
+      }
+    ],
+    "judge": {
+      "verdict": "PASS",
+      "reason": "The answer correctly states that `chunk_size` is optional (not required) as shown in the parameter tables for both v2 and v3.",
+      "error": ""
+    }
+  }
+}

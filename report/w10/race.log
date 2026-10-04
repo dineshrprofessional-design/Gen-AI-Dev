@@ -1,0 +1,22 @@
+2026-10-04 06:41:10Z  warm-up: docs server ready in 27.5s (not timed)
+2026-10-04 06:41:35Z  w6-003 single PASS  judge=PASS       tokens= 7,579    6.9s  path=['search_docs', 'search_docs']  termination=final_answer
+2026-10-04 06:43:02Z  w6-003 squad  FAIL  judge=NOT_JUDGED tokens=13,196   76.9s  path=['version', 'code']  termination=final_answer
+2026-10-04 06:43:15Z  smoke: 2 run(s) recorded under report/w10/runs/smoke (not part of the race)
+2026-10-04 06:46:34Z  smoke attempt 1 kept in runs/smoke/attempt1: squad failed on format (ANSWER/VERSION/CITATIONS on one line) and SDK-level 429 sleeps were unmeasured; both fixed in b90fe78 before any raced case. Re-running the smoke case once.
+2026-10-04 06:47:20Z  warm-up: docs server ready in 29.2s (not timed)
+2026-10-04 06:47:36Z  w6-003 single PASS  judge=PASS       tokens= 7,523    5.2s  path=['search_docs', 'search_docs']  termination=final_answer
+2026-10-04 06:49:26Z  w6-003 squad  FAIL  judge=FAIL       tokens=13,167   46.0s  path=['version', 'code']  termination=final_answer
+2026-10-04 06:49:49Z  smoke: 2 run(s) recorded under report/w10/runs/smoke (not part of the race)
+2026-10-04 06:50:32Z  race: 5 case(s) this session: ['w6-001', 'w6-002', 'w6-007', 'w6-014', 'w6-015']
+2026-10-04 06:51:20Z  warm-up: docs server ready in 46.1s (not timed)
+2026-10-04 06:52:04Z  w6-001 single PASS  judge=PASS       tokens=12,319   25.1s  path=['search_docs', 'search_docs', 'search_docs']  termination=final_answer
+2026-10-04 06:53:42Z  w6-001 squad  FAIL  judge=NOT_JUDGED tokens=14,166   51.1s  path=['version', 'code']  termination=final_answer
+2026-10-04 06:55:03Z  w6-002 squad  PASS  judge=PASS       tokens= 9,287   33.3s  path=['version']  termination=final_answer
+2026-10-04 06:56:06Z  w6-002 single PASS  judge=PASS       tokens= 7,686   32.0s  path=['search_docs', 'search_docs']  termination=final_answer
+2026-10-04 06:57:07Z  w6-007 single PASS  judge=PASS       tokens= 7,297   38.0s  path=['search_docs', 'search_docs']  termination=final_answer
+2026-10-04 06:58:43Z  w6-007 squad  PASS  judge=PASS       tokens=13,058   50.1s  path=['version', 'code']  termination=final_answer
+2026-10-04 07:00:18Z  w6-014 squad  FAIL  judge=NOT_JUDGED tokens=13,421   33.6s  path=['version', 'code']  termination=final_answer
+2026-10-04 07:01:09Z  w6-014 single PASS  judge=PASS       tokens= 8,114   16.0s  path=['search_docs', 'search_docs']  termination=final_answer
+2026-10-04 07:02:57Z  w6-015 single PASS  judge=PASS       tokens=13,328   23.1s  path=['search_docs', 'search_docs', 'search_docs']  termination=final_answer
+2026-10-04 07:04:18Z  w6-015 squad  PASS  judge=PASS       tokens= 9,397   16.4s  path=['version']  termination=final_answer
+2026-10-04 07:04:41Z  race: 10 run(s) recorded this session; cases still to run: ['w6-016', 'w6-019', 'w6-026', 'w6-029', 'w6-031']
